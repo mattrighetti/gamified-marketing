@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name="product", schema="gamified_marketing")
+@Table(name="product")
 public class Product  implements Serializable {
 
     @Id
