@@ -6,7 +6,7 @@
 
     <groupId>com</groupId>
     <artifactId>marketing</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <name>marketing</name>
     <packaging>war</packaging>
 
@@ -40,12 +40,6 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>5.4.31.Final</version>
-        </dependency>
 
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
         <dependency>
@@ -53,14 +47,6 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql-connector.version}</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.apache.tomee.maven/maven-util -->
-        <dependency>
-            <groupId>org.apache.tomee.maven</groupId>
-            <artifactId>maven-util</artifactId>
-            <version>${tomee-maven-plugin.version}</version>
-        </dependency>
-
     </dependencies>
 
     <build>
