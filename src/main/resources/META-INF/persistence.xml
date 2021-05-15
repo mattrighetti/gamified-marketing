@@ -6,8 +6,15 @@
     <persistence-unit name="MarketingEJB">
         <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
         <jta-data-source>MyDataBase</jta-data-source>
+        <class>com.marketing.entity.Answer</class>
+        <class>com.marketing.entity.Log</class>
+        <class>com.marketing.entity.Product</class>
+        <class>com.marketing.entity.Question</class>
+        <class>com.marketing.entity.User</class>
         <properties>
             <property name="eclipselink.logging.level" value="FINE" />
+            <property name="openjpa.ConnectionURL" value="jdbc:mysql://localhost:3306/gamified_marketing"/>
+            <property name="openjpa.ConnectionDriverName" value="com.mysql.cj.jdbc.Driver"/>
         </properties>
     </persistence-unit>
 </persistence>

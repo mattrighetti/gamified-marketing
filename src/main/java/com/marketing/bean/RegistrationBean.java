@@ -16,8 +16,8 @@ public class RegistrationBean extends AbstractFacade<User> {
         // requested username must not already exist in the database
         if (user == null) {
             user = new User();
-            user.setAdmin(false);
-            user.setBanned(false);
+            user.setAdmin((byte) 0x0);
+            user.setBanned((byte) 0x0);
             user.setUsername(username);
             user.setPassword(password);
             create(user);

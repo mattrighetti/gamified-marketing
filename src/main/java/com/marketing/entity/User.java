@@ -1,27 +1,20 @@
 package com.marketing.entity;
 
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-
-import java.io.Serializable;
+import javax.persistence.Id;
 
 @Entity
-@Table(name = "user", schema="gamified_marketing")
-public class User implements Serializable {
-
-    @Id
+public class User {
     private String username;
     private String password;
-    private Boolean admin;
-    private Boolean banned;
-    private Integer score;
+    private byte admin;
+    private byte banned;
+    private int score;
 
-    public User(){
-
-    }
-
-
+    @Id
+    @Column(name = "username")
     public String getUsername() {
         return username;
     }
@@ -30,6 +23,8 @@ public class User implements Serializable {
         this.username = username;
     }
 
+    @Basic
+    @Column(name = "password")
     public String getPassword() {
         return password;
     }
@@ -38,27 +33,59 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public Boolean getAdmin() {
+    @Basic
+    @Column(name = "admin")
+    public byte getAdmin() {
         return admin;
     }
 
-    public void setAdmin(Boolean admin) {
+    public void setAdmin(byte admin) {
         this.admin = admin;
     }
 
-    public Boolean getBanned() {
+    @Basic
+    @Column(name = "banned")
+    public byte getBanned() {
         return banned;
     }
 
-    public void setBanned(Boolean banned) {
+    public void setBanned(byte banned) {
         this.banned = banned;
     }
 
-    public Integer getScore() {
+    @Basic
+    @Column(name = "score")
+    public int getScore() {
         return score;
     }
 
-    public void setScore(Integer score) {
+    public void setScore(int score) {
         this.score = score;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (admin != user.admin) return false;
+        if (banned != user.banned) return false;
+        if (score != user.score) return false;
+        if (username != null ? !username.equals(user.username) : user.username != null) return false;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = username != null ? username.hashCode() : 0;
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (int) admin;
+        result = 31 * result + (int) banned;
+        result = 31 * result + score;
+        return result;
     }
 }
