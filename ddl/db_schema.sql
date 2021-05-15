@@ -17,20 +17,21 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB;
 
 CREATE TABLE `product` (
-    `id` INT(4) UNSIGNED NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(50) NOT NULL,
-    `image` VARCHAR(50) NOT NULL UNIQUE KEY,
-    `thumbnail` VARCHAR(50) NOT NULL UNIQUE KEY,
-    `date` INT(11) NOT NULL,
-    `description` VARCHAR(100) NOT NULL,
-    PRIMARY KEY (id)
+   `id` INT(4) UNSIGNED NOT NULL AUTO_INCREMENT,
+   `name` VARCHAR(50) NOT NULL,
+   `image` VARCHAR(50) NOT NULL,
+   `thumbnail` VARCHAR(50) NOT NULL,
+   `date` INT(11) NOT NULL,
+   `description` VARCHAR(100) NOT NULL,
+   PRIMARY KEY (id),
+   UNIQUE KEY (`thumbnail`, `image`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE `question` (
-    `id` INT NOT NULL AUTO_INCREMENT,
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `product` INT UNSIGNED NOT NULL,
     `question_text` VARCHAR(100) NOT NULL,
-    `mandatory` BOOL NOT NULL DEFAULT FALSE, 
+    `mandatory` BOOL NOT NULL DEFAULT FALSE,
     `answer` VARCHAR(100),
     PRIMARY KEY(`id`,`product`),
     FOREIGN KEY(`product`)
@@ -45,22 +46,29 @@ CREATE TABLE `answer` (
     `text` VARCHAR(100) NOT NULL,
     PRIMARY KEY (`user`,`question`),
     FOREIGN KEY(`user`)
-        REFERENCES user(`username`)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    FOREIGN KEY(`user`)
-        REFERENCES question(`id`)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
+      REFERENCES user(`username`)
+      ON UPDATE CASCADE
+      ON DELETE CASCADE,
+    FOREIGN KEY(`question`)
+      REFERENCES question(`id`)
+      ON UPDATE CASCADE
+      ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 
 CREATE TABLE `log` (
-    `user` VARCHAR(50) NOT NULL,
-    `access` TIMESTAMP NOT NULL,
-    PRIMARY KEY(`user`,`access`),
-    FOREIGN KEY(`user`)
-        REFERENCES user(`username`)
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
+   `user` VARCHAR(50) NOT NULL,
+   `access` TIMESTAMP NOT NULL,
+   PRIMARY KEY(`user`,`access`),
+   FOREIGN KEY(`user`)
+       REFERENCES user(`username`)
+       ON UPDATE CASCADE
+       ON DELETE CASCADE
 ) ENGINE=InnoDB;
+
+INSERT INTO user
+VALUES ("admin1", "secret", 1, 0, 10),
+       ("admin2", "secret", 1, 0, 1000),
+       ("admin3", "secret", 1, 0, 854),
+       ("matt", "secret", 0, 0, 130921),
+       ("random", "secret", 0, 0, 2139);
