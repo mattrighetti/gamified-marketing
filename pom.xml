@@ -47,6 +47,26 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql-connector.version}</version>
         </dependency>
+
+        <!--        The Api to log with-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.21</version>
+        </dependency>
+        <!--        The actual logger implementation-->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.1.7</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.openjpa/openjpa-persistence -->
+        <dependency>
+            <groupId>org.apache.openjpa</groupId>
+            <artifactId>openjpa-persistence</artifactId>
+            <version>3.2.0</version>
+        </dependency>
     </dependencies>
 
     <build>

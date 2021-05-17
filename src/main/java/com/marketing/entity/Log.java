@@ -1,19 +1,17 @@
 package com.marketing.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 @IdClass(LogPK.class)
+@Table(name = "log")
 public class Log {
     private String user;
     private Timestamp access;
 
     @Id
-    @Column(name = "user")
+    @Column(name = "user", nullable = false, length = 50)
     public String getUser() {
         return user;
     }
@@ -23,7 +21,7 @@ public class Log {
     }
 
     @Id
-    @Column(name = "access")
+    @Column(name = "access", nullable = false)
     public Timestamp getAccess() {
         return access;
     }

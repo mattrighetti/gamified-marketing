@@ -8,7 +8,7 @@ public class AnswerPK implements Serializable {
     private String user;
     private Object question;
 
-    @Column(name = "user")
+    @Column(name = "user", nullable = false, length = 50)
     @Id
     public String getUser() {
         return user;
@@ -18,7 +18,7 @@ public class AnswerPK implements Serializable {
         this.user = user;
     }
 
-    @Column(name = "question")
+    @Column(name = "question", nullable = false)
     @Id
     public Object getQuestion() {
         return question;

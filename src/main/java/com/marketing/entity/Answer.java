@@ -4,13 +4,14 @@ import javax.persistence.*;
 
 @Entity
 @IdClass(AnswerPK.class)
+@Table(name = "answer")
 public class Answer {
     private String user;
     private Object question;
     private String text;
 
     @Id
-    @Column(name = "user")
+    @Column(name = "user", nullable = false, length = 50)
     public String getUser() {
         return user;
     }
@@ -20,7 +21,7 @@ public class Answer {
     }
 
     @Id
-    @Column(name = "question")
+    @Column(name = "question", nullable = false)
     public Object getQuestion() {
         return question;
     }
@@ -30,7 +31,7 @@ public class Answer {
     }
 
     @Basic
-    @Column(name = "text")
+    @Column(name = "text", nullable = false, length = 100)
     public String getText() {
         return text;
     }

@@ -9,7 +9,7 @@ public class LogPK implements Serializable {
     private String user;
     private Timestamp access;
 
-    @Column(name = "user")
+    @Column(name = "user", nullable = false, length = 50)
     @Id
     public String getUser() {
         return user;
@@ -19,7 +19,7 @@ public class LogPK implements Serializable {
         this.user = user;
     }
 
-    @Column(name = "access")
+    @Column(name = "access", nullable = false)
     @Id
     public Timestamp getAccess() {
         return access;

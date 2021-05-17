@@ -56,7 +56,7 @@ public class LoginServlet extends HttpServlet {
         out.println("<TABLE>");
         out.println("<TR>");
         out.println("<TD>Username:</TD>");
-        out.println("<TD><INPUT TYPE=TEXT NAME=userName></TD>");
+        out.println("<TD><INPUT TYPE=TEXT NAME=username></TD>");
         out.println("</TR>");
         out.println("<TR>");
         out.println("<TD>Password:</TD>");
