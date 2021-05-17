@@ -1,7 +1,9 @@
 package com.marketing.servlet;
 
 import com.marketing.bean.LoginBean;
+import com.marketing.utils.Servlets;
 import com.marketing.utils.SessionAttribute;
+import com.marketing.utils.UrlBuilder;
 
 import javax.ejb.EJB;
 import javax.servlet.*;
@@ -29,8 +31,7 @@ public class LoginServlet extends HttpServlet {
         if (loginBean.login(username, password)) {
             HttpSession session = request.getSession(true);
             session.setAttribute(SessionAttribute.IS_LOGGED, true);
-            RequestDispatcher rd = request.getRequestDispatcher("HomeServlet");
-            rd.forward(request, response);
+            response.sendRedirect(UrlBuilder.getUrl(request, Servlets.HOME));
         } else {
             sendLoginForm(response, true);
         }

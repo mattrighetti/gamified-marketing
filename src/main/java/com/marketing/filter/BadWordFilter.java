@@ -1,12 +1,12 @@
 package com.marketing.filter;
 
-import com.marketing.utils.ServletUrls;
+import com.marketing.utils.Servlets;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 
-@WebFilter(servletNames = { ServletUrls.REGISTER })
+@WebFilter(servletNames = { Servlets.REGISTER })
 public class BadWordFilter implements Filter {
     private FilterConfig filterConfig;
 
