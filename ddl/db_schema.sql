@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS `product`;
 CREATE TABLE `user` (
     `username` VARCHAR(50) NOT NULL,
     `password` VARCHAR(50) NOT NULL,
+    `email` VARCHAR(50) NOT NULL,
     `admin` BOOL NOT NULL DEFAULT FALSE,
     `banned` BOOL NOT NULL DEFAULT FALSE,
     `score` INT NOT NULL DEFAULT 0,
@@ -58,7 +59,7 @@ CREATE TABLE `answer` (
 
 CREATE TABLE `log` (
    `user` VARCHAR(50) NOT NULL,
-   `access` TIMESTAMP NOT NULL,
+   `access` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
    PRIMARY KEY(`user`,`access`),
    FOREIGN KEY(`user`)
        REFERENCES user(`username`)
@@ -67,8 +68,8 @@ CREATE TABLE `log` (
 ) ENGINE=InnoDB;
 
 INSERT INTO user
-VALUES ("admin1", "secret", 1, 0, 10),
-       ("admin2", "secret", 1, 0, 1000),
-       ("admin3", "secret", 1, 0, 854),
-       ("matt", "secret", 0, 0, 130921),
-       ("random", "secret", 0, 0, 2139);
+VALUES ("admin1", "secret", "admin1@gmail.com", 1, 0, 10),
+       ("admin2", "secret", "admin1@gmail.com", 1, 0, 1000),
+       ("admin3", "secret", "admin1@gmail.com", 1, 0, 854),
+       ("matt", "secret", "admin1@gmail.com", 0, 0, 130921),
+       ("random", "secret", "admin1@gmail.com", 0, 0, 2139);

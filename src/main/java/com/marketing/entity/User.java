@@ -7,6 +7,7 @@ import javax.persistence.*;
 public class User {
     private String username;
     private String password;
+    private String email;
     private Byte admin;
     private Byte banned;
     private Integer score;
@@ -19,6 +20,16 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Basic
+    @Column(name = "email", nullable = false, length = 50)
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Basic
