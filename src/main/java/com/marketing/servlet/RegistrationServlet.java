@@ -1,6 +1,10 @@
 package com.marketing.servlet;
 
+import com.marketing.bean.AccessLogBean;
 import com.marketing.bean.RegistrationBean;
+import com.marketing.commons.RedirectAfterCompletion;
+import com.marketing.utils.Servlets;
+import com.marketing.utils.SessionAttribute;
 
 import javax.ejb.EJB;
 import javax.servlet.*;
@@ -15,10 +19,8 @@ public class RegistrationServlet extends HttpServlet {
     @EJB
     private RegistrationBean registrationBean;
 
-    @Override
-    public void init() throws ServletException {
-        this.registrationBean = new RegistrationBean();
-    }
+    @EJB
+    private AccessLogBean accessLogBean;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,8 +31,15 @@ public class RegistrationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        if (registrationBean.register(username, password)) {
-            // TODO forward to a page with a new welcome message
+        String email = request.getParameter("email");
+        if (registrationBean.register(username, password, email)) {
+            RedirectAfterCompletion action = new RedirectAfterCompletion(Servlets.HOME, (req, res) -> {
+                HttpSession session = req.getSession(true);
+                session.setAttribute(SessionAttribute.IS_LOGGED, true);
+                session.setAttribute(SessionAttribute.USERNAME, username);
+                accessLogBean.logUserAccess(username);
+            });
+            action.run(request, response);
         } else {
             sendPage(request, response, true);
         }
@@ -55,7 +64,33 @@ public class RegistrationServlet extends HttpServlet {
 
     private void sendRegistrationForm(HttpServletRequest request, HttpServletResponse response, boolean showPreviousValues) throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-        out.println("");
+
+        if (showPreviousValues)
+            out.println("Registration failed. Please insert a different username.<BR>");
+
+        out.println("<BR>");
+        out.println("<BR><H2>Registration Page</H2>");
+        out.println("<BR>");
+        out.println("<BR><FORM METHOD=POST>");
+        out.println("<TABLE>");
+        out.println("<TR>");
+        out.println("<TD>Username:</TD>");
+        out.println("<TD><INPUT TYPE=TEXT NAME=username></TD>");
+        out.println("</TR>");
+        out.println("<TR>");
+        out.println("<TD>Password:</TD>");
+        out.println("<TD><INPUT TYPE=PASSWORD NAME=password></TD>");
+        out.println("</TR>");
+        out.println("<TR>");
+        out.println("<TD>Email:</TD>");
+        out.println("<TD><INPUT TYPE=TEXT NAME=email></TD>");
+        out.println("</TR>");
+        out.println("<TR>");
+        out.println("<TD ALIGN=RIGHT COLSPAN=2>");
+        out.println("<INPUT TYPE=SUBMIT VALUE=Register></TD>");
+        out.println("</TR>");
+        out.println("</TABLE>");
+        out.println("</FORM>");
     }
 
     private void sendPageFooter(HttpServletResponse response) throws IOException {

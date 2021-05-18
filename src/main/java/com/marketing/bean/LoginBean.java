@@ -4,7 +4,7 @@ import com.marketing.entity.User;
 
 import javax.ejb.Stateless;
 
-@Stateless(name = "LoginBean")
+@Stateless
 public class LoginBean extends AbstractFacade<User> {
 
     public LoginBean() {

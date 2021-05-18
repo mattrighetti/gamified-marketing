@@ -21,7 +21,8 @@ public class Log {
     }
 
     @Id
-    @Column(name = "access", nullable = false)
+    @Column(name = "access", nullable = false, insertable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     public Timestamp getAccess() {
         return access;
     }

@@ -1,5 +1,6 @@
 package com.marketing.servlet;
 
+import com.marketing.bean.AccessLogBean;
 import com.marketing.bean.LoginBean;
 import com.marketing.utils.Servlets;
 import com.marketing.utils.SessionAttribute;
@@ -15,8 +16,11 @@ import java.io.PrintWriter;
 @WebServlet(name = "LoginServlet", value = "/LoginServlet")
 public class LoginServlet extends HttpServlet {
 
-    @EJB(beanName = "LoginBean")
+    @EJB
     private LoginBean loginBean;
+
+    @EJB
+    private AccessLogBean accessLogBean;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -31,7 +35,9 @@ public class LoginServlet extends HttpServlet {
         if (loginBean.login(username, password)) {
             HttpSession session = request.getSession(true);
             session.setAttribute(SessionAttribute.IS_LOGGED, true);
+            session.setAttribute(SessionAttribute.USERNAME, username);
             response.sendRedirect(UrlBuilder.getUrl(request, Servlets.HOME));
+            accessLogBean.logUserAccess(username);
         } else {
             sendLoginForm(response, true);
         }
