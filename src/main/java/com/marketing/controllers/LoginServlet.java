@@ -11,10 +11,14 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.HashMap;
 
 @WebServlet(name = "LoginServlet", value = "/LoginServlet")
-public class LoginServlet extends HttpServlet {
+public class LoginServlet extends RendererServlet {
+
+    public LoginServlet() {
+        super("/WEB-INF/login.html");
+    }
 
     @EJB
     private LoginBean loginBean;
@@ -24,7 +28,10 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        sendLoginForm(response, false);
+        HashMap<String, Object> vars = new HashMap<>();
+        vars.put("formAction", "LoginServlet");
+        vars.put("failedAttempt", false);
+        renderAndServeWithVariables(request, response, vars);
     }
 
     @Override
@@ -35,48 +42,17 @@ public class LoginServlet extends HttpServlet {
         if (loginBean.login(username, password)) {
             HttpSession session = request.getSession(true);
             session.setAttribute(SessionAttribute.IS_LOGGED, true);
+            // TODO change this section, it is better that login returns the actual user so that we can pass it in the session itself
+            session.setAttribute(SessionAttribute.IS_ADMIN, false);
             session.setAttribute(SessionAttribute.USERNAME, username);
             response.sendRedirect(UrlBuilder.getUrl(request, Servlets.HOME));
             accessLogBean.logUserAccess(username);
         } else {
-            sendLoginForm(response, true);
+            HashMap<String, Object> vars = new HashMap<>();
+            vars.put("formAction", "LoginServlet");
+            vars.put("failedAttempt", true);
+            vars.put("alertText", "Incorrect data, try again with valid credentials.");
+            renderAndServeWithVariables(request, response, vars);
         }
-    }
-
-    private void sendLoginForm(HttpServletResponse response, boolean withErrorMessage) throws IOException {
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-        out.println("<HTML>");
-        out.println("<HEAD>");
-        out.println("<TITLE>Login</TITLE>");
-        out.println("</HEAD>");
-        out.println("<BODY>");
-        out.println("<CENTER>");
-
-        if (withErrorMessage)
-            out.println("Login failed. Please try again.<BR>");
-
-        out.println("<BR>");
-        out.println("<BR><H2>Login Page</H2>");
-        out.println("<BR>");
-        out.println("<BR><FORM METHOD=POST>");
-        out.println("<TABLE>");
-        out.println("<TR>");
-        out.println("<TD>Username:</TD>");
-        out.println("<TD><INPUT TYPE=TEXT NAME=username></TD>");
-        out.println("</TR>");
-        out.println("<TR>");
-        out.println("<TD>Password:</TD>");
-        out.println("<TD><INPUT TYPE=PASSWORD NAME=password></TD>");
-        out.println("</TR>");
-        out.println("<TR>");
-        out.println("<TD ALIGN=RIGHT COLSPAN=2>");
-        out.println("<INPUT TYPE=SUBMIT VALUE=Login></TD>");
-        out.println("</TR>");
-        out.println("</TABLE>");
-        out.println("</FORM>");
-        out.println("</CENTER>");
-        out.println("</BODY>");
-        out.println("</HTML>");
     }
 }
