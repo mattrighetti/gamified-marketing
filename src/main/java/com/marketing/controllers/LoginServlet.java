@@ -1,4 +1,4 @@
-package com.marketing.servlet;
+package com.marketing.controllers;
 
 import com.marketing.bean.AccessLogBean;
 import com.marketing.bean.LoginBean;

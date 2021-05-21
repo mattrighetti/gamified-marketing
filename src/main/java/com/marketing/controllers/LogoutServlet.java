@@ -1,4 +1,4 @@
-package com.marketing.servlet;
+package com.marketing.controllers;
 
 import com.marketing.commons.RedirectAfterCompletion;
 import com.marketing.commons.ServletCommon;

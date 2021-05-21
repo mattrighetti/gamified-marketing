@@ -1,4 +1,4 @@
-package com.marketing.servlet;
+package com.marketing.controllers;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
