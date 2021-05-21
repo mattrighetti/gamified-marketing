@@ -29,10 +29,10 @@ public class RegistrationServlet extends RendererServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HashMap<String, Object> vars = new HashMap<>();
-        vars.put("formAction", "RegistrationServlet");
-        vars.put("failedAttempt", false);
-        renderAndServeWithVariables(request, response, vars);
+        renderAndServeWithVariables(request, response, new HashMap<String, Object>() {{
+            put("formAction", "RegistrationServlet");
+            put("failedAttempt", false);
+        }});
     }
 
     @Override
@@ -49,11 +49,11 @@ public class RegistrationServlet extends RendererServlet {
             });
             action.run(request, response);
         } else {
-            HashMap<String, Object> vars = new HashMap<>();
-            vars.put("formAction", "RegistrationServlet");
-            vars.put("failedAttempt", true);
-            vars.put("alertText", String.format("Username %s has already been taken, try with another one.", username));
-            renderAndServeWithVariables(request, response, vars);
+            renderAndServeWithVariables(request, response, new HashMap<String, Object>() {{
+                put("formAction", "RegistrationServlet");
+                put("failedAttempt", true);
+                put("alertText", String.format("Username %s has already been taken, try with another one.", username));
+            }});
         }
     }
 }

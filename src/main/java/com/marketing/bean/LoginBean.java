@@ -11,13 +11,13 @@ public class LoginBean extends AbstractFacade<User> {
         super(User.class);
     }
 
-    public boolean login(String username, String password) {
+    public User login(String username, String password) {
         logger.debug("Login called with {} {}", username, password);
         User user = this.find(username);
-        if (user != null) {
+        if (user != null && user.getPassword().equals(password)) {
             logger.debug("user has been found");
-            return user.getPassword().equals(password);
+            return user;
         }
-        return false;
+        return null;
     }
 }

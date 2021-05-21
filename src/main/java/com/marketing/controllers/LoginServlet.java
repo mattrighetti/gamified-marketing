@@ -2,6 +2,7 @@ package com.marketing.controllers;
 
 import com.marketing.bean.AccessLogBean;
 import com.marketing.bean.LoginBean;
+import com.marketing.entity.User;
 import com.marketing.utils.Servlets;
 import com.marketing.utils.SessionAttribute;
 import com.marketing.utils.UrlBuilder;
@@ -28,10 +29,7 @@ public class LoginServlet extends RendererServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HashMap<String, Object> vars = new HashMap<>();
-        vars.put("formAction", "LoginServlet");
-        vars.put("failedAttempt", false);
-        renderAndServeWithVariables(request, response, vars);
+        sendForm(request, response, false);
     }
 
     @Override
@@ -39,20 +37,24 @@ public class LoginServlet extends RendererServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         // Check credentials
-        if (loginBean.login(username, password)) {
+        User user = loginBean.login(username, password);
+        if (user != null) {
             HttpSession session = request.getSession(true);
             session.setAttribute(SessionAttribute.IS_LOGGED, true);
-            // TODO change this section, it is better that login returns the actual user so that we can pass it in the session itself
-            session.setAttribute(SessionAttribute.IS_ADMIN, false);
-            session.setAttribute(SessionAttribute.USERNAME, username);
+            session.setAttribute(SessionAttribute.IS_ADMIN, user.getAdmin());
+            session.setAttribute(SessionAttribute.USERNAME, user.getUsername());
             response.sendRedirect(UrlBuilder.getUrl(request, Servlets.HOME));
             accessLogBean.logUserAccess(username);
         } else {
-            HashMap<String, Object> vars = new HashMap<>();
-            vars.put("formAction", "LoginServlet");
-            vars.put("failedAttempt", true);
-            vars.put("alertText", "Incorrect data, try again with valid credentials.");
-            renderAndServeWithVariables(request, response, vars);
+            sendForm(request, response, true);
         }
+    }
+
+    public void sendForm(HttpServletRequest request, HttpServletResponse response, boolean withError) throws IOException {
+        renderAndServeWithVariables(request, response, new HashMap<String, Object>() {{
+            put("formAction", getServletName());
+            put("failedAttempt", withError);
+            put("alertText", "Incorrect data, try again with valid credentials.");
+        }});
     }
 }
