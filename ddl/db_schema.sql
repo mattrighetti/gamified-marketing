@@ -12,7 +12,9 @@ CREATE TABLE `user` (
     `admin` BOOLEAN NOT NULL DEFAULT FALSE,
     `banned` BOOLEAN NOT NULL DEFAULT FALSE,
     `score` INT UNSIGNED NOT NULL DEFAULT 0,
-    PRIMARY KEY(`id`)
+    PRIMARY KEY(`id`),
+    UNIQUE (`username`),
+    UNIQUE (`email`)
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `product`;
@@ -40,10 +42,10 @@ DROP TABLE IF EXISTS `log`;
 
 CREATE TABLE `log` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `user` INT UNSIGNED NOT NULL,
-    `access` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `user_id` INT UNSIGNED NOT NULL,
+    `access` TIMESTAMP NOT NULL,
     PRIMARY KEY(`id`),
-    FOREIGN KEY(`user`) REFERENCES `user`(`id`)
+    FOREIGN KEY(`user_id`) REFERENCES `user`(`id`)
         ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
@@ -151,7 +153,7 @@ CREATE TABLE `answer` (
 
 INSERT INTO `user`(`username`, `password`, `email`, `admin`, `banned`, `score`)
 VALUES ("admin1", "secret", "admin1@gmail.com", 1, 0, 10),
-       ("admin2", "secret", "admin1@gmail.com", 1, 0, 1000),
-       ("admin3", "secret", "admin1@gmail.com", 1, 0, 854),
-       ("matt", "secret", "admin1@gmail.com", 0, 0, 130921),
-       ("random", "secret", "admin1@gmail.com", 0, 0, 2139);
+       ("admin2", "secret", "admin2@gmail.com", 1, 0, 1000),
+       ("admin3", "secret", "admin3@gmail.com", 1, 0, 854),
+       ("matt", "secret", "matt@gmail.com", 0, 0, 130921),
+       ("random", "secret", "random@gmail.com", 0, 0, 2139);

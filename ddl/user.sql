@@ -8,5 +8,7 @@ CREATE TABLE `user` (
     `admin` BOOLEAN NOT NULL DEFAULT FALSE,
     `banned` BOOLEAN NOT NULL DEFAULT FALSE,
     `score` INT UNSIGNED NOT NULL DEFAULT 0,
-    PRIMARY KEY(`id`)
+    PRIMARY KEY(`id`),
+    UNIQUE (`username`),
+    UNIQUE (`email`)
 ) ENGINE=InnoDB;
