@@ -44,7 +44,7 @@ public class LoginServlet extends RendererServlet {
             session.setAttribute(SessionAttribute.IS_ADMIN, user.getAdmin());
             session.setAttribute(SessionAttribute.USERNAME, user.getUsername());
             response.sendRedirect(UrlBuilder.getUrl(request, Servlets.HOME));
-            accessLogBean.logUserAccess(username);
+            accessLogBean.logUserAccess(user);
         } else {
             sendForm(request, response, true);
         }

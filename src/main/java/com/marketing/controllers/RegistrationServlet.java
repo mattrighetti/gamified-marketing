@@ -45,7 +45,8 @@ public class RegistrationServlet extends RendererServlet {
                 HttpSession session = req.getSession(true);
                 session.setAttribute(SessionAttribute.IS_LOGGED, true);
                 session.setAttribute(SessionAttribute.USERNAME, username);
-                accessLogBean.logUserAccess(username);
+                // TODO do not pass null, needs fixing
+                accessLogBean.logUserAccess(null);
             });
             action.run(request, response);
         } else {

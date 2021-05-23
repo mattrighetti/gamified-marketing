@@ -6,10 +6,18 @@
     <persistence-unit name="MarketingEJB">
         <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
         <jta-data-source>MyDataBase</jta-data-source>
-        <class>com.marketing.entity.User</class>
         <class>com.marketing.entity.Answer</class>
+        <class>com.marketing.entity.InputType</class>
         <class>com.marketing.entity.Log</class>
+        <class>com.marketing.entity.OptionChoice</class>
+        <class>com.marketing.entity.OptionGroup</class>
         <class>com.marketing.entity.Product</class>
+        <class>com.marketing.entity.Question</class>
+        <class>com.marketing.entity.QuestionOption</class>
+        <class>com.marketing.entity.SurveyHeader</class>
+        <class>com.marketing.entity.SurveySection</class>
+        <class>com.marketing.entity.User</class>
+        <class>com.marketing.entity.UserSurveySections</class>
         <properties>
             <property name="openjpa.Log" value="SQL=TRACE" />
             <property name="openjpa.ConnectionFactoryProperties" value="printParameters=true"/>
