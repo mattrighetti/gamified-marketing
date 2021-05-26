@@ -2,6 +2,15 @@ DROP DATABASE IF EXISTS gamified_marketing;
 CREATE DATABASE gamified_marketing;
 USE gamified_marketing;
 
+DROP TABLE IF EXISTS `forbidden`;
+
+CREATE TABLE `forbidden`(
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `word` VARCHAR(50) NOT NULL,
+    PRIMARY KEY(`id`),
+    UNIQUE KEY(`word`)
+) ENGINE=InnoDB;
+
 DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (
