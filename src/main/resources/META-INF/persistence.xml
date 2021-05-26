@@ -17,7 +17,6 @@
         <class>com.marketing.entity.SurveyHeader</class>
         <class>com.marketing.entity.SurveySection</class>
         <class>com.marketing.entity.User</class>
-        <class>com.marketing.entity.UserSurveySections</class>
         <class>com.marketing.entity.Forbidden</class>
         <properties>
             <property name="openjpa.Log" value="SQL=TRACE" />
