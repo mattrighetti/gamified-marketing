@@ -3,20 +3,20 @@ package com.marketing.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "question_option", schema = "gamified_marketing", catalog = "")
+@Table(name = "question_option", schema = "gamified_marketing")
 public class QuestionOption {
-    private Object id;
+    private long id;
     private Object questionId;
     private Object optionChoiceId;
 
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue
-    public Object getId() {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public long getId() {
         return id;
     }
 
-    public void setId(Object id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -36,28 +36,5 @@ public class QuestionOption {
 
     public void setOptionChoiceId(Object optionChoiceId) {
         this.optionChoiceId = optionChoiceId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        QuestionOption that = (QuestionOption) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (questionId != null ? !questionId.equals(that.questionId) : that.questionId != null) return false;
-        if (optionChoiceId != null ? !optionChoiceId.equals(that.optionChoiceId) : that.optionChoiceId != null)
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (questionId != null ? questionId.hashCode() : 0);
-        result = 31 * result + (optionChoiceId != null ? optionChoiceId.hashCode() : 0);
-        return result;
     }
 }

@@ -3,13 +3,14 @@ package com.marketing.entity;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "forbidden", schema = "gamified_marketing")
 public class Forbidden {
     private long id;
     private String word;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
         return id;
     }
