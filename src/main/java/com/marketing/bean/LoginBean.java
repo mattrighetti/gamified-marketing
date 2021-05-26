@@ -3,6 +3,9 @@ package com.marketing.bean;
 import com.marketing.entity.User;
 
 import javax.ejb.Stateless;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Stateless
 public class LoginBean extends AbstractFacade<User> {
@@ -22,9 +25,14 @@ public class LoginBean extends AbstractFacade<User> {
     }
 
     private User findUserByUsername(String username) {
-        return (User) getEntityManager().createNamedQuery("User.selectUserWithUsername")
-                .setParameter("username", username)
-                .getResultList()
-                .get(0);
+        // TODO try to find a cleaner way to handle empty returned list
+        try {
+            return (User) getEntityManager().createNamedQuery("User.selectUserWithUsername")
+                    .setParameter("username", username)
+                    .getResultList()
+                    .get(0);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.marketing.controllers;
 
 import com.marketing.bean.AccessLogBean;
 import com.marketing.bean.RegistrationBean;
+import com.marketing.commons.ForwardAfterCompletion;
 import com.marketing.commons.RedirectAfterCompletion;
 import com.marketing.utils.Servlets;
 import com.marketing.utils.SessionAttribute;
@@ -41,13 +42,7 @@ public class RegistrationServlet extends RendererServlet {
         String password = request.getParameter("password");
         String email = request.getParameter("email");
         if (registrationBean.register(username, password, email)) {
-            RedirectAfterCompletion action = new RedirectAfterCompletion(Servlets.HOME, (req, res) -> {
-                HttpSession session = req.getSession(true);
-                session.setAttribute(SessionAttribute.IS_LOGGED, true);
-                session.setAttribute(SessionAttribute.USERNAME, username);
-                // TODO do not pass null, needs fixing
-                accessLogBean.logUserAccess(null);
-            });
+            ForwardAfterCompletion action = new ForwardAfterCompletion((req, res) -> {}, Servlets.LOGIN);
             action.run(request, response);
         } else {
             renderAndServeWithVariables(request, response, new HashMap<String, Object>() {{
