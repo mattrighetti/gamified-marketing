@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table(name = "survey_header", schema = "gamified_marketing")
 public class SurveyHeader {
     private long id;
-    private Object productId;
+    private Product productId;
     private String name;
     private String instructions;
 
@@ -21,12 +21,14 @@ public class SurveyHeader {
         this.id = id;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "product_id")
     @Column(name = "product_id", nullable = false)
-    public Object getProductId() {
+    public Product getProductId() {
         return productId;
     }
 
-    public void setProductId(Object productId) {
+    public void setProductId(Product productId) {
         this.productId = productId;
     }
 

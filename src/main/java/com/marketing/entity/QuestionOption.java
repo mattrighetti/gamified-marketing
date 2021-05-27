@@ -6,8 +6,8 @@ import javax.persistence.*;
 @Table(name = "question_option", schema = "gamified_marketing")
 public class QuestionOption {
     private long id;
-    private Object questionId;
-    private Object optionChoiceId;
+    private Question questionId;
+    private OptionChoice optionChoiceId;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -20,21 +20,23 @@ public class QuestionOption {
         this.id = id;
     }
 
+    @ManyToOne
     @Column(name = "question_id", nullable = false)
-    public Object getQuestionId() {
+    public Question getQuestionId() {
         return questionId;
     }
 
-    public void setQuestionId(Object questionId) {
+    public void setQuestionId(Question questionId) {
         this.questionId = questionId;
     }
 
+    @ManyToOne
     @Column(name = "option_choice_id", nullable = false)
-    public Object getOptionChoiceId() {
+    public OptionChoice getOptionChoiceId() {
         return optionChoiceId;
     }
 
-    public void setOptionChoiceId(Object optionChoiceId) {
+    public void setOptionChoiceId(OptionChoice optionChoiceId) {
         this.optionChoiceId = optionChoiceId;
     }
 }

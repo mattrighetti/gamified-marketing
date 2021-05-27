@@ -31,7 +31,7 @@ DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(50) NOT NULL,
-    `image` VARCHAR(50) NOT NULL UNIQUE KEY,
+    `image` VARCHAR(500) NOT NULL UNIQUE KEY,
     `thumbnail` VARCHAR(50) NOT NULL UNIQUE KEY,
     `date` INT UNSIGNED NOT NULL,
     `description` VARCHAR(100) NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE `product` (
 DROP TABLE IF EXISTS `input_type`;
 
 CREATE TABLE `input_type` (
-    `id` INT UNSIGNED NOT NULL,
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `type` VARCHAR(50) NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY (`type`)
@@ -74,30 +74,24 @@ DROP TABLE IF EXISTS `survey_section`;
 
 CREATE TABLE `survey_section` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `survey_header_id` INT UNSIGNED NOT NULL,
     `name` VARCHAR(50) NOT NULL,
     `title` VARCHAR(50) NOT NULL,
     `subheading` VARCHAR(70),
-    PRIMARY KEY (`id`),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS `survey_header_survey_section`;
+
+CREATE TABLE `survey_header_survey_section`(
+    `survey_header_id` INT UNSIGNED NOT NULL,
+    `survey_section_id` INT UNSIGNED NOT NULL,
+    `order` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`survey_header_id`, `survey_section_id`),
+    FOREIGN KEY (`survey_section_id`) REFERENCES `survey_section`(`id`)
+        ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (`survey_header_id`) REFERENCES `survey_header`(`id`)
         ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB;
-
-DROP TABLE IF EXISTS `question`;
-
-CREATE TABLE `question` (
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `survey_section_id` INT UNSIGNED NOT NULL,
-    `input_type_id` INT UNSIGNED NOT NULL,
-    `name` VARCHAR(100) NOT NULL,
-    `subtext` VARCHAR(255),
-    `required` BOOLEAN NOT NULL DEFAULT FALSE,
-    PRIMARY KEY(`id`),
-    FOREIGN KEY (`survey_section_id`) REFERENCES `survey_section`(`id`)
-        ON UPDATE CASCADE ON DELETE NO ACTION,
-    FOREIGN KEY (`input_type_id`) REFERENCES `input_type`(`id`)
-        ON UPDATE CASCADE ON DELETE NO ACTION
-)  ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `option_group`;
 
@@ -107,11 +101,31 @@ CREATE TABLE `option_group`(
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS `question`;
+
+CREATE TABLE `question` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `survey_section_id` INT UNSIGNED NOT NULL,
+    `input_type_id` INT UNSIGNED NOT NULL,
+    `option_group` INT UNSIGNED,
+    `name` VARCHAR(100) NOT NULL,
+    `subtext` VARCHAR(255),
+    `required` BOOLEAN NOT NULL DEFAULT FALSE,
+    PRIMARY KEY(`id`),
+    FOREIGN KEY (`option_group`) REFERENCES `option_group`(`id`)
+        ON UPDATE CASCADE ON DELETE NO ACTION,
+    FOREIGN KEY (`survey_section_id`) REFERENCES `survey_section`(`id`)
+        ON UPDATE CASCADE ON DELETE NO ACTION,
+    FOREIGN KEY (`input_type_id`) REFERENCES `input_type`(`id`)
+        ON UPDATE CASCADE ON DELETE NO ACTION
+)  ENGINE=InnoDB;
+
 DROP TABLE IF EXISTS `option_choice`;
 
 CREATE TABLE `option_choice`(
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `option_group_id` INT UNSIGNED NOT NULL,
+    `option_choice_name` VARCHAR(50) NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`option_group_id`) REFERENCES `option_group`(`id`)
         ON UPDATE CASCADE ON DELETE NO ACTION
@@ -146,9 +160,51 @@ CREATE TABLE `answer` (
         ON UPDATE CASCADE ON DELETE NO ACTION
 ) ENGINE=InnoDB;
 
+
+
+-- SQL DATA INSERTION
+
 INSERT INTO `user`(`username`, `password`, `email`, `admin`, `banned`, `score`)
 VALUES ("admin1", "secret", "admin1@gmail.com", 1, 0, 10),
        ("admin2", "secret", "admin2@gmail.com", 1, 0, 1000),
        ("admin3", "secret", "admin3@gmail.com", 1, 0, 854),
        ("matt", "secret", "matt@gmail.com", 0, 0, 130921),
        ("random", "secret", "random@gmail.com", 0, 0, 2139);
+
+INSERT INTO `product`(`name`, `image`, `thumbnail`, `date`, `description`)
+VALUE ("iPad 12.9\"", "https://johnlewis.scene7.com/is/image/JohnLewis/238667158?$rsp-pdp-port-1440$", "none", 1622106066, "This is the new iPad 12.9 inches with the new M1 chip");
+
+INSERT INTO `survey_header`(`name`, `product_id`, `instructions`)
+VALUE ("Quality Control", 1, "Answer to all the required fields to gain points");
+
+INSERT INTO `survey_section`(`name`, `title`, `subheading`)
+VALUES ("Quality questions", "Quality", "This section asks general questions about the product's quality"),
+       ("Statistics questions", "Statistichs", "This section will ask stuff about you");
+
+INSERT INTO `survey_header_survey_section`(`survey_header_id`,`survey_section_id`, `order`)
+VALUES  (1,1,1),
+        (1,2,2);
+
+INSERT INTO `input_type`(`type`)
+VALUES ("text"),
+       ("checkbox"),
+       ("radiobutton");
+
+INSERT INTO `option_group`(`option_group_name`)
+VALUES ("Sex options"),
+       ("Age range");
+
+INSERT INTO `option_choice`(`option_group_id`, `option_choice_name`)
+VALUES (1, "Male"),
+       (1, "Female"),
+       (2, "15-30"),
+       (2, "30-45"),
+       (2, "45-60"),
+       (2, ">60");
+
+INSERT INTO `question`(`survey_section_id`, `input_type_id`, `option_group`, `name`, `subtext`, `required`)
+VALUES (1, 1, null, "Review the product", "Write a small review of the product: what you did like, what you did not like etc.", true),
+       (1, 1, null, "Would you recommend this product to a friend?", null, true),
+       (1, 1, null, "What would you buy next?", null, true),
+       (2, 3, 1, "Sex", null, false),
+       (2, 3, 2, "Age", null, false);

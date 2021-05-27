@@ -1,15 +1,17 @@
 package com.marketing.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "survey_section", schema = "gamified_marketing")
 public class SurveySection {
     private long id;
-    private Object surveyHeaderId;
+    private SurveyHeader surveyHeaderId;
     private String name;
     private String title;
     private String subheading;
+    private List<Question> questions;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -22,16 +24,17 @@ public class SurveySection {
         this.id = id;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "survey_header_id")
     @Column(name = "survey_header_id", nullable = false)
-    public Object getSurveyHeaderId() {
+    public SurveyHeader getSurveyHeaderId() {
         return surveyHeaderId;
     }
 
-    public void setSurveyHeaderId(Object surveyHeaderId) {
+    public void setSurveyHeaderId(SurveyHeader surveyHeaderId) {
         this.surveyHeaderId = surveyHeaderId;
     }
 
-    @Basic
     @Column(name = "name", nullable = false, length = 50)
     public String getName() {
         return name;
@@ -41,7 +44,6 @@ public class SurveySection {
         this.name = name;
     }
 
-    @Basic
     @Column(name = "title", nullable = false, length = 50)
     public String getTitle() {
         return title;
@@ -51,7 +53,6 @@ public class SurveySection {
         this.title = title;
     }
 
-    @Basic
     @Column(name = "subheading", nullable = true, length = 70)
     public String getSubheading() {
         return subheading;
@@ -59,5 +60,14 @@ public class SurveySection {
 
     public void setSubheading(String subheading) {
         this.subheading = subheading;
+    }
+
+    @OneToMany
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
     }
 }

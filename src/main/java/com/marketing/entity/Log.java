@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 @Table(name = "log", schema = "gamified_marketing")
 public class Log {
     private long id;
-    private long userId;
+    private User userId;
     private Timestamp access;
 
     @Id
@@ -21,16 +21,17 @@ public class Log {
         this.id = id;
     }
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @OneToOne
     @Column(name = "user_id", nullable = false)
-    public long getUserId() {
+    public User getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(User userId) {
         this.userId = userId;
     }
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "access", nullable = false)
     public Timestamp getAccess() {
         return access;
