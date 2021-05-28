@@ -1,3 +1,8 @@
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/16304728/119998747-4add0180-bfd1-11eb-8361-0dc74c5e116a.png" height="200" />
+    <img src="https://user-images.githubusercontent.com/16304728/119998944-81b31780-bfd1-11eb-8665-42fda50d4ee1.png" height="200"/>
+</p>
+
 ## Gamified Marketing Application
 ### Functional specifications
 An application deals with gamified consumer data collection. A user registers with a username, a password and an email. A registered user logs in and accesses a HOME PAGE where a “Questionnaire of the day” is published.
