@@ -7,7 +7,6 @@ import java.util.List;
 @Table(name = "survey_section", schema = "gamified_marketing")
 public class SurveySection {
     private long id;
-    private SurveyHeader surveyHeaderId;
     private String name;
     private String title;
     private String subheading;
@@ -22,17 +21,6 @@ public class SurveySection {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "survey_header_id")
-    @Column(name = "survey_header_id", nullable = false)
-    public SurveyHeader getSurveyHeaderId() {
-        return surveyHeaderId;
-    }
-
-    public void setSurveyHeaderId(SurveyHeader surveyHeaderId) {
-        this.surveyHeaderId = surveyHeaderId;
     }
 
     @Column(name = "name", nullable = false, length = 50)
@@ -62,7 +50,8 @@ public class SurveySection {
         this.subheading = subheading;
     }
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "survey_section_id")
     public List<Question> getQuestions() {
         return questions;
     }

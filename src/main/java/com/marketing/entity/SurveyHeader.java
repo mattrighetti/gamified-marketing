@@ -1,14 +1,20 @@
 package com.marketing.entity;
 
 import javax.persistence.*;
+import java.util.Map;
 
 @Entity
 @Table(name = "survey_header", schema = "gamified_marketing")
+@NamedQuery(
+        name = "SurveyHeader.selectSurveyHeaderWhereProduct",
+        query = "SELECT s FROM SurveyHeader s WHERE s.productId = :productId"
+)
 public class SurveyHeader {
     private long id;
     private Product productId;
     private String name;
     private String instructions;
+    private Map<Integer, SurveySection> surveySections;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -21,7 +27,7 @@ public class SurveyHeader {
         this.id = id;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     @Column(name = "product_id", nullable = false)
     public Product getProductId() {
@@ -50,5 +56,20 @@ public class SurveyHeader {
 
     public void setInstructions(String instructions) {
         this.instructions = instructions;
+    }
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "survey_header_survey_section",
+            joinColumns = @JoinColumn(name = "survey_header_id"),
+            inverseJoinColumns = @JoinColumn(name = "survey_section_id")
+    )
+    @MapKeyColumn(name = "section_order")
+    public Map<Integer, SurveySection> getSurveySections() {
+        return surveySections;
+    }
+
+    public void setSurveySections(Map<Integer, SurveySection> surveySections) {
+        this.surveySections = surveySections;
     }
 }

@@ -1,7 +1,6 @@
 package com.marketing.entity;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "question", schema = "gamified_marketing")
@@ -25,8 +24,7 @@ public class Question {
         this.id = id;
     }
 
-    @ManyToMany
-    @JoinColumn(name = "survey_section_id")
+    @ManyToOne
     @Column(name = "survey_section_id", nullable = false)
     public SurveySection getSurveySectionId() {
         return surveySectionId;
@@ -36,7 +34,7 @@ public class Question {
         this.surveySectionId = surveySectionId;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "input_type_id")
     @Column(name = "input_type_id", nullable = false)
     public InputType getInputTypeId() {
@@ -56,7 +54,7 @@ public class Question {
         this.name = name;
     }
 
-    @Column(name = "subtext", nullable = true, length = 255)
+    @Column(name = "subtext")
     public String getSubtext() {
         return subtext;
     }
@@ -74,7 +72,9 @@ public class Question {
         this.required = required;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "option_group")
+    @Column(name = "option_group")
     public OptionGroup getOptionGroups() {
         return optionGroups;
     }

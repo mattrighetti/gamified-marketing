@@ -85,7 +85,7 @@ DROP TABLE IF EXISTS `survey_header_survey_section`;
 CREATE TABLE `survey_header_survey_section`(
     `survey_header_id` INT UNSIGNED NOT NULL,
     `survey_section_id` INT UNSIGNED NOT NULL,
-    `order` INT UNSIGNED NOT NULL,
+    `section_order` INT UNSIGNED NOT NULL,
     PRIMARY KEY (`survey_header_id`, `survey_section_id`),
     FOREIGN KEY (`survey_section_id`) REFERENCES `survey_section`(`id`)
         ON UPDATE CASCADE ON DELETE CASCADE,
@@ -181,7 +181,7 @@ INSERT INTO `survey_section`(`name`, `title`, `subheading`)
 VALUES ("Quality questions", "Quality", "This section asks general questions about the product's quality"),
        ("Statistics questions", "Statistichs", "This section will ask stuff about you");
 
-INSERT INTO `survey_header_survey_section`(`survey_header_id`,`survey_section_id`, `order`)
+INSERT INTO `survey_header_survey_section`(`survey_header_id`,`survey_section_id`, `section_order`)
 VALUES  (1,1,1),
         (1,2,2);
 

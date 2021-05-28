@@ -1,14 +1,14 @@
 package com.marketing.entity;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Collection;
 
 @Entity
 @Table(name = "option_group", schema = "gamified_marketing")
 public class OptionGroup {
     private long id;
     private String optionGroupName;
-    private List<OptionChoice> optionChoices;
+    private Collection<OptionChoice> optionChoices;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -22,7 +22,7 @@ public class OptionGroup {
     }
 
     @Basic
-    @Column(name = "option_group_name", nullable = true, length = 50)
+    @Column(name = "option_group_name", length = 50)
     public String getOptionGroupName() {
         return optionGroupName;
     }
@@ -31,12 +31,13 @@ public class OptionGroup {
         this.optionGroupName = optionGroupName;
     }
 
-    @OneToMany
-    public List<OptionChoice> getOptionChoice() {
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "option_group_id")
+    public Collection<OptionChoice> getOptionChoice() {
         return optionChoices;
     }
 
-    public void setOptionChoice(List<OptionChoice> optionChoices) {
+    public void setOptionChoice(Collection<OptionChoice> optionChoices) {
         this.optionChoices = optionChoices;
     }
 }
