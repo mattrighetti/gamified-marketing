@@ -15,7 +15,7 @@ public class AccessLogBean extends AbstractFacade<Log> {
 
     public void logUserAccess(User user) {
         Log log = new Log();
-        log.setUserId(user.getId());
+        log.setUserId(user);
         log.setAccess(new Timestamp(System.currentTimeMillis()));
         create(log);
     }

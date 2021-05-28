@@ -16,8 +16,7 @@
             <div class="card-body">
                 <h5 class="card-title" th:text="${productName}"></h5>
                 <p class="card-text" th:text="${productDescription}"></p>
-                <!-- TODO change the href of this questionnaire button -->
-                <a href="#" class="btn btn-primary">Take the questionnaire</a>
+                <a href="/QuestionnaireServlet" th:href="@{/QuestionnaireServlet(product=${productId}, survey=${surveyId})}" class="btn btn-primary">Take the questionnaire</a>
             </div>
         </div>
     </div>

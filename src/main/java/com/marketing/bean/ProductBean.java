@@ -14,4 +14,8 @@ public class ProductBean extends AbstractFacade<Product> {
         // TODO for simplicity and test purposes this is just getting the first product in the database
         return this.find(1);
     }
+
+    public Product getProduct(int id) {
+        return find(id);
+    }
 }

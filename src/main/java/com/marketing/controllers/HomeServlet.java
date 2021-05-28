@@ -29,6 +29,9 @@ public class HomeServlet extends RendererServlet {
         vars.put("imageUrl", product.getImage());
         vars.put("productName", product.getName());
         vars.put("productDescription", product.getDescription());
+        vars.put("productId", product.getId());
+        // TODO change this hardcoded surveyId in case there will be more than one for a single product
+        vars.put("surveyId", 1);
         renderAndServeWithVariables(request, response, vars);
     }
 
