@@ -6,7 +6,8 @@ import javax.persistence.*;
 @Table(name = "option_choice", schema = "gamified_marketing")
 public class OptionChoice {
     private long id;
-    private Object optionGroupId;
+    private OptionGroup optionGroupId;
+    private String optionChoiceName;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -19,12 +20,23 @@ public class OptionChoice {
         this.id = id;
     }
 
+    @Basic
+    @Column(name = "option_choice_name", nullable = false)
+    public String getOptionChoiceName() {
+        return optionChoiceName;
+    }
+
+    public void setOptionChoiceName(String optionChoiceName) {
+        this.optionChoiceName = optionChoiceName;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @Column(name = "option_group_id", nullable = false)
-    public Object getOptionGroupId() {
+    public OptionGroup getOptionGroupId() {
         return optionGroupId;
     }
 
-    public void setOptionGroupId(Object optionGroupId) {
+    public void setOptionGroupId(OptionGroup optionGroupId) {
         this.optionGroupId = optionGroupId;
     }
 }

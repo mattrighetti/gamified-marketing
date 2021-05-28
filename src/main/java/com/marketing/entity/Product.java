@@ -9,7 +9,7 @@ public class Product {
     private String name;
     private String image;
     private String thumbnail;
-    private Object date;
+    private long date;
     private String description;
 
     @Id
@@ -23,7 +23,6 @@ public class Product {
         this.id = id;
     }
 
-    @Basic
     @Column(name = "name", nullable = false, length = 50)
     public String getName() {
         return name;
@@ -33,7 +32,6 @@ public class Product {
         this.name = name;
     }
 
-    @Basic
     @Column(name = "image", nullable = false, length = 50)
     public String getImage() {
         return image;
@@ -43,7 +41,6 @@ public class Product {
         this.image = image;
     }
 
-    @Basic
     @Column(name = "thumbnail", nullable = false, length = 50)
     public String getThumbnail() {
         return thumbnail;
@@ -54,15 +51,14 @@ public class Product {
     }
 
     @Column(name = "date", nullable = false)
-    public Object getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(Object date) {
+    public void setDate(long date) {
         this.date = date;
     }
 
-    @Basic
     @Column(name = "description", nullable = false, length = 100)
     public String getDescription() {
         return description;

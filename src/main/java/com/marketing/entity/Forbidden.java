@@ -19,7 +19,6 @@ public class Forbidden {
         this.id = id;
     }
 
-    @Basic
     @Column(name = "word", nullable = false, length = 50)
     public String getWord() {
         return word;

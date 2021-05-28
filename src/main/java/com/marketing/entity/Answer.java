@@ -6,9 +6,9 @@ import javax.persistence.*;
 @Table(name = "answer", schema = "gamified_marketing")
 public class Answer {
     private long id;
-    private long userId;
-    private long questionOptionId;
-    private Object answerNumeric;
+    private User userId;
+    private QuestionOption questionOptionId;
+    private long answerNumeric;
     private String answerText;
     private Byte answerYn;
 
@@ -23,30 +23,32 @@ public class Answer {
         this.id = id;
     }
 
+    @ManyToOne
     @Column(name = "user_id", nullable = false)
-    public long getUserId() {
+    public User getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(User userId) {
         this.userId = userId;
     }
 
+    @ManyToOne
     @Column(name = "question_option_id", nullable = false)
-    public long getQuestionOptionId() {
+    public QuestionOption getQuestionOptionId() {
         return questionOptionId;
     }
 
-    public void setQuestionOptionId(long questionOptionId) {
+    public void setQuestionOptionId(QuestionOption questionOptionId) {
         this.questionOptionId = questionOptionId;
     }
 
     @Column(name = "answer_numeric", nullable = true)
-    public Object getAnswerNumeric() {
+    public long getAnswerNumeric() {
         return answerNumeric;
     }
 
-    public void setAnswerNumeric(Object answerNumeric) {
+    public void setAnswerNumeric(long answerNumeric) {
         this.answerNumeric = answerNumeric;
     }
 
