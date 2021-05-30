@@ -20,8 +20,8 @@ public class RegistrationBean extends AbstractFacade<User> {
                 .getResultList()
                 .isEmpty()) {
             User user = new User();
-            user.setAdmin((byte) 0x0);
-            user.setBanned((byte) 0x0);
+            user.setAdmin(false);
+            user.setBanned(false);
             user.setEmail(email);
             user.setUsername(username);
             user.setPassword(password);

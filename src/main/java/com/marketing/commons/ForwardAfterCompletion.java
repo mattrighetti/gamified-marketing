@@ -16,7 +16,9 @@ public class ForwardAfterCompletion implements ServletExecutableStrategy {
 
     @Override
     public void run(HttpServletRequest request, HttpServletResponse response) {
-        action.run(request, response);
+        if (action != null) {
+            action.run(request, response);
+        }
         try {
             request.getRequestDispatcher(forwardServlet).forward(request, response);
         } catch (ServletException | IOException e) {

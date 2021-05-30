@@ -17,7 +17,9 @@ public class RedirectAfterCompletion implements ServletExecutableStrategy {
 
     @Override
     public void run(HttpServletRequest request, HttpServletResponse response) {
-        action.run(request, response);
+        if (action != null) {
+            action.run(request, response);
+        }
         String url = UrlBuilder.getUrl(request, redirectUrl);
         try {
             response.sendRedirect(url);

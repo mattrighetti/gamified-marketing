@@ -1,10 +1,15 @@
 package com.marketing.filter;
 
+import com.marketing.utils.Servlets;
 import com.marketing.utils.SessionAttribute;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
-@WebFilter(servletNames = "HomeServlet")
+@WebFilter(servletNames = {
+        Servlets.HOME,
+        Servlets.QUESTIONNAIRE,
+        Servlets.LOGOUT
+})
 public class ProtectedPagesFilter extends ProtectionFilter {
     @Override
     protected boolean satisfy(HttpServletRequest request) {

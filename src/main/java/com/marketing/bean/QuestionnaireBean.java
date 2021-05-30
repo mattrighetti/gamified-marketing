@@ -2,13 +2,18 @@ package com.marketing.bean;
 
 import com.marketing.entity.SurveyHeader;
 import com.marketing.entity.SurveySection;
+import com.marketing.utils.Tuple;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
+import java.util.HashMap;
 
 @Stateful
 public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
-    private int currentSection = 0;
+    private int productId = 0;
+    private int surveyId = 0;
+    private boolean isDataSet = false;
+    private int currentSection = 1;
 
     @EJB
     private ProductBean productBean;
@@ -18,18 +23,41 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         super(SurveyHeader.class);
     }
 
-    public SurveyHeader getProductQuestionnaire(int productId) {
-        // TODO in this case I am getting the first result in the list, change it to select possible multi-surveys
-        if (survey != null) {
-            return this.survey;
-        }
-
+    public void getProductQuestionnaire() {
         this.survey = (SurveyHeader) getEntityManager()
                 .createNamedQuery("SurveyHeader.selectSurveyHeaderWhereProduct")
                 .setParameter("productId", productBean.getProduct(productId))
+                .setParameter("surveyId",  this.surveyId)
                 .getResultList()
                 .get(0);
-        return this.survey;
+    }
+
+    public void setInitialData(int productId, int surveyId) {
+        this.setProductId(productId);
+        this.setSurveyId(surveyId);
+        this.isDataSet = true;
+        getProductQuestionnaire();
+    }
+
+    public boolean isDataSet() {
+        return isDataSet;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
+    public void setSurveyId(int surveyId) {
+        this.surveyId = surveyId;
+    }
+
+    public HashMap<String, Object> getVarsForCurrentSection() {
+        HashMap<String, Object> vars = new HashMap<>();
+        vars.put("header", getCurrentSurveySection().getName());
+        vars.put("subheader", getCurrentSurveySection().getSubheading());
+        vars.put("questions", getCurrentSurveySection().getQuestions());
+        vars.put("sectionState", new Tuple<>(this.survey.getSurveySections().size(), currentSection));
+        return vars;
     }
 
     public void nextQuestion() {
@@ -38,5 +66,17 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
 
     public void previousQuestion() {
         this.currentSection -= 1;
+    }
+
+    public boolean hasPreviousSection() {
+        return survey.getSurveySections().size() - currentSection >= 0;
+    }
+
+    public boolean isLastSection() {
+        return survey.getSurveySections().size() - currentSection == 0;
+    }
+
+    public SurveySection getCurrentSurveySection() {
+        return this.survey.getSurveySections().get(currentSection);
     }
 }

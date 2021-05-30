@@ -1,14 +1,14 @@
 package com.marketing.entity;
 
 import javax.persistence.*;
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "option_group", schema = "gamified_marketing")
 public class OptionGroup {
     private long id;
     private String optionGroupName;
-    private Collection<OptionChoice> optionChoices;
+    private List<OptionChoice> optionChoices;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -33,11 +33,11 @@ public class OptionGroup {
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "option_group_id")
-    public Collection<OptionChoice> getOptionChoice() {
+    public List<OptionChoice> getOptionChoices() {
         return optionChoices;
     }
 
-    public void setOptionChoice(Collection<OptionChoice> optionChoices) {
+    public void setOptionChoices(List<OptionChoice> optionChoices) {
         this.optionChoices = optionChoices;
     }
 }

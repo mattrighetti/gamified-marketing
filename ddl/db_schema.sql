@@ -188,7 +188,10 @@ VALUES  (1,1,1),
 INSERT INTO `input_type`(`type`)
 VALUES ("text"),
        ("checkbox"),
-       ("radiobutton");
+       ("radio"),
+       ("email"),
+       ("password"),
+       ("tel");
 
 INSERT INTO `option_group`(`option_group_name`)
 VALUES ("Sex options"),

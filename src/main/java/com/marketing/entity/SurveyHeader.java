@@ -7,7 +7,7 @@ import java.util.Map;
 @Table(name = "survey_header", schema = "gamified_marketing")
 @NamedQuery(
         name = "SurveyHeader.selectSurveyHeaderWhereProduct",
-        query = "SELECT s FROM SurveyHeader s WHERE s.productId = :productId"
+        query = "SELECT s FROM SurveyHeader s WHERE s.productId = :productId AND s.id = :surveyId"
 )
 public class SurveyHeader {
     private long id;

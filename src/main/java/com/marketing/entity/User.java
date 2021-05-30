@@ -19,8 +19,8 @@ public class User {
     private String username;
     private String password;
     private String email;
-    private Byte admin;
-    private Byte banned;
+    private boolean admin;
+    private boolean banned;
     private Object score;
 
     @Id
@@ -65,22 +65,22 @@ public class User {
     }
 
     @Basic
-    @Column(name = "admin", nullable = false)
-    public Byte getAdmin() {
+    @Column(name = "admin", nullable = false, columnDefinition = "TINYINT(1)")
+    public boolean getAdmin() {
         return admin;
     }
 
-    public void setAdmin(Byte admin) {
+    public void setAdmin(boolean admin) {
         this.admin = admin;
     }
 
     @Basic
-    @Column(name = "banned", nullable = false)
-    public Byte getBanned() {
+    @Column(name = "banned", nullable = false, columnDefinition = "TINYINT(1)")
+    public boolean getBanned() {
         return banned;
     }
 
-    public void setBanned(Byte banned) {
+    public void setBanned(boolean banned) {
         this.banned = banned;
     }
 

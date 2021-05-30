@@ -7,11 +7,11 @@ import javax.persistence.*;
 public class Question {
     private long id;
     private SurveySection surveySectionId;
-    private InputType inputTypeId;
+    private InputType inputType;
     private String name;
     private String subtext;
-    private Byte required;
-    private OptionGroup optionGroups;
+    private boolean required;
+    private OptionGroup optionGroup;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -37,12 +37,12 @@ public class Question {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "input_type_id")
     @Column(name = "input_type_id", nullable = false)
-    public InputType getInputTypeId() {
-        return inputTypeId;
+    public InputType getInputType() {
+        return inputType;
     }
 
-    public void setInputTypeId(InputType inputTypeId) {
-        this.inputTypeId = inputTypeId;
+    public void setInputType(InputType inputType) {
+        this.inputType = inputType;
     }
 
     @Column(name = "name", nullable = false, length = 100)
@@ -63,23 +63,23 @@ public class Question {
         this.subtext = subtext;
     }
 
-    @Column(name = "required", nullable = false)
-    public Byte getRequired() {
+    @Column(name = "required", nullable = false, columnDefinition = "TINYINT(1)")
+    public boolean getRequired() {
         return required;
     }
 
-    public void setRequired(Byte required) {
+    public void setRequired(boolean required) {
         this.required = required;
     }
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "option_group")
     @Column(name = "option_group")
-    public OptionGroup getOptionGroups() {
-        return optionGroups;
+    public OptionGroup getOptionGroup() {
+        return optionGroup;
     }
 
-    public void setOptionGroups(OptionGroup optionGroups) {
-        this.optionGroups = optionGroups;
+    public void setOptionGroup(OptionGroup optionGroups) {
+        this.optionGroup = optionGroups;
     }
 }
