@@ -211,3 +211,6 @@ VALUES (1, 1, null, "Review the product", "Write a small review of the product: 
        (1, 1, null, "What would you buy next?", null, true),
        (2, 3, 1, "Sex", null, false),
        (2, 3, 2, "Age", null, false);
+
+INSERT INTO `forbidden`(`word`)
+VALUES ("cazzo"), ("culo"), ("merda"), ("coglione"), ("imbecille"), ("ritardato")
