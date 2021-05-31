@@ -2,6 +2,7 @@ package com.marketing.controllers;
 
 import com.marketing.bean.AccessLogBean;
 import com.marketing.bean.LoginBean;
+import com.marketing.commons.RedirectAfterCompletion;
 import com.marketing.entity.User;
 import com.marketing.utils.Servlets;
 import com.marketing.utils.SessionAttribute;
@@ -29,7 +30,7 @@ public class LoginServlet extends RendererServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        sendForm(request, response, false);
+        sendForm(request, response, false, null);
     }
 
     @Override
@@ -39,6 +40,10 @@ public class LoginServlet extends RendererServlet {
         // Check credentials
         User user = loginBean.login(username, password);
         if (user != null) {
+            if (user.getBanned()) {
+                sendForm(request, response, true, "This user has been banned for improper use of words, try with a different user.");
+                return;
+            }
             HttpSession session = request.getSession(true);
             session.setAttribute(SessionAttribute.IS_LOGGED, true);
             session.setAttribute(SessionAttribute.IS_ADMIN, user.getAdmin());
@@ -46,15 +51,15 @@ public class LoginServlet extends RendererServlet {
             response.sendRedirect(UrlBuilder.getUrl(request, Servlets.HOME));
             accessLogBean.logUserAccess(user);
         } else {
-            sendForm(request, response, true);
+            sendForm(request, response, true, "Incorrect data, try again with valid credentials.");
         }
     }
 
-    public void sendForm(HttpServletRequest request, HttpServletResponse response, boolean withError) throws IOException {
+    public void sendForm(HttpServletRequest request, HttpServletResponse response, boolean withError, String errorMessage) throws IOException {
         renderAndServeWithVariables(request, response, new HashMap<String, Object>() {{
             put("formAction", getServletName());
             put("failedAttempt", withError);
-            put("alertText", "Incorrect data, try again with valid credentials.");
+            put("alertText", errorMessage);
         }});
     }
 }

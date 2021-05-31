@@ -8,7 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 @WebFilter(servletNames = {
         Servlets.HOME,
         Servlets.QUESTIONNAIRE,
-        Servlets.LOGOUT
+        Servlets.LOGOUT,
+        Servlets.BANNED
 })
 public class ProtectedPagesFilter extends ProtectionFilter {
     @Override
