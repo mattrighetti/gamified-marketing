@@ -160,7 +160,19 @@ CREATE TABLE `answer` (
         ON UPDATE CASCADE ON DELETE NO ACTION
 ) ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS `review`;
 
+CREATE TABLE `review` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `product_id` INT UNSIGNED NOT NULL,
+    `user_id` INT UNSIGNED NOT NULL,
+    `review_text` VARCHAR(511),
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`product_id`) REFERENCES `product`(`id`)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
+        ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 -- SQL DATA INSERTION
 
@@ -213,4 +225,8 @@ VALUES (1, 1, null, "Review the product", "Write a small review of the product: 
        (2, 3, 2, "Age", null, false);
 
 INSERT INTO `forbidden`(`word`)
-VALUES ("cazzo"), ("culo"), ("merda"), ("coglione"), ("imbecille"), ("ritardato")
+VALUES ("cazzo"), ("culo"), ("merda"), ("coglione"), ("imbecille"), ("ritardato");
+
+INSERT INTO `review`(`product_id`, `user_id`, `review_text`)
+VALUES (1, 1, "Best product ever!"),
+       (1, 3, "Android is better!");

@@ -1,8 +1,11 @@
 package com.marketing.bean;
 
 import com.marketing.entity.Product;
+import com.marketing.entity.Review;
 
 import javax.ejb.Stateless;
+import java.util.LinkedList;
+import java.util.List;
 
 @Stateless
 public class ProductBean extends AbstractFacade<Product> {

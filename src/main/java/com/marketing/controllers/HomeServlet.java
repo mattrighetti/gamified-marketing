@@ -2,6 +2,7 @@ package com.marketing.controllers;
 
 import com.marketing.bean.ProductBean;
 import com.marketing.entity.Product;
+import com.marketing.entity.Review;
 
 import javax.ejb.EJB;
 import javax.servlet.*;
@@ -30,6 +31,7 @@ public class HomeServlet extends RendererServlet {
         vars.put("productName", product.getName());
         vars.put("productDescription", product.getDescription());
         vars.put("productId", product.getId());
+        vars.put("reviews", product.getReviews());
         // TODO change this hardcoded surveyId in case there will be more than one for a single product
         vars.put("surveyId", 1);
         renderAndServeWithVariables(request, response, vars);
