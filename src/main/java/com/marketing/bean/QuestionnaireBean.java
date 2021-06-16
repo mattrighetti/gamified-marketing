@@ -5,8 +5,10 @@ import com.marketing.entity.SurveySection;
 import com.marketing.utils.Tuple;
 
 import javax.ejb.EJB;
+import javax.ejb.Remove;
 import javax.ejb.Stateful;
 import java.util.HashMap;
+import java.util.Map;
 
 @Stateful
 public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
@@ -14,6 +16,7 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
     private int surveyId = 0;
     private boolean isDataSet = false;
     private int currentSection = 1;
+    private Map<String,Map<String,String>> temporaryAnswers;
 
     @EJB
     private ProductBean productBean;
@@ -21,6 +24,7 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
 
     public QuestionnaireBean() {
         super(SurveyHeader.class);
+        temporaryAnswers = new HashMap<>();
     }
 
     public void getProductQuestionnaire() {
@@ -56,16 +60,34 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         vars.put("header", getCurrentSurveySection().getName());
         vars.put("subheader", getCurrentSurveySection().getSubheading());
         vars.put("questions", getCurrentSurveySection().getQuestions());
+        if (temporaryAnswers.containsKey(Integer.toString(currentSection))){
+            vars.put("temporaryAnswers", temporaryAnswers.get(Integer.toString(currentSection)));
+        }
         vars.put("sectionState", new Tuple<>(this.survey.getSurveySections().size(), currentSection));
         return vars;
     }
 
-    public void nextQuestion() {
+    public void nextQuestion(Map<String, String[]> answers) {
+        Map<String,String> newParams = new HashMap<>();
+        for (String key: answers.keySet() ) {
+            newParams.put(key,new String(answers.get(key)[0]));
+        }
+        this.temporaryAnswers.put(Integer.toString(currentSection), newParams);
         this.currentSection += 1;
     }
 
-    public void previousQuestion() {
+    public void previousQuestion(Map<String, String[]> answers) {
+        Map<String,String> newParams = new HashMap<>();
+        for (String key: answers.keySet() ) {
+            newParams.put(key,new String(answers.get(key)[0]));
+        }
+        this.temporaryAnswers.put(Integer.toString(currentSection), newParams);
         this.currentSection -= 1;
+    }
+
+    @Remove
+    public void cancelQuestionnaire(){
+        // The persistence context is terminated when the client calls this method
     }
 
     public boolean hasPreviousSection() {
@@ -79,4 +101,5 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
     public SurveySection getCurrentSurveySection() {
         return this.survey.getSurveySections().get(currentSection);
     }
+
 }

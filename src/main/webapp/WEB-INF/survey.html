@@ -22,7 +22,9 @@
                         PARAM_NAME=QuestionId,VALUE=TextInserted
                         */-->
                         <label th:for="${question.id}" class="form-label" th:text="${question.name}"></label>
-                        <input type="text" class="form-control" th:id="${question.id}" th:name="${question.id}" th:required="question.required">
+                        <input type="text" class="form-control" th:id="${question.id}" th:name="${question.id}"
+                               th:value="${ temporaryAnswers? '' : '' }"
+                               th:required="question.required">
                         <small th:if="${question.subtext != ''}" th:id="${question.id}" class="form-text text-muted" th:text="${question.subtext}"></small>
                     </div>
                     <div class="mb-3" th:case="'radio'">

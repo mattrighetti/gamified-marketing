@@ -10,6 +10,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @WebServlet(name = "QuestionnaireServlet", value = "/QuestionnaireServlet")
@@ -39,15 +41,16 @@ public class QuestionnaireServlet extends RendererServlet {
                 // TODO save answers to database
                 break;
             case CANCEL:
+                questionnaireBean.cancelQuestionnaire();
                 RedirectAfterCompletion redirect = new RedirectAfterCompletion(Servlets.HOME, null);
                 redirect.run(request, response);
                 break;
             case NEXT:
-                questionnaireBean.nextQuestion();
+                questionnaireBean.nextQuestion(request.getParameterMap());
                 renderAndServeWithVariables(request, response, questionnaireBean.getVarsForCurrentSection());
                 break;
             case PREVIOUS:
-                questionnaireBean.previousQuestion();
+                questionnaireBean.previousQuestion(request.getParameterMap());
                 renderAndServeWithVariables(request, response, questionnaireBean.getVarsForCurrentSection());
                 break;
             default:
