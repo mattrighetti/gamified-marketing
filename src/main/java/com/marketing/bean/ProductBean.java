@@ -4,6 +4,7 @@ import com.marketing.entity.Product;
 import com.marketing.entity.Review;
 
 import javax.ejb.Stateless;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,5 +21,23 @@ public class ProductBean extends AbstractFacade<Product> {
 
     public Product getProduct(int id) {
         return find(id);
+    }
+
+    public Product getProductByDate(long date){
+        List<Product> products = getEntityManager().createNamedQuery("Product.selectProductByDate", Product.class).setParameter("date",date).getResultList();
+        if (products.size() > 0)
+            return products.get(0);
+        else
+            return null;
+    }
+
+    public void addProduct(String name, long date, String description){
+        Product newProduct = new Product();
+        newProduct.setName(name);
+        newProduct.setDate(date);
+        newProduct.setDescription(description);
+        newProduct.setImage("https://images-eu.ssl-images-amazon.com/images/G/29/X-Site/2021/PD21/shop-all-deals-cat-card-low-res._SY304_CB666436135_.jpg");
+        newProduct.setThumbnail("url");
+        create(newProduct);
     }
 }

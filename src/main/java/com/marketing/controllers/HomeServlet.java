@@ -27,6 +27,7 @@ public class HomeServlet extends RendererServlet {
         Product product = productBean.getProductOfTheDay();
         HashMap<String, Object> vars = new HashMap<>();
         vars.put("username", session.getAttribute("username"));
+        vars.put("isAdmin", session.getAttribute("isAdmin"));
         vars.put("imageUrl", product.getImage());
         vars.put("productName", product.getName());
         vars.put("productDescription", product.getDescription());

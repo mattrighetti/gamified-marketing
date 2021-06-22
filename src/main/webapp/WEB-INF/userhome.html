@@ -12,6 +12,12 @@
         <p class="display-3">Welcome <span th:text="${username}"></span></p>
         <p class="display-5">Product of the day</p>
         <div class="row">
+            <div class="admin">
+                <a href="/CreateProductServlet" th:href="@{/CreateProductServlet}" class="btn btn-primary">Create a new Product</a>
+                <!--a href="/InspectQuestionnaireServlet" th:href="@{/InspectQuestionnaireServlet}" class="btn btn-primary">Inspect Questionnaires</a-->
+            </div>
+        </div>
+        <div class="row">
             <div class="card col-sm" style="width: 18rem;">
                 <img class="card-img-top" th:src="${imageUrl}" alt="Product cap">
                 <div class="card-body">
