@@ -1,12 +1,13 @@
 package com.marketing.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "question", schema = "gamified_marketing")
 public class Question {
     private long id;
-    private SurveySection surveySectionId;
+    private List<SurveySection> surveySectionsId;
     private InputType inputType;
     private String name;
     private String subtext;
@@ -24,14 +25,13 @@ public class Question {
         this.id = id;
     }
 
-    @ManyToOne
-    @Column(name = "survey_section_id", nullable = false)
-    public SurveySection getSurveySectionId() {
-        return surveySectionId;
+    @ManyToMany(mappedBy = "questions")
+    public List<SurveySection> getSurveySectionsId() {
+        return surveySectionsId;
     }
 
-    public void setSurveySectionId(SurveySection surveySectionId) {
-        this.surveySectionId = surveySectionId;
+    public void setSurveySectionsId(List<SurveySection> surveySectionsId) {
+        this.surveySectionsId = surveySectionsId;
     }
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -50,8 +50,12 @@ public class SurveySection {
         this.subheading = subheading;
     }
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "survey_section_id")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "survey_section_question",
+            joinColumns = @JoinColumn(name = "survey_section_id"),
+            inverseJoinColumns = @JoinColumn(name = "question_id")
+    )
     public List<Question> getQuestions() {
         return questions;
     }

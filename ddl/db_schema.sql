@@ -105,7 +105,6 @@ DROP TABLE IF EXISTS `question`;
 
 CREATE TABLE `question` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `survey_section_id` INT UNSIGNED NOT NULL,
     `input_type_id` INT UNSIGNED NOT NULL,
     `option_group` INT UNSIGNED,
     `name` VARCHAR(100) NOT NULL,
@@ -114,11 +113,21 @@ CREATE TABLE `question` (
     PRIMARY KEY(`id`),
     FOREIGN KEY (`option_group`) REFERENCES `option_group`(`id`)
         ON UPDATE CASCADE ON DELETE NO ACTION,
-    FOREIGN KEY (`survey_section_id`) REFERENCES `survey_section`(`id`)
-        ON UPDATE CASCADE ON DELETE NO ACTION,
     FOREIGN KEY (`input_type_id`) REFERENCES `input_type`(`id`)
         ON UPDATE CASCADE ON DELETE NO ACTION
 )  ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS `survey_section_question`;
+
+CREATE TABLE `survey_section_question`(
+                                          `survey_section_id` INT UNSIGNED NOT NULL,
+                                          `question_id` INT UNSIGNED NOT NULL,
+                                          PRIMARY KEY (`survey_section_id`,question_id),
+                                          FOREIGN KEY (`survey_section_id`) REFERENCES survey_section(`id`)
+                                              ON UPDATE CASCADE  ON DELETE CASCADE,
+                                          FOREIGN KEY (`question_id`) REFERENCES `question`(`id`)
+                                              ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `option_choice`;
 
@@ -217,12 +226,18 @@ VALUES (1, "Male"),
        (2, "45-60"),
        (2, ">60");
 
-INSERT INTO `question`(`survey_section_id`, `input_type_id`, `option_group`, `name`, `subtext`, `required`)
-VALUES (1, 1, null, "Review the product", "Write a small review of the product: what you did like, what you did not like etc.", true),
-       (1, 1, null, "Would you recommend this product to a friend?", null, true),
-       (1, 1, null, "What would you buy next?", null, true),
-       (2, 3, 1, "Sex", null, false),
-       (2, 3, 2, "Age", null, false);
+INSERT INTO `question`( `input_type_id`, `option_group`, `name`, `subtext`, `required`)
+VALUES ( 1, null, "Review the product", "Write a small review of the product: what you did like, what you did not like etc.", true),
+       (1, null, "Would you recommend this product to a friend?", null, true),
+       (1, null, "What would you buy next?", null, true),
+       (3, 1, "Sex", null, false),
+       (3, 2, "Age", null, false);
+INSERT INTO `survey_section_question`(`survey_section_id`,question_id)
+VALUES(1,1),
+       (1,2),
+       (1,3),
+       (2,4),
+       (2,5);
 
 INSERT INTO `forbidden`(`word`)
 VALUES ("cazzo"), ("culo"), ("merda"), ("coglione"), ("imbecille"), ("ritardato");
