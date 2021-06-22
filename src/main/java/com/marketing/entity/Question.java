@@ -8,7 +8,6 @@ import java.util.List;
 public class Question {
     private long id;
     private List<SurveySection> surveySectionsId;
-    private InputType inputType;
     private String name;
     private String subtext;
     private boolean required;
@@ -32,17 +31,6 @@ public class Question {
 
     public void setSurveySectionsId(List<SurveySection> surveySectionsId) {
         this.surveySectionsId = surveySectionsId;
-    }
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "input_type_id")
-    @Column(name = "input_type_id", nullable = false)
-    public InputType getInputType() {
-        return inputType;
-    }
-
-    public void setInputType(InputType inputType) {
-        this.inputType = inputType;
     }
 
     @Column(name = "name", nullable = false, length = 100)

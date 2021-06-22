@@ -72,4 +72,7 @@ public class SurveyHeader {
     public void setSurveySections(Map<Integer, SurveySection> surveySections) {
         this.surveySections = surveySections;
     }
+    public void addSurveySection(int id, SurveySection surveySection){
+        surveySections.put(id, surveySection);
+    }
 }

@@ -38,15 +38,6 @@ CREATE TABLE `product` (
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
-DROP TABLE IF EXISTS `input_type`;
-
-CREATE TABLE `input_type` (
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `type` VARCHAR(50) NOT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY (`type`)
-) ENGINE=InnoDB;
-
 DROP TABLE IF EXISTS `log`;
 
 CREATE TABLE `log` (
@@ -105,15 +96,12 @@ DROP TABLE IF EXISTS `question`;
 
 CREATE TABLE `question` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `input_type_id` INT UNSIGNED NOT NULL,
     `option_group` INT UNSIGNED,
     `name` VARCHAR(100) NOT NULL,
     `subtext` VARCHAR(255),
     `required` BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY(`id`),
     FOREIGN KEY (`option_group`) REFERENCES `option_group`(`id`)
-        ON UPDATE CASCADE ON DELETE NO ACTION,
-    FOREIGN KEY (`input_type_id`) REFERENCES `input_type`(`id`)
         ON UPDATE CASCADE ON DELETE NO ACTION
 )  ENGINE=InnoDB;
 
@@ -205,14 +193,6 @@ VALUES ("Quality questions", "Quality", "This section asks general questions abo
 INSERT INTO `survey_header_survey_section`(`survey_header_id`,`survey_section_id`, `section_order`)
 VALUES  (1,1,1),
         (1,2,2);
-
-INSERT INTO `input_type`(`type`)
-VALUES ("text"),
-       ("checkbox"),
-       ("radio"),
-       ("email"),
-       ("password"),
-       ("tel");
 
 INSERT INTO `option_group`(`option_group_name`)
 VALUES ("Sex options"),

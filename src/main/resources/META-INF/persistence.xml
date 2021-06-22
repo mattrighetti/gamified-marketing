@@ -7,7 +7,6 @@
         <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
         <jta-data-source>MyDataBase</jta-data-source>
         <class>com.marketing.entity.Answer</class>
-        <class>com.marketing.entity.InputType</class>
         <class>com.marketing.entity.Log</class>
         <class>com.marketing.entity.OptionChoice</class>
         <class>com.marketing.entity.OptionGroup</class>

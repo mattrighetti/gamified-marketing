@@ -31,7 +31,7 @@ public class ProductBean extends AbstractFacade<Product> {
             return null;
     }
 
-    public void addProduct(String name, long date, String description){
+    public Product addProduct(String name, long date, String description){
         Product newProduct = new Product();
         newProduct.setName(name);
         newProduct.setDate(date);
@@ -39,5 +39,6 @@ public class ProductBean extends AbstractFacade<Product> {
         newProduct.setImage("https://images-eu.ssl-images-amazon.com/images/G/29/X-Site/2021/PD21/shop-all-deals-cat-card-low-res._SY304_CB666436135_.jpg");
         newProduct.setThumbnail("url");
         create(newProduct);
+        return newProduct;
     }
 }

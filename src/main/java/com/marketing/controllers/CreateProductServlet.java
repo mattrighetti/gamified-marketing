@@ -1,6 +1,7 @@
 package com.marketing.controllers;
 
 import com.marketing.bean.ProductBean;
+import com.marketing.bean.QuestionnaireBean;
 import com.marketing.entity.Product;
 
 import javax.ejb.EJB;
@@ -20,6 +21,8 @@ public class CreateProductServlet extends RendererServlet{
 
     @EJB
     private ProductBean productBean;
+    @EJB
+    private QuestionnaireBean questionnaireBean;
 
     public CreateProductServlet() {
         super("/WEB-INF/createProduct.html");
@@ -50,9 +53,18 @@ public class CreateProductServlet extends RendererServlet{
         }
         Date currDate = new Date();
 
+        //Save the questions for the questionnaire
+        int id = 1;
+        Map<String,String> questions = new HashMap<>();
+        while(request.getParameter(Integer.toString(id)) != null){
+            questions.put(Integer.toString(id),request.getParameter(Integer.toString(id)));
+            id++;
+        }
+
         //check if the selected date is not already occupied with another product
         if (productBean.getProductByDate((long) date.getTime()/1000) == null) {
-            productBean.addProduct(name, (long) date.getTime()/1000, description);
+            Product product = productBean.addProduct(name, (long) date.getTime()/1000, description);
+            questionnaireBean.createQuestionnaire(product, questions);
             sendForm(request, response, true,"confirmation", "Product " + name + " has been correctly added!");
         } else {
             sendForm(request, response, true, "alertText","You cannot create a product of the day for the selected day,  a product is already set on that day! please select an other free date.");

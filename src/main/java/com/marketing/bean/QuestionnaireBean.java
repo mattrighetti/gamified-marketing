@@ -1,13 +1,14 @@
 package com.marketing.bean;
 
-import com.marketing.entity.SurveyHeader;
-import com.marketing.entity.SurveySection;
+import com.marketing.entity.*;
 import com.marketing.utils.Tuple;
 
 import javax.ejb.EJB;
 import javax.ejb.Remove;
 import javax.ejb.Stateful;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Stateful
@@ -100,6 +101,35 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
 
     public SurveySection getCurrentSurveySection() {
         return this.survey.getSurveySections().get(currentSection);
+    }
+
+    public void createQuestionnaire(Product product, Map<String,String> questions){
+        SurveyHeader surveyHeader = new SurveyHeader();
+        surveyHeader.setProductId(product);
+        surveyHeader.setSurveySections(new HashMap<>());
+
+        List<Question> list = new ArrayList<>();
+        for (String key: questions.keySet() ) {
+            //TODO check if the question already exists
+
+            //the question doesn't exist, create a new one
+            Question question = new Question();
+            question.setName(questions.get(key));
+            question.setOptionGroup(null);
+            question.setRequired(true);
+            list.add(question);
+            getEntityManager().persist(question);
+        }
+        SurveySection surveySection = new SurveySection();
+        surveySection.setTitle("Marketing section");
+        surveySection.setName("Quality");
+        surveySection.setQuestions(list);
+        getEntityManager().persist(surveySection);
+
+        //Add the marketing section (marked with 1)
+        //TODO add the default statistical section
+        surveyHeader.addSurveySection(Integer.valueOf(1),surveySection);
+        create(surveyHeader);
     }
 
 }
