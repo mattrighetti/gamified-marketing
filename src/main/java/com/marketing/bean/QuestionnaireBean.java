@@ -6,10 +6,7 @@ import com.marketing.utils.Tuple;
 import javax.ejb.EJB;
 import javax.ejb.Remove;
 import javax.ejb.Stateful;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Stateful
 public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
@@ -21,7 +18,10 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
 
     @EJB
     private ProductBean productBean;
+    @EJB
+    private QuestionBean questionBean;
     private SurveyHeader survey;
+
 
     public QuestionnaireBean() {
         super(SurveyHeader.class);
@@ -110,15 +110,18 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
 
         List<Question> list = new ArrayList<>();
         for (String key: questions.keySet() ) {
-            //TODO check if the question already exists
 
-            //the question doesn't exist, create a new one
-            Question question = new Question();
-            question.setName(questions.get(key));
-            question.setOptionGroup(null);
-            question.setRequired(true);
+            //check if the question already exists
+            Question question = questionBean.getQuestionByName(questions.get(key));
+            //if the question doesn't exist, create a new one
+            if(question == null){
+                question = new Question();
+                question.setName(questions.get(key));
+                question.setOptionGroup(null);
+                question.setRequired(true);
+                getEntityManager().persist(question);
+            }
             list.add(question);
-            getEntityManager().persist(question);
         }
         SurveySection surveySection = new SurveySection();
         surveySection.setTitle("Marketing section");
@@ -127,9 +130,25 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         getEntityManager().persist(surveySection);
 
         //Add the marketing section (marked with 1)
-        //TODO add the default statistical section
-        surveyHeader.addSurveySection(Integer.valueOf(1),surveySection);
+        surveyHeader.addSurveySection(1,surveySection);
+        //Add the statistical Section: the section with id 2 is assumed to be the default "statistical section"
+        SurveySection statSection = getEntityManager().find(SurveySection.class,2);
+        if(statSection != null) {
+            //surveyHeader.addSurveySection(2, statSection);
+        }
         create(surveyHeader);
+        getEntityManager().flush();
+    }
+
+    public List<SurveyHeader> getAllQuestionnaires(){
+        List<SurveyHeader> questionnaires = getEntityManager().createNamedQuery("SurveyHeader.allPastSurveysOrderedByDate").setParameter("today",(long) new Date().getTime()/1000).getResultList();
+        if (questionnaires != null) return questionnaires;
+        else return new ArrayList<>();
+
+    }
+
+    public void deleteQuestionnaire(int id){
+        remove(find(id));
     }
 
 }

@@ -5,6 +5,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "question", schema = "gamified_marketing")
+@NamedQueries(
+        @NamedQuery( name = "Question.questionByName", query="select q from Question q where q.name =: name")
+)
 public class Question {
     private long id;
     private List<SurveySection> surveySectionsId;

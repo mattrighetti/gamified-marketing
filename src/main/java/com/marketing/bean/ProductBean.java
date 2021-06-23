@@ -36,9 +36,11 @@ public class ProductBean extends AbstractFacade<Product> {
         newProduct.setName(name);
         newProduct.setDate(date);
         newProduct.setDescription(description);
+        //placeholder image url
         newProduct.setImage("https://images-eu.ssl-images-amazon.com/images/G/29/X-Site/2021/PD21/shop-all-deals-cat-card-low-res._SY304_CB666436135_.jpg");
         newProduct.setThumbnail("url");
         create(newProduct);
+        getEntityManager().flush();
         return newProduct;
     }
 }

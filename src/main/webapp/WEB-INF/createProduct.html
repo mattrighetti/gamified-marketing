@@ -47,13 +47,13 @@
         <h3>Questionnaire</h3>
         <p>Create the questionnaire for the new product!</p>
         <p>You have added <span id="counter">0</span> marketing questions:</p>
-        <div id="questions_form" class="mb-3" >
+        <div id="questions_form" class="row" >
         </div>
-        <a href=# onclick="addQuestion()" class="btn btn-secondary btn-lg ms-3">Add a question</a>
+        <a href=# onclick="addQuestion()" class="btn btn-primary">Add a question</a>
 
         <div class="d-flex flex-row-reverse bd-highlight">
-            <button type="submit" class="btn btn-secondary btn-lg ms-3"  name="submit">Submit</button>
-            <a href="/HomeServlet" th:href="@{/HomeServlet}" class="btn btn-primary">Cancel</a>
+            <button type="submit" class="btn btn-primary"  name="submit">Submit</button>
+            <a href="/HomeServlet" th:href="@{/HomeServlet}" class=" btn-secondary btn-lg ms-3">Cancel</a>
         </div>
     </form>
 </div>

@@ -108,13 +108,13 @@ CREATE TABLE `question` (
 DROP TABLE IF EXISTS `survey_section_question`;
 
 CREATE TABLE `survey_section_question`(
-                                          `survey_section_id` INT UNSIGNED NOT NULL,
-                                          `question_id` INT UNSIGNED NOT NULL,
-                                          PRIMARY KEY (`survey_section_id`,question_id),
-                                          FOREIGN KEY (`survey_section_id`) REFERENCES survey_section(`id`)
-                                              ON UPDATE CASCADE  ON DELETE CASCADE,
-                                          FOREIGN KEY (`question_id`) REFERENCES `question`(`id`)
-                                              ON UPDATE CASCADE ON DELETE CASCADE
+    `survey_section_id` INT UNSIGNED NOT NULL,
+    `question_id` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`survey_section_id`,question_id),
+    FOREIGN KEY (`survey_section_id`) REFERENCES survey_section(`id`)
+      ON UPDATE CASCADE  ON DELETE CASCADE,
+    FOREIGN KEY (`question_id`) REFERENCES `question`(`id`)
+      ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `option_choice`;
@@ -181,10 +181,13 @@ VALUES ("admin1", "secret", "admin1@gmail.com", 1, 0, 10),
        ("random", "secret", "random@gmail.com", 0, 0, 2139);
 
 INSERT INTO `product`(`name`, `image`, `thumbnail`, `date`, `description`)
-VALUE ("iPad 12.9\"", "https://johnlewis.scene7.com/is/image/JohnLewis/238667158?$rsp-pdp-port-1440$", "none", 1622106066, "This is the new iPad 12.9 inches with the new M1 chip");
+VALUE ("iPad 12.9\"", "https://johnlewis.scene7.com/is/image/JohnLewis/238667158?$rsp-pdp-port-1440$", "none", 1622106066, "This is the new iPad 12.9 inches with the new M1 chip"),
+      ("iPhone 12\"", "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.apple.com%2Fit%2Fshop%2Fbuy-iphone%2Fiphone-12-pro&psig=AOvVaw0F9zeDBzOck__7nGRYLMU3&ust=1624488071565000&source=images&cd=vfe&ved=0CAoQjRxqFwoTCMDao9HCrPECFQAAAAAdAAAAABAD", "none", 1620106066, "This is the new iPhone 12 ");
+
 
 INSERT INTO `survey_header`(`name`, `product_id`, `instructions`)
-VALUE ("Quality Control", 1, "Answer to all the required fields to gain points");
+VALUE ("Quality Control", 1, "Answer to all the required fields to gain points"),
+    ("Quality Control", 2, "Answer to all the required fields to gain points");
 
 INSERT INTO `survey_section`(`name`, `title`, `subheading`)
 VALUES ("Quality questions", "Quality", "This section asks general questions about the product's quality"),
@@ -192,7 +195,9 @@ VALUES ("Quality questions", "Quality", "This section asks general questions abo
 
 INSERT INTO `survey_header_survey_section`(`survey_header_id`,`survey_section_id`, `section_order`)
 VALUES  (1,1,1),
-        (1,2,2);
+        (1,2,2),
+        (2,1,1),
+        (2,2,2);
 
 INSERT INTO `option_group`(`option_group_name`)
 VALUES ("Sex options"),
@@ -206,12 +211,12 @@ VALUES (1, "Male"),
        (2, "45-60"),
        (2, ">60");
 
-INSERT INTO `question`( `input_type_id`, `option_group`, `name`, `subtext`, `required`)
-VALUES ( 1, null, "Review the product", "Write a small review of the product: what you did like, what you did not like etc.", true),
-       (1, null, "Would you recommend this product to a friend?", null, true),
-       (1, null, "What would you buy next?", null, true),
-       (3, 1, "Sex", null, false),
-       (3, 2, "Age", null, false);
+INSERT INTO `question`(`option_group`, `name`, `subtext`, `required`)
+VALUES ( null, "Review the product", "Write a small review of the product: what you did like, what you did not like etc.", true),
+       (null, "Would you recommend this product to a friend?", null, true),
+       (null, "What would you buy next?", null, true),
+       ( 1, "Sex", null, false),
+       (2, "Age", null, false);
 INSERT INTO `survey_section_question`(`survey_section_id`,question_id)
 VALUES(1,1),
        (1,2),

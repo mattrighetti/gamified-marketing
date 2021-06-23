@@ -5,10 +5,14 @@ import java.util.Map;
 
 @Entity
 @Table(name = "survey_header", schema = "gamified_marketing")
-@NamedQuery(
-        name = "SurveyHeader.selectSurveyHeaderWhereProduct",
-        query = "SELECT s FROM SurveyHeader s WHERE s.productId = :productId AND s.id = :surveyId"
-)
+@NamedQueries({
+        @NamedQuery(
+                name = "SurveyHeader.selectSurveyHeaderWhereProduct",
+                query = "SELECT s FROM SurveyHeader s WHERE s.productId = :productId AND s.id = :surveyId"),
+        @NamedQuery(
+                name = "SurveyHeader.allPastSurveysOrderedByDate",
+                query = "select s from SurveyHeader s, Product p where p = s.productId and p.date < :today order by p.date desc")
+})
 public class SurveyHeader {
     private long id;
     private Product productId;

@@ -2,6 +2,8 @@ package com.marketing.controllers;
 
 import com.marketing.bean.QuestionnaireBean;
 import com.marketing.entity.SurveyHeader;
+import com.marketing.utils.Servlets;
+import com.marketing.utils.UrlBuilder;
 
 import javax.ejb.EJB;
 import javax.servlet.annotation.WebServlet;
@@ -12,28 +14,24 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-@WebServlet(name="InspectQuestionnaireServlet", value="/InspectQuestionnaireServlet")
-public class InspectQuestionnaireServlet extends RendererServlet{
+@WebServlet(name="DeleteQuestionnaireServlet", value="/DeleteQuestionnaireServlet")
+public class DeleteQuestionnaireServlet extends RendererServlet{
 
     @EJB
     private QuestionnaireBean questionnaireBean;
 
-    public InspectQuestionnaireServlet() {
+    public DeleteQuestionnaireServlet() {
         super("/WEB-INF/inspectQuest.html");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        doGet(request,response);
+        String surveyId = request.getParameter("surveyId");
+        questionnaireBean.deleteQuestionnaire(Integer.valueOf(surveyId));
+        response.sendRedirect(UrlBuilder.getUrl(request, Servlets.INSPECTION));
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        HttpSession session = request.getSession();
-        List<SurveyHeader> questionnaires =  questionnaireBean.getAllQuestionnaires();
-        HashMap<String, Object> vars = new HashMap<>();
-        vars.put("username", session.getAttribute("username"));
-        vars.put("questionnaires", questionnaires);
-        renderAndServeWithVariables(request, response, vars);
+        doPost(request,response);
     }
-
 
 }

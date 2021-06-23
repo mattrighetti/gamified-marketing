@@ -5,10 +5,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "product", schema = "gamified_marketing")
-@NamedQueries(
-        @NamedQuery(name="Product.selectProductByDate",
-        query = "select p from Product p where p.date =: date")
-)
+@NamedQueries({
+        @NamedQuery(name = "Product.selectProductByDate",
+                query = "select p from Product p where p.date =: date")
+})
 public class Product {
     private long id;
     private String name;
