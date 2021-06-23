@@ -2,6 +2,7 @@ package com.marketing.controllers;
 
 import com.marketing.bean.QuestionnaireBean;
 import com.marketing.entity.SurveyHeader;
+import com.marketing.entity.User;
 
 import javax.ejb.EJB;
 import javax.servlet.annotation.WebServlet;
@@ -29,6 +30,9 @@ public class InspectQuestionnaireServlet extends RendererServlet{
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
         HttpSession session = request.getSession();
         List<SurveyHeader> questionnaires =  questionnaireBean.getAllQuestionnaires();
+        List<User> usersCompiled;
+        List<User> usersCanceled;
+
         HashMap<String, Object> vars = new HashMap<>();
         vars.put("username", session.getAttribute("username"));
         vars.put("questionnaires", questionnaires);

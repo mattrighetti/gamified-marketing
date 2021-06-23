@@ -13,6 +13,7 @@ public class Question {
     private List<SurveySection> surveySectionsId;
     private String name;
     private String subtext;
+    private String inputType;
     private boolean required;
     private OptionGroup optionGroup;
 
@@ -65,12 +66,20 @@ public class Question {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "option_group")
-    @Column(name = "option_group")
     public OptionGroup getOptionGroup() {
         return optionGroup;
     }
 
     public void setOptionGroup(OptionGroup optionGroups) {
         this.optionGroup = optionGroups;
+    }
+
+    @Column(name = "input_type")
+    public String getInputType() {
+        return inputType;
+    }
+
+    public void setInputType(String inputType) {
+        this.inputType = inputType;
     }
 }

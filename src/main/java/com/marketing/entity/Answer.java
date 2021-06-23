@@ -7,10 +7,9 @@ import javax.persistence.*;
 public class Answer {
     private long id;
     private User userId;
-    private QuestionOption questionOptionId;
-    private long answerNumeric;
+    private Question questionId;
+    private OptionChoice optionChoice;
     private String answerText;
-    private Byte answerYn;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -24,6 +23,7 @@ public class Answer {
     }
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     @Column(name = "user_id", nullable = false)
     public User getUserId() {
         return userId;
@@ -34,22 +34,14 @@ public class Answer {
     }
 
     @ManyToOne
-    @Column(name = "question_option_id", nullable = false)
-    public QuestionOption getQuestionOptionId() {
-        return questionOptionId;
+    @JoinColumn(name = "question_id")
+    @Column(name = "question_id", nullable = false)
+    public Question getQuestionId() {
+        return questionId;
     }
 
-    public void setQuestionOptionId(QuestionOption questionOptionId) {
-        this.questionOptionId = questionOptionId;
-    }
-
-    @Column(name = "answer_numeric", nullable = true)
-    public long getAnswerNumeric() {
-        return answerNumeric;
-    }
-
-    public void setAnswerNumeric(long answerNumeric) {
-        this.answerNumeric = answerNumeric;
+    public void setQuestionId(Question questionId) {
+        this.questionId = questionId;
     }
 
     @Basic
@@ -62,13 +54,13 @@ public class Answer {
         this.answerText = answerText;
     }
 
-    @Basic
-    @Column(name = "answer_yn", nullable = true)
-    public Byte getAnswerYn() {
-        return answerYn;
+    @ManyToOne
+    @JoinColumn(name="option_choice_id")
+    public OptionChoice getOptionChoice() {
+        return optionChoice;
     }
 
-    public void setAnswerYn(Byte answerYn) {
-        this.answerYn = answerYn;
+    public void setOptionChoice(OptionChoice optionChoice) {
+        this.optionChoice = optionChoice;
     }
 }

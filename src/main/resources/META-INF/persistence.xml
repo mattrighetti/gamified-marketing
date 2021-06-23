@@ -12,7 +12,6 @@
         <class>com.marketing.entity.OptionGroup</class>
         <class>com.marketing.entity.Product</class>
         <class>com.marketing.entity.Question</class>
-        <class>com.marketing.entity.QuestionOption</class>
         <class>com.marketing.entity.SurveyHeader</class>
         <class>com.marketing.entity.SurveySection</class>
         <class>com.marketing.entity.User</class>

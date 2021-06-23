@@ -12,6 +12,7 @@ import java.util.*;
 public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
     private int productId = 0;
     private int surveyId = 0;
+    private String username;
     private boolean isDataSet = false;
     private int currentSection = 1;
     private Map<String,Map<String,String>> temporaryAnswers;
@@ -20,6 +21,8 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
     private ProductBean productBean;
     @EJB
     private QuestionBean questionBean;
+    @EJB
+    private AnswerBean answerBean;
     private SurveyHeader survey;
 
 
@@ -35,11 +38,21 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
                 .setParameter("surveyId",  this.surveyId)
                 .getResultList()
                 .get(0);
+        this.survey.setCompiledFrom(new LinkedList<>());
+        edit(survey);
     }
 
-    public void setInitialData(int productId, int surveyId) {
+    public User getCurrentUser(){
+        return (User) getEntityManager().createNamedQuery("User.selectUserWithUsername")
+                .setParameter("username", this.username)
+                .getResultList()
+                .get(0);
+    }
+
+    public void setInitialData(int productId, int surveyId, String username) {
         this.setProductId(productId);
         this.setSurveyId(surveyId);
+        this.setUsername(username);
         this.isDataSet = true;
         getProductQuestionnaire();
     }
@@ -69,26 +82,36 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
     }
 
     public void nextQuestion(Map<String, String[]> answers) {
-        Map<String,String> newParams = new HashMap<>();
-        for (String key: answers.keySet() ) {
-            newParams.put(key,new String(answers.get(key)[0]));
-        }
-        this.temporaryAnswers.put(Integer.toString(currentSection), newParams);
+        this.storeAnswers(answers);
         this.currentSection += 1;
     }
 
     public void previousQuestion(Map<String, String[]> answers) {
-        Map<String,String> newParams = new HashMap<>();
-        for (String key: answers.keySet() ) {
-            newParams.put(key,new String(answers.get(key)[0]));
-        }
-        this.temporaryAnswers.put(Integer.toString(currentSection), newParams);
+        this.storeAnswers(answers);
         this.currentSection -= 1;
     }
 
     @Remove
     public void cancelQuestionnaire(){
         // The persistence context is terminated when the client calls this method
+        survey.addCompiledFrom(this.getCurrentUser());
+        getEntityManager().persist(survey);
+        getEntityManager().flush();
+    }
+    @Remove
+    public void submitQuestionnaire(Map<String, String[]> answers){
+        this.storeAnswers(answers);
+        Map<Integer,SurveySection> sections = survey.getSurveySections();
+        for (Integer sectionKey : sections.keySet()) {
+            for (Question question : sections.get(sectionKey).getQuestions()) {
+                if (temporaryAnswers.get(sectionKey.toString()) != null && temporaryAnswers.get(sectionKey.toString()).get(Long.toString(question.getId())) != null ){
+                    answerBean.createAnswer(question,temporaryAnswers.get(sectionKey.toString()).get(Long.toString(question.getId())), getCurrentUser());
+                }
+            }
+        }
+        survey.addCompiledFrom(this.getCurrentUser());
+        this.edit(survey);
+        getEntityManager().flush();
     }
 
     public boolean hasPreviousSection() {
@@ -107,6 +130,7 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         SurveyHeader surveyHeader = new SurveyHeader();
         surveyHeader.setProductId(product);
         surveyHeader.setSurveySections(new HashMap<>());
+        surveyHeader.setCompiledFrom(new LinkedList<>());
 
         List<Question> list = new ArrayList<>();
         for (String key: questions.keySet() ) {
@@ -134,6 +158,7 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         //Add the statistical Section: the section with id 2 is assumed to be the default "statistical section"
         SurveySection statSection = getEntityManager().find(SurveySection.class,2);
         if(statSection != null) {
+            //TODO add the statistical part
             //surveyHeader.addSurveySection(2, statSection);
         }
         create(surveyHeader);
@@ -151,4 +176,19 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         remove(find(id));
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    void storeAnswers(Map<String, String[]> answers){
+        Map<String,String> newParams = new HashMap<>();
+        for (String key: answers.keySet() ) {
+            newParams.put(key,new String(answers.get(key)[0]));
+        }
+        this.temporaryAnswers.put(Integer.toString(currentSection), newParams);
+    }
 }

@@ -38,12 +38,12 @@ public class QuestionnaireServlet extends RendererServlet {
     private void handlePostRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         switch (Objects.requireNonNull(getPostAction(request))) {
             case SUBMIT:
-                // TODO save answers to database
+                questionnaireBean.submitQuestionnaire(request.getParameterMap());
+                new RedirectAfterCompletion(Servlets.HOME, null).run(request,response);
                 break;
             case CANCEL:
                 questionnaireBean.cancelQuestionnaire();
-                RedirectAfterCompletion redirect = new RedirectAfterCompletion(Servlets.HOME, null);
-                redirect.run(request, response);
+                new RedirectAfterCompletion(Servlets.HOME, null).run(request, response);
                 break;
             case NEXT:
                 questionnaireBean.nextQuestion(request.getParameterMap());
@@ -66,7 +66,8 @@ public class QuestionnaireServlet extends RendererServlet {
         if (!questionnaireBean.isDataSet()) {
             int productId = Integer.parseInt(request.getParameter("product"));
             int surveyId = Integer.parseInt(request.getParameter("survey"));
-            questionnaireBean.setInitialData(productId, surveyId);
+            String username = request.getParameter("username");
+            questionnaireBean.setInitialData(productId, surveyId, username);
         }
     }
 

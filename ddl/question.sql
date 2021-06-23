@@ -6,6 +6,7 @@ CREATE TABLE `question` (
     `option_group` INT UNSIGNED,
     `name` VARCHAR(100) NOT NULL,
     `subtext` VARCHAR(255),
+    `input_type` VARCHAR(30),
     `required` BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY(`id`),
     FOREIGN KEY (`option_group`) REFERENCES `option_group`(`id`)

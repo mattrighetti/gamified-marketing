@@ -61,6 +61,18 @@ CREATE TABLE `survey_header` (
         ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS `survey_user`;
+
+CREATE TABLE `survey_header_user` (
+    `survey_header_id` INT UNSIGNED NOT NULL ,
+    `user_id` INT UNSIGNED NOT NULL ,
+    PRIMARY KEY (`survey_header_id`,`user_id`),
+    FOREIGN KEY (`survey_header_id`) REFERENCES `survey_header`(`id`)
+        ON UPDATE CASCADE ON DELETE CASCADE ,
+    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
+        ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 DROP TABLE IF EXISTS `survey_section`;
 
 CREATE TABLE `survey_section` (
@@ -99,6 +111,7 @@ CREATE TABLE `question` (
     `option_group` INT UNSIGNED,
     `name` VARCHAR(100) NOT NULL,
     `subtext` VARCHAR(255),
+    `input_type` VARCHAR(30),
     `required` BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY(`id`),
     FOREIGN KEY (`option_group`) REFERENCES `option_group`(`id`)
@@ -130,30 +143,20 @@ CREATE TABLE `option_choice`(
 
 DROP TABLE IF EXISTS `quesiton_option`;
 
-CREATE TABLE `question_option`(
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `question_id` INT UNSIGNED NOT NULL,
-    `option_choice_id` INT UNSIGNED NOT NULL,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`question_id`) REFERENCES `question`(`id`)
-        ON UPDATE CASCADE ON DELETE NO ACTION,
-    FOREIGN KEY (`option_choice_id`) REFERENCES `option_choice`(`id`)
-        ON UPDATE CASCADE ON DELETE NO ACTION
-) ENGINE=InnoDB;
-
 DROP TABLE IF EXISTS `answer`;
 
 CREATE TABLE `answer` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `user_id` INT UNSIGNED NOT NULL,
-    `question_option_id` INT UNSIGNED NOT NULL,
-    `answer_numeric` INT UNSIGNED,
+    `question_id` INT UNSIGNED,
+    `option_choice_id` INT UNSIGNED,
     `answer_text` VARCHAR(255),
-    `answer_yn` BOOLEAN,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
         ON UPDATE CASCADE ON DELETE NO ACTION,
-    FOREIGN KEY (`question_option_id`) REFERENCES `question_option`(`id`)
+    FOREIGN KEY (`question_id`) REFERENCES `question`(`id`)
+        ON UPDATE CASCADE ON DELETE NO ACTION,
+    FOREIGN KEY (`option_choice_id`) REFERENCES `option_choice`(`id`)
         ON UPDATE CASCADE ON DELETE NO ACTION
 ) ENGINE=InnoDB;
 
@@ -211,12 +214,13 @@ VALUES (1, "Male"),
        (2, "45-60"),
        (2, ">60");
 
-INSERT INTO `question`(`option_group`, `name`, `subtext`, `required`)
-VALUES ( null, "Review the product", "Write a small review of the product: what you did like, what you did not like etc.", true),
-       (null, "Would you recommend this product to a friend?", null, true),
-       (null, "What would you buy next?", null, true),
-       ( 1, "Sex", null, false),
-       (2, "Age", null, false);
+INSERT INTO `question`(`option_group`, `name`, `subtext`,`input_type` ,`required`)
+VALUES ( null, "Review the product", "Write a small review of the product: what you did like, what you did not like etc.","text" ,true),
+       (null, "Would you recommend this product to a friend?", null, "text", true),
+       (null, "What would you buy next?", null, "text", true),
+       ( 1, "Sex", null, "radio", false),
+       (2, "Age", null, "radio", false);
+
 INSERT INTO `survey_section_question`(`survey_section_id`,question_id)
 VALUES(1,1),
        (1,2),
