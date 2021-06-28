@@ -1,5 +1,6 @@
 package com.marketing.controllers;
 
+import com.marketing.bean.AdminBean;
 import com.marketing.bean.QuestionnaireBean;
 import com.marketing.entity.SurveyHeader;
 import com.marketing.entity.User;
@@ -18,7 +19,7 @@ import java.util.Map;
 public class InspectQuestionnaireServlet extends RendererServlet{
 
     @EJB
-    private QuestionnaireBean questionnaireBean;
+    private AdminBean adminBean;
 
     public InspectQuestionnaireServlet() {
         super("/WEB-INF/inspectQuest.html");
@@ -30,11 +31,15 @@ public class InspectQuestionnaireServlet extends RendererServlet{
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
         HttpSession session = request.getSession();
-        List<SurveyHeader> questionnaires =  questionnaireBean.getAllQuestionnaires();
-
+        Map<Long,Map<String,List<User>>> usersMap = new HashMap<>();
+        List<SurveyHeader> questionnaires =  adminBean.getAllQuestionnaires();
+        for (SurveyHeader q : questionnaires ) {
+            usersMap.put(q.getId(),adminBean.getSumbittedCanceledUsers(q));
+        }
         HashMap<String, Object> vars = new HashMap<>();
         vars.put("username", session.getAttribute("username"));
         vars.put("questionnaires", questionnaires);
+        vars.put("usersMap", usersMap);
         renderAndServeWithVariables(request, response, vars);
     }
 

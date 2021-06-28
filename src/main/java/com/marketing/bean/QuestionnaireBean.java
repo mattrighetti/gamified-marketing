@@ -55,6 +55,7 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         this.setUsername(username);
         this.isDataSet = true;
         getProductQuestionnaire();
+        survey.setCompiledQuestUsers(new LinkedList<>());
     }
 
     public boolean isDataSet() {
@@ -94,12 +95,18 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
     @Remove
     public void cancelQuestionnaire(){
         // The persistence context is terminated when the client calls this method
-        getEntityManager().persist(survey);
+        survey.addCompiledQuestUsers(this.getCurrentUser());
+        getEntityManager().merge(survey);
         getEntityManager().flush();
     }
     @Remove
     public void submitQuestionnaire(Map<String, String[]> answers){
         this.storeAnswers(answers);
+        //add user in the list of who has compiled the questionnaire
+        survey.addCompiledQuestUsers(this.getCurrentUser());
+        getEntityManager().merge(survey);
+        getEntityManager().flush();
+
         Map<Integer,SurveySection> sections = survey.getSurveySections();
         for (Integer sectionKey : sections.keySet()) {
             for (Question question : sections.get(sectionKey).getQuestions()) {
@@ -163,13 +170,6 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         getEntityManager().flush();
     }
 
-    public List<SurveyHeader> getAllQuestionnaires(){
-        List<SurveyHeader> questionnaires = getEntityManager().createNamedQuery("SurveyHeader.allPastSurveysOrderedByDate").setParameter("today",(long) new Date().getTime()/1000).getResultList();
-        if (questionnaires != null) return questionnaires;
-        else return new ArrayList<>();
-
-    }
-
     public void deleteQuestionnaire(int id){
         remove(find(id));
     }
@@ -189,4 +189,5 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         }
         this.temporaryAnswers.put(Integer.toString(currentSection), newParams);
     }
+
 }

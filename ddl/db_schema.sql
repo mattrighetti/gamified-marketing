@@ -65,8 +65,7 @@ DROP TABLE IF EXISTS `survey_header_user`;
 
 CREATE TABLE `survey_header_user` (
     `survey_header_id` INT UNSIGNED NOT NULL ,
-    `user_id` INT UNSIGNED NOT NULL ,
-    `status` VARCHAR(30) NOT NULL,
+    `user_id` INT UNSIGNED NOT NULL,
     PRIMARY KEY (`survey_header_id`,`user_id`),
     FOREIGN KEY (`survey_header_id`) REFERENCES `survey_header`(`id`)
         ON UPDATE CASCADE ON DELETE CASCADE ,
@@ -238,4 +237,17 @@ VALUES ("cazzo"), ("culo"), ("merda"), ("coglione"), ("imbecille"), ("ritardato"
 INSERT INTO `review`(`product_id`, `user_id`, `review_text`)
 VALUES (1, 1, "Best product ever!"),
        (1, 3, "Android is better!");
+
+INSERT INTO `survey_header_user`(`survey_header_id`,`user_id`)
+VALUES (2,2);
+
+INSERT INTO `answer`(`user_id`,`question_id`,`survey_header_id`,`option_choice_id`,`answer_text`)
+VALUES (2,1,2,null,"a"),
+        (2,2,2,null,"b"),
+        (2,3,2,null,"c"),
+       (2,4,2,1,null),
+       (2,5,2,3,null);
+
+
+
 

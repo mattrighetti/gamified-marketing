@@ -1,6 +1,8 @@
 package com.marketing.entity;
 
 import javax.persistence.*;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +23,7 @@ public class SurveyHeader {
     private String instructions;
     private Map<Integer, SurveySection> surveySections;
     private List<Answer> answers;
+    private List<User> compiledQuestUsers;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -95,4 +98,23 @@ public class SurveyHeader {
     public void addAnswers(Answer answer){
         this.answers.add(answer);
     }
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "survey_header_user",
+            joinColumns = @JoinColumn(name = "survey_header_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    public List<User> getCompiledQuestUsers() {
+        return compiledQuestUsers;
+    }
+
+    public void setCompiledQuestUsers(List<User> compiledQuestUsers) {
+        this.compiledQuestUsers = compiledQuestUsers;
+    }
+
+    public void addCompiledQuestUsers(User user){
+        compiledQuestUsers.add(user);
+    }
+
 }

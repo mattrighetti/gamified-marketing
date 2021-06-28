@@ -17,7 +17,7 @@
                 <a href="/DeleteQuestionnaireServlet" th:href="@{/DeleteQuestionnaireServlet(surveyId = ${questionnaire.getId()})}" class="btn btn-primary">Delete</a>
             </div>
             <div class="questionnaire_users col-sm">
-                <ul th:each="user: ${questionnaire.getCompiledFrom()}">
+                <ul th:each="user: ${usersMap.get(questionnaire.id).get("submitted")}">
                     <li th:text="${user.getUsername()}"></li>
                 </ul>
             </div>
