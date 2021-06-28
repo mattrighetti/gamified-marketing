@@ -61,11 +61,12 @@ CREATE TABLE `survey_header` (
         ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-DROP TABLE IF EXISTS `survey_user`;
+DROP TABLE IF EXISTS `survey_header_user`;
 
 CREATE TABLE `survey_header_user` (
     `survey_header_id` INT UNSIGNED NOT NULL ,
     `user_id` INT UNSIGNED NOT NULL ,
+    `status` VARCHAR(30) NOT NULL,
     PRIMARY KEY (`survey_header_id`,`user_id`),
     FOREIGN KEY (`survey_header_id`) REFERENCES `survey_header`(`id`)
         ON UPDATE CASCADE ON DELETE CASCADE ,
@@ -149,13 +150,16 @@ CREATE TABLE `answer` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `user_id` INT UNSIGNED NOT NULL,
     `question_id` INT UNSIGNED,
+    `survey_header_id` INT UNSIGNED,
     `option_choice_id` INT UNSIGNED,
     `answer_text` VARCHAR(255),
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
-        ON UPDATE CASCADE ON DELETE NO ACTION,
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (`survey_header_id`) REFERENCES `survey_header`(`id`)
+        ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (`question_id`) REFERENCES `question`(`id`)
-        ON UPDATE CASCADE ON DELETE NO ACTION,
+        ON UPDATE CASCADE ON DELETE CASCADE,
     FOREIGN KEY (`option_choice_id`) REFERENCES `option_choice`(`id`)
         ON UPDATE CASCADE ON DELETE NO ACTION
 ) ENGINE=InnoDB;
@@ -221,7 +225,7 @@ VALUES ( null, "Review the product", "Write a small review of the product: what 
        ( 1, "Sex", null, "radio", false),
        (2, "Age", null, "radio", false);
 
-INSERT INTO `survey_section_question`(`survey_section_id`,question_id)
+INSERT INTO `survey_section_question`(`survey_section_id`,`question_id`)
 VALUES(1,1),
        (1,2),
        (1,3),
@@ -234,3 +238,4 @@ VALUES ("cazzo"), ("culo"), ("merda"), ("coglione"), ("imbecille"), ("ritardato"
 INSERT INTO `review`(`product_id`, `user_id`, `review_text`)
 VALUES (1, 1, "Best product ever!"),
        (1, 3, "Android is better!");
+

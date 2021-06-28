@@ -1,8 +1,6 @@
 package com.marketing.entity;
 
 import javax.persistence.*;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +20,7 @@ public class SurveyHeader {
     private String name;
     private String instructions;
     private Map<Integer, SurveySection> surveySections;
-    private List<User> compiledFrom;
+    private List<Answer> answers;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -84,20 +82,17 @@ public class SurveyHeader {
         surveySections.put(id, surveySection);
     }
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "survey_header_user",
-                joinColumns = @JoinColumn(name = "survey_header_id"),
-                inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    public List<User> getCompiledFrom() {
-        return compiledFrom;
+
+    @OneToMany(mappedBy = "surveyHeaderId")
+    public List<Answer> getAnswers() {
+        return answers;
     }
 
-    public void setCompiledFrom(List<User> compiledFrom) {
-        this.compiledFrom = compiledFrom;
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
     }
-    
-    public void addCompiledFrom(User user){
-        compiledFrom.add(user);
+
+    public void addAnswers(Answer answer){
+        this.answers.add(answer);
     }
 }

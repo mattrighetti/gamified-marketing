@@ -8,6 +8,7 @@ public class Answer {
     private long id;
     private User userId;
     private Question questionId;
+    private SurveyHeader surveyHeaderId;
     private OptionChoice optionChoice;
     private String answerText;
 
@@ -62,5 +63,15 @@ public class Answer {
 
     public void setOptionChoice(OptionChoice optionChoice) {
         this.optionChoice = optionChoice;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "survey_header_id")
+    public SurveyHeader getSurveyHeaderId() {
+        return surveyHeaderId;
+    }
+
+    public void setSurveyHeaderId(SurveyHeader surveyHeaderId) {
+        this.surveyHeaderId = surveyHeaderId;
     }
 }

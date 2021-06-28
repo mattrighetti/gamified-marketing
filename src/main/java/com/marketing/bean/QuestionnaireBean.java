@@ -23,6 +23,7 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
     private QuestionBean questionBean;
     @EJB
     private AnswerBean answerBean;
+
     private SurveyHeader survey;
 
 
@@ -38,7 +39,6 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
                 .setParameter("surveyId",  this.surveyId)
                 .getResultList()
                 .get(0);
-        this.survey.setCompiledFrom(new LinkedList<>());
         edit(survey);
     }
 
@@ -94,7 +94,6 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
     @Remove
     public void cancelQuestionnaire(){
         // The persistence context is terminated when the client calls this method
-        survey.addCompiledFrom(this.getCurrentUser());
         getEntityManager().persist(survey);
         getEntityManager().flush();
     }
@@ -105,11 +104,10 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         for (Integer sectionKey : sections.keySet()) {
             for (Question question : sections.get(sectionKey).getQuestions()) {
                 if (temporaryAnswers.get(sectionKey.toString()) != null && temporaryAnswers.get(sectionKey.toString()).get(Long.toString(question.getId())) != null ){
-                    answerBean.createAnswer(question,temporaryAnswers.get(sectionKey.toString()).get(Long.toString(question.getId())), getCurrentUser());
+                    answerBean.createAnswer(survey, question, temporaryAnswers.get(sectionKey.toString()).get(Long.toString(question.getId())), getCurrentUser());
                 }
             }
         }
-        survey.addCompiledFrom(this.getCurrentUser());
         this.edit(survey);
         getEntityManager().flush();
     }
@@ -130,7 +128,7 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         SurveyHeader surveyHeader = new SurveyHeader();
         surveyHeader.setProductId(product);
         surveyHeader.setSurveySections(new HashMap<>());
-        surveyHeader.setCompiledFrom(new LinkedList<>());
+        surveyHeader.setAnswers(new LinkedList<>());
 
         List<Question> list = new ArrayList<>();
         for (String key: questions.keySet() ) {

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet(name="InspectQuestionnaireServlet", value="/InspectQuestionnaireServlet")
 public class InspectQuestionnaireServlet extends RendererServlet{
@@ -30,8 +31,6 @@ public class InspectQuestionnaireServlet extends RendererServlet{
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
         HttpSession session = request.getSession();
         List<SurveyHeader> questionnaires =  questionnaireBean.getAllQuestionnaires();
-        List<User> usersCompiled;
-        List<User> usersCanceled;
 
         HashMap<String, Object> vars = new HashMap<>();
         vars.put("username", session.getAttribute("username"));

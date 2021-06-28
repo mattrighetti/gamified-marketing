@@ -11,10 +11,15 @@
     <p class="display-1">Inspect Questionnaires</p>
     <a href="/HomeServlet" class="btn btn-secondary btn-lg">Back</a>
         <div th:each="questionnaire: ${questionnaires}" class="row" style="width: 18rem;">
-            <div>
+            <div class="col-sm">
                 <h4>Questionnaire related to product: </h4>
                 <h5 class="card-title" th:text="${questionnaire.getProductId().getName()}"></h5>
                 <a href="/DeleteQuestionnaireServlet" th:href="@{/DeleteQuestionnaireServlet(surveyId = ${questionnaire.getId()})}" class="btn btn-primary">Delete</a>
+            </div>
+            <div class="questionnaire_users col-sm">
+                <ul th:each="user: ${questionnaire.getCompiledFrom()}">
+                    <li th:text="${user.getUsername()}"></li>
+                </ul>
             </div>
         </div>
 </div>
