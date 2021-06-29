@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "answer", schema = "gamified_marketing")
 @NamedQuery(name = "Answer.getAnswerBySurveyHeader", query =
-        "select a from Answer a where a.surveyHeaderId =: surveyHeader and a.userId =:userId ")
+        "select a from Answer a where a.surveyHeaderId =: surveyHeader and a.userId =:user ")
 public class Answer {
     private long id;
     private User userId;

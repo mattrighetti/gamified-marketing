@@ -10,6 +10,7 @@
     <div class="container">
         <p class="display-5" th:text="${header}"></p>
         <p class="display-6" th:text="${subheader}"></p>
+        <a th:href="'HomeServlet'" class="btn btn-secondary btn-lg">Back</a>
 
         <form action="QuestionnaireServlet" method="post">
             <div th:each="question: ${questions}">

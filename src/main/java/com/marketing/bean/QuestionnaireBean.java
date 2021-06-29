@@ -141,6 +141,7 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         for (String key: questions.keySet() ) {
 
             //check if the question already exists
+            //TODO change in lower case without spaces
             Question question = questionBean.getQuestionByName(questions.get(key));
             //if the question doesn't exist, create a new one
             if(question == null){

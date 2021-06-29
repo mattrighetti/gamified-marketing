@@ -25,7 +25,7 @@ public class AdminBean extends AbstractFacade{
         List<User> canceledUsers = new LinkedList<>();
 
         for (User user : users) {
-            if(getEntityManager().createNamedQuery("Answer.getAnswerBySurveyHeader").getResultList().size() > 0)
+            if(getEntityManager().createNamedQuery("Answer.getAnswerBySurveyHeader").setParameter("user", user).setParameter("surveyHeader", surveyHeader).getResultList().size() > 0)
                 submittedUsers.add(user);
             else
                 canceledUsers.add(user);

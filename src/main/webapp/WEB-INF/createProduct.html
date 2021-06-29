@@ -30,6 +30,7 @@
 
     <h1>Logged as <span th:text="${username}"></span></h1>
     <p th:text="${confirmation}" style="color: green">Product <span th:text="${prodName}" ></span> correctly created! </p>
+    <a th:href="'HomeServlet'" class="btn btn-secondary btn-lg">Back</a>
     <form action="CreateProductServlet" method="post">
         <div>
             <div class="mb-3">
