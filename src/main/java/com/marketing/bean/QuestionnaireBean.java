@@ -10,17 +10,21 @@ import java.util.*;
 
 @Stateful
 public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
-    private int productId = 0;
-    private int surveyId = 0;
+    private int productId;
     private String username;
     private boolean isDataSet = false;
     private int currentSection = 1;
-    private Map<String,Map<String,String>> temporaryAnswers;
+    private final Map<String,Map<String,String>> temporaryAnswers;
+
+    @EJB
+    private UserBean userBean;
 
     @EJB
     private ProductBean productBean;
+
     @EJB
     private QuestionBean questionBean;
+
     @EJB
     private AnswerBean answerBean;
 
@@ -35,23 +39,18 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
     public void getProductQuestionnaire() {
         this.survey = (SurveyHeader) getEntityManager()
                 .createNamedQuery("SurveyHeader.selectSurveyHeaderWhereProduct")
-                .setParameter("productId", productBean.getProduct(productId))
-                .setParameter("surveyId",  this.surveyId)
+                .setParameter("productId", productBean.getProduct(this.productId))
                 .getResultList()
                 .get(0);
         edit(survey);
     }
 
     public User getCurrentUser(){
-        return (User) getEntityManager().createNamedQuery("User.selectUserWithUsername")
-                .setParameter("username", this.username)
-                .getResultList()
-                .get(0);
+        return userBean.getUser(this.username);
     }
 
-    public void setInitialData(int productId, int surveyId, String username) {
+    public void setInitialData(int productId, String username) {
         this.setProductId(productId);
-        this.setSurveyId(surveyId);
         this.setUsername(username);
         this.isDataSet = true;
         getProductQuestionnaire();
@@ -64,10 +63,6 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
 
     public void setProductId(int productId) {
         this.productId = productId;
-    }
-
-    public void setSurveyId(int surveyId) {
-        this.surveyId = surveyId;
     }
 
     public HashMap<String, Object> getVarsForCurrentSection() {

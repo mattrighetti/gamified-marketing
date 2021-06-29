@@ -1,8 +1,6 @@
 package com.marketing.entity;
 
 import javax.persistence.*;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,10 +9,12 @@ import java.util.Map;
 @NamedQueries({
         @NamedQuery(
                 name = "SurveyHeader.selectSurveyHeaderWhereProduct",
-                query = "SELECT s FROM SurveyHeader s WHERE s.productId = :productId AND s.id = :surveyId"),
+                query = "SELECT s FROM SurveyHeader s WHERE s.productId = :productId"
+        ),
         @NamedQuery(
                 name = "SurveyHeader.allPastSurveysOrderedByDate",
-                query = "select s from SurveyHeader s, Product p where p = s.productId and p.date < :today order by p.date desc")
+                query = "select s from SurveyHeader s, Product p where p = s.productId and p.date < :today order by p.date desc"
+        )
 })
 public class SurveyHeader {
     private long id;

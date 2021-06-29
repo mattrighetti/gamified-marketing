@@ -2,7 +2,6 @@ package com.marketing.controllers;
 
 import com.marketing.bean.ProductBean;
 import com.marketing.entity.Product;
-import com.marketing.entity.Review;
 
 import javax.ejb.EJB;
 import javax.servlet.*;
@@ -28,13 +27,15 @@ public class HomeServlet extends RendererServlet {
         HashMap<String, Object> vars = new HashMap<>();
         vars.put("username", session.getAttribute("username"));
         vars.put("isAdmin", session.getAttribute("isAdmin"));
-        vars.put("imageUrl", product.getImage());
-        vars.put("productName", product.getName());
-        vars.put("productDescription", product.getDescription());
-        vars.put("productId", product.getId());
-        vars.put("reviews", product.getReviews());
-        // TODO change this hardcoded surveyId in case there will be more than one for a single product
-        vars.put("surveyId", 1);
+        if (product != null) {
+            vars.put("imageUrl", product.getImage());
+            vars.put("productName", product.getName());
+            vars.put("productDescription", product.getDescription());
+            vars.put("productId", product.getId());
+            vars.put("reviews", product.getReviews());
+        } else {
+            // TODO handle case when product is not found
+        }
         renderAndServeWithVariables(request, response, vars);
     }
 

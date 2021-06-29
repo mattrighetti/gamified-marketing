@@ -10,8 +10,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 @WebServlet(name = "QuestionnaireServlet", value = "/QuestionnaireServlet")
@@ -65,9 +63,8 @@ public class QuestionnaireServlet extends RendererServlet {
     private void setInitialData(HttpServletRequest request) {
         if (!questionnaireBean.isDataSet()) {
             int productId = Integer.parseInt(request.getParameter("product"));
-            int surveyId = Integer.parseInt(request.getParameter("survey"));
             String username = request.getParameter("username");
-            questionnaireBean.setInitialData(productId, surveyId, username);
+            questionnaireBean.setInitialData(productId, username);
         }
     }
 
