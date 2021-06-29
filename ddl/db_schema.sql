@@ -31,20 +31,11 @@ DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(50) NOT NULL,
-    `image` VARCHAR(500) NOT NULL UNIQUE KEY,
-    `thumbnail` VARCHAR(50) NOT NULL UNIQUE KEY,
+    `image` VARCHAR(500) NOT NULL,
+    `thumbnail` VARCHAR(500) NOT NULL,
     `date` INT UNSIGNED NOT NULL,
     `description` VARCHAR(100) NOT NULL,
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-
-DROP TABLE IF EXISTS `input_type`;
-
-CREATE TABLE `input_type` (
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `type` VARCHAR(50) NOT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY (`type`)
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `log`;
@@ -67,6 +58,18 @@ CREATE TABLE `survey_header` (
     `instructions` VARCHAR(255),
     PRIMARY KEY (`id`),
     FOREIGN KEY (`product_id`) REFERENCES `product`(`id`)
+        ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS `survey_header_user`;
+
+CREATE TABLE `survey_header_user` (
+    `survey_header_id` INT UNSIGNED NOT NULL ,
+    `user_id` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`survey_header_id`,`user_id`),
+    FOREIGN KEY (`survey_header_id`) REFERENCES `survey_header`(`id`)
+        ON UPDATE CASCADE ON DELETE CASCADE ,
+    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
         ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
@@ -105,20 +108,27 @@ DROP TABLE IF EXISTS `question`;
 
 CREATE TABLE `question` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `survey_section_id` INT UNSIGNED NOT NULL,
-    `input_type_id` INT UNSIGNED NOT NULL,
     `option_group` INT UNSIGNED,
     `name` VARCHAR(100) NOT NULL,
     `subtext` VARCHAR(255),
+    `input_type` VARCHAR(30),
     `required` BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY(`id`),
     FOREIGN KEY (`option_group`) REFERENCES `option_group`(`id`)
-        ON UPDATE CASCADE ON DELETE NO ACTION,
-    FOREIGN KEY (`survey_section_id`) REFERENCES `survey_section`(`id`)
-        ON UPDATE CASCADE ON DELETE NO ACTION,
-    FOREIGN KEY (`input_type_id`) REFERENCES `input_type`(`id`)
         ON UPDATE CASCADE ON DELETE NO ACTION
 )  ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS `survey_section_question`;
+
+CREATE TABLE `survey_section_question`(
+    `survey_section_id` INT UNSIGNED NOT NULL,
+    `question_id` INT UNSIGNED NOT NULL,
+    PRIMARY KEY (`survey_section_id`,question_id),
+    FOREIGN KEY (`survey_section_id`) REFERENCES survey_section(`id`)
+      ON UPDATE CASCADE  ON DELETE CASCADE,
+    FOREIGN KEY (`question_id`) REFERENCES `question`(`id`)
+      ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `option_choice`;
 
@@ -133,34 +143,49 @@ CREATE TABLE `option_choice`(
 
 DROP TABLE IF EXISTS `quesiton_option`;
 
-CREATE TABLE `question_option`(
-    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `question_id` INT UNSIGNED NOT NULL,
-    `option_choice_id` INT UNSIGNED NOT NULL,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`question_id`) REFERENCES `question`(`id`)
-        ON UPDATE CASCADE ON DELETE NO ACTION,
-    FOREIGN KEY (`option_choice_id`) REFERENCES `option_choice`(`id`)
-        ON UPDATE CASCADE ON DELETE NO ACTION
-) ENGINE=InnoDB;
-
 DROP TABLE IF EXISTS `answer`;
 
 CREATE TABLE `answer` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `user_id` INT UNSIGNED NOT NULL,
-    `question_option_id` INT UNSIGNED NOT NULL,
-    `answer_numeric` INT UNSIGNED,
+    `question_id` INT UNSIGNED,
+    `survey_header_id` INT UNSIGNED,
+    `option_choice_id` INT UNSIGNED,
     `answer_text` VARCHAR(255),
-    `answer_yn` BOOLEAN,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
-        ON UPDATE CASCADE ON DELETE NO ACTION,
-    FOREIGN KEY (`question_option_id`) REFERENCES `question_option`(`id`)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (`survey_header_id`) REFERENCES `survey_header`(`id`)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (`question_id`) REFERENCES `question`(`id`)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (`option_choice_id`) REFERENCES `option_choice`(`id`)
         ON UPDATE CASCADE ON DELETE NO ACTION
 ) ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS `review`;
 
+CREATE TABLE `review` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `product_id` INT UNSIGNED NOT NULL,
+    `user_id` INT UNSIGNED NOT NULL,
+    `review_text` VARCHAR(511),
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`product_id`) REFERENCES `product`(`id`)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
+        ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+DROP TABLE IF EXISTS `leaderboard`;
+
+CREATE TABLE `leaderboard`(
+    `user_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `points` INT UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY (`user_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
+        ON UPDATE NO ACTION ON DELETE NO ACTION
+) ENGINE=InnoDB;
 
 -- SQL DATA INSERTION
 
@@ -172,10 +197,13 @@ VALUES ("admin1", "secret", "admin1@gmail.com", 1, 0, 10),
        ("random", "secret", "random@gmail.com", 0, 0, 2139);
 
 INSERT INTO `product`(`name`, `image`, `thumbnail`, `date`, `description`)
-VALUE ("iPad 12.9\"", "https://johnlewis.scene7.com/is/image/JohnLewis/238667158?$rsp-pdp-port-1440$", "none", 1622106066, "This is the new iPad 12.9 inches with the new M1 chip");
+VALUE ("iPad 12.9\"", "https://johnlewis.scene7.com/is/image/JohnLewis/238667158?$rsp-pdp-port-1440$", "none", 1622106066, "This is the new iPad 12.9 inches with the new M1 chip"),
+      ("iPhone 12\"", "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.apple.com%2Fit%2Fshop%2Fbuy-iphone%2Fiphone-12-pro&psig=AOvVaw0F9zeDBzOck__7nGRYLMU3&ust=1624488071565000&source=images&cd=vfe&ved=0CAoQjRxqFwoTCMDao9HCrPECFQAAAAAdAAAAABAD", "none", 1620106066, "This is the new iPhone 12 ");
+
 
 INSERT INTO `survey_header`(`name`, `product_id`, `instructions`)
-VALUE ("Quality Control", 1, "Answer to all the required fields to gain points");
+VALUE ("Quality Control", 1, "Answer to all the required fields to gain points"),
+    ("Quality Control", 2, "Answer to all the required fields to gain points");
 
 INSERT INTO `survey_section`(`name`, `title`, `subheading`)
 VALUES ("Quality questions", "Quality", "This section asks general questions about the product's quality"),
@@ -183,15 +211,9 @@ VALUES ("Quality questions", "Quality", "This section asks general questions abo
 
 INSERT INTO `survey_header_survey_section`(`survey_header_id`,`survey_section_id`, `section_order`)
 VALUES  (1,1,1),
-        (1,2,2);
-
-INSERT INTO `input_type`(`type`)
-VALUES ("text"),
-       ("checkbox"),
-       ("radio"),
-       ("email"),
-       ("password"),
-       ("tel");
+        (1,2,2),
+        (2,1,1),
+        (2,2,2);
 
 INSERT INTO `option_group`(`option_group_name`)
 VALUES ("Sex options"),
@@ -205,12 +227,75 @@ VALUES (1, "Male"),
        (2, "45-60"),
        (2, ">60");
 
-INSERT INTO `question`(`survey_section_id`, `input_type_id`, `option_group`, `name`, `subtext`, `required`)
-VALUES (1, 1, null, "Review the product", "Write a small review of the product: what you did like, what you did not like etc.", true),
-       (1, 1, null, "Would you recommend this product to a friend?", null, true),
-       (1, 1, null, "What would you buy next?", null, true),
-       (2, 3, 1, "Sex", null, false),
-       (2, 3, 2, "Age", null, false);
+INSERT INTO `question`(`option_group`, `name`, `subtext`,`input_type` ,`required`)
+VALUES ( null, "Review the product", "Write a small review of the product: what you did like, what you did not like etc.","text" ,true),
+       (null, "Would you recommend this product to a friend?", null, "text", true),
+       (null, "What would you buy next?", null, "text", true),
+       ( 1, "Sex", null, "radio", false),
+       (2, "Age", null, "radio", false);
+
+INSERT INTO `survey_section_question`(`survey_section_id`,`question_id`)
+VALUES(1,1),
+       (1,2),
+       (1,3),
+       (2,4),
+       (2,5);
 
 INSERT INTO `forbidden`(`word`)
-VALUES ("cazzo"), ("culo"), ("merda"), ("coglione"), ("imbecille"), ("ritardato")
+VALUES ("cazzo"), ("culo"), ("merda"), ("coglione"), ("imbecille"), ("ritardato");
+
+INSERT INTO `review`(`product_id`, `user_id`, `review_text`)
+VALUES (1, 1, "Best product ever!"),
+       (1, 3, "Android is better!");
+
+INSERT INTO `survey_header_user`(`survey_header_id`,`user_id`)
+VALUES (2,2);
+
+INSERT INTO `answer`(`user_id`,`question_id`,`survey_header_id`,`option_choice_id`,`answer_text`)
+VALUES (2,1,2,null,"a"),
+        (2,2,2,null,"b"),
+        (2,3,2,null,"c"),
+       (2,4,2,1,null),
+       (2,5,2,3,null);
+
+
+
+DELIMITER //
+
+CREATE TRIGGER `addUsersScore`
+    AFTER INSERT ON `answer`
+    FOR EACH ROW
+BEGIN
+    IF EXISTS((SELECT leaderboard.`user_id` FROM `leaderboard` WHERE leaderboard.`user_id` = NEW.`user_id`)) THEN
+        UPDATE `leaderboard`
+        SET leaderboard.`points` = (SELECT SUM(shss.`section_order`)
+                                    FROM `survey_section_question` AS sq
+                                             INNER JOIN `survey_section` AS ss ON sq.`survey_section_id` = ss.`id`
+                                             INNER JOIN `survey_header_survey_section` AS shss ON ss.id = shss.`survey_section_id`
+                                    WHERE NEW.`question_id` = sq.`question_id`
+                                   ) + leaderboard.`points`
+        WHERE `user_id` = NEW.`user_id`;
+    ELSE
+        INSERT INTO `leaderboard`
+        SELECT NEW.`user_id`, SUM(shss.`section_order`)
+        FROM `survey_section_question` AS `sq`
+                 INNER JOIN `survey_section` AS `ss` ON sq.`survey_section_id` = ss.`id`
+                 INNER JOIN `survey_header_survey_section` AS shss ON ss.`id` = shss.`survey_section_id`
+        WHERE sq.`question_id` = NEW.`question_id`;
+    END IF;
+END; //
+
+DELIMITER //
+
+CREATE TRIGGER `subtractUsersScore`
+    BEFORE DELETE ON `answer`
+    FOR EACH ROW
+    UPDATE `leaderboard`
+    SET leaderboard.`points` = leaderboard.`points` - (SELECT SUM(shss.`section_order`)
+                                FROM `survey_section_question` AS sq
+                                         INNER JOIN `survey_section` AS ss ON sq.`survey_section_id` = ss.`id`
+                                         INNER JOIN `survey_header_survey_section` AS shss ON ss.id = shss.`survey_section_id`
+                                WHERE OLD.`question_id` = sq.`question_id`
+                               )
+    WHERE `user_id` = OLD.`user_id`;
+//

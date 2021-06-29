@@ -9,14 +9,39 @@
 <body>
     <div class="container">
         <p class="display-1">Home</p>
-        <p class="display-3">Welcome <span th:text="${username}"></span></p>
+        <div class="row">
+            <div class="col-sm">
+                <p class="display-3">Welcome <span th:text="${username}"></span></p>
+            </div>
+            <div class="col-sm">
+                <a th:href="'LogoutServlet'" class="btn btn-secondary btn-lg">Logout</a>
+            </div>
+        </div>
         <p class="display-5">Product of the day</p>
-        <div class="card" style="width: 18rem;">
-            <img class="card-img-top" th:src="${imageUrl}" alt="Product cap">
-            <div class="card-body">
-                <h5 class="card-title" th:text="${productName}"></h5>
-                <p class="card-text" th:text="${productDescription}"></p>
-                <a href="/QuestionnaireServlet" th:href="@{/QuestionnaireServlet(product=${productId}, survey=${surveyId})}" class="btn btn-primary">Take the questionnaire</a>
+        <div class="row">
+            <div class="admin">
+                <a th:if="${isAdmin}" href="/CreateProductServlet" th:href="@{/CreateProductServlet}" class="btn btn-primary">Create a new Product</a>
+                <a th:if="${isAdmin}" href="/InspectQuestionnaireServlet" th:href="@{/InspectQuestionnaireServlet}" class="btn btn-primary">Inspect Questionnaires</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="card col-sm" style="width: 18rem;">
+                <img class="card-img-top" th:src="${imageUrl}" alt="Product cap">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${productName}"></h5>
+                    <p class="card-text" th:text="${productDescription}"></p>
+                    <a href="/QuestionnaireServlet" th:href="@{/QuestionnaireServlet(product=${productId})}" class="btn btn-primary">Take the questionnaire</a>
+                </div>
+            </div>
+            <div class="reviews col-sm">
+                <h3>Reviews</h3>
+                <div class="review" th:each="review: ${reviews}">
+                    <h4 th:text="${review.getUserId().getUsername()}"></h4>
+                    <p th:text="${review.getReviewText()}"></p>
+                </div>
+            </div>
+            <div class="row" style="padding: 20px">
+                <a th:href="'LeaderboardServlet'" class="btn btn-secondary btn-lg">Leaderboard</a>
             </div>
         </div>
     </div>

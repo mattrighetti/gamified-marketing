@@ -3,16 +3,14 @@ package com.marketing.controllers;
 import com.marketing.bean.AccessLogBean;
 import com.marketing.bean.RegistrationBean;
 import com.marketing.commons.ForwardAfterCompletion;
-import com.marketing.commons.RedirectAfterCompletion;
 import com.marketing.utils.Servlets;
-import com.marketing.utils.SessionAttribute;
 
 import javax.ejb.EJB;
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
 
 @WebServlet(name = "RegistrationServlet", value = "/RegistrationServlet")
@@ -42,7 +40,8 @@ public class RegistrationServlet extends RendererServlet {
         String password = request.getParameter("password");
         String email = request.getParameter("email");
         if (registrationBean.register(username, password, email)) {
-            ForwardAfterCompletion action = new ForwardAfterCompletion((req, res) -> {}, Servlets.LOGIN);
+            ForwardAfterCompletion action = new ForwardAfterCompletion((req, res) -> {
+            }, Servlets.LOGIN);
             action.run(request, response);
         } else {
             renderAndServeWithVariables(request, response, new HashMap<String, Object>() {{

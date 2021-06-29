@@ -2,11 +2,11 @@ DROP TABLE IF EXISTS `question`;
 
 CREATE TABLE `question` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    `survey_section_id` INT UNSIGNED NOT NULL,
     `input_type_id` INT UNSIGNED NOT NULL,
     `option_group` INT UNSIGNED,
     `name` VARCHAR(100) NOT NULL,
     `subtext` VARCHAR(255),
+    `input_type` VARCHAR(30),
     `required` BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY(`id`),
     FOREIGN KEY (`option_group`) REFERENCES `option_group`(`id`)

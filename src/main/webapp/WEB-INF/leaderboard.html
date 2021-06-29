@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Leaderboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+<div class="container">
+    <h1>Leaderboard</h1>
+    <a th:href="'HomeServlet'" class="btn btn-secondary btn-lg">Back</a>
+
+    <div >
+        <ul th:each="l, iter: ${leaderboard}">
+            <li><span th:text="${(iter.index + 1) + ' - ' + l.userId.username + ' : ' + l.getPoints()}"> </span></li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

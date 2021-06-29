@@ -1,20 +1,29 @@
 package com.marketing.entity;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Map;
 
 @Entity
 @Table(name = "survey_header", schema = "gamified_marketing")
-@NamedQuery(
-        name = "SurveyHeader.selectSurveyHeaderWhereProduct",
-        query = "SELECT s FROM SurveyHeader s WHERE s.productId = :productId AND s.id = :surveyId"
-)
+@NamedQueries({
+        @NamedQuery(
+                name = "SurveyHeader.selectSurveyHeaderWhereProduct",
+                query = "SELECT s FROM SurveyHeader s WHERE s.productId = :productId"
+        ),
+        @NamedQuery(
+                name = "SurveyHeader.allPastSurveysOrderedByDate",
+                query = "select s from SurveyHeader s, Product p where p = s.productId and p.date < :today order by p.date desc"
+        )
+})
 public class SurveyHeader {
     private long id;
     private Product productId;
     private String name;
     private String instructions;
     private Map<Integer, SurveySection> surveySections;
+    private List<Answer> answers;
+    private List<User> compiledQuestUsers;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -72,4 +81,41 @@ public class SurveyHeader {
     public void setSurveySections(Map<Integer, SurveySection> surveySections) {
         this.surveySections = surveySections;
     }
+
+    public void addSurveySection(int id, SurveySection surveySection) {
+        surveySections.put(id, surveySection);
+    }
+
+
+    @OneToMany(mappedBy = "surveyHeaderId", cascade = CascadeType.REMOVE)
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
+
+    public void addAnswers(Answer answer) {
+        this.answers.add(answer);
+    }
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @JoinTable(
+            name = "survey_header_user",
+            joinColumns = @JoinColumn(name = "survey_header_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    public List<User> getCompiledQuestUsers() {
+        return compiledQuestUsers;
+    }
+
+    public void setCompiledQuestUsers(List<User> compiledQuestUsers) {
+        this.compiledQuestUsers = compiledQuestUsers;
+    }
+
+    public void addCompiledQuestUsers(User user) {
+        compiledQuestUsers.add(user);
+    }
+
 }

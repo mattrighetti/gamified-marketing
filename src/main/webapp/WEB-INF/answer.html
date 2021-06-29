@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Answers</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+<div class="container">
+    <h1>Questionnaire</h1>
+    <a th:href="'InspectQuestionnaireServlet'" class="btn btn-secondary btn-lg">Back</a>
+
+    <div th:each="question: ${questionsAnswers.keySet()}">
+        <h4></h4>
+        <p><bold>Q: </bold><span th:text="${question}"></span></p>
+        <p><bold>A: </bold><span th:text="${questionsAnswers.get(question)}"></span></p>
+    </div>
+</div>
+</body>
+</html>

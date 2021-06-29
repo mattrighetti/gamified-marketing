@@ -1,9 +1,14 @@
 package com.marketing.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "product", schema = "gamified_marketing")
+@NamedQueries({
+        @NamedQuery(name = "Product.selectProductByDate",
+                query = "select p from Product p where p.date =: date")
+})
 public class Product {
     private long id;
     private String name;
@@ -11,6 +16,7 @@ public class Product {
     private String thumbnail;
     private long date;
     private String description;
+    private List<Review> reviews;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -66,5 +72,18 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @OneToMany(mappedBy = "productId", fetch = FetchType.EAGER)
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public void addReview(Review review) {
+        this.reviews.add(review);
     }
 }

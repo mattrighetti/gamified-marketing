@@ -1,15 +1,19 @@
 package com.marketing.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "question", schema = "gamified_marketing")
+@NamedQueries(
+        @NamedQuery(name = "Question.questionByName", query = "select q from Question q where q.name =: name")
+)
 public class Question {
     private long id;
-    private SurveySection surveySectionId;
-    private InputType inputType;
+    private List<SurveySection> surveySectionsId;
     private String name;
     private String subtext;
+    private String inputType;
     private boolean required;
     private OptionGroup optionGroup;
 
@@ -24,25 +28,13 @@ public class Question {
         this.id = id;
     }
 
-    @ManyToOne
-    @Column(name = "survey_section_id", nullable = false)
-    public SurveySection getSurveySectionId() {
-        return surveySectionId;
+    @ManyToMany(mappedBy = "questions")
+    public List<SurveySection> getSurveySectionsId() {
+        return surveySectionsId;
     }
 
-    public void setSurveySectionId(SurveySection surveySectionId) {
-        this.surveySectionId = surveySectionId;
-    }
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "input_type_id")
-    @Column(name = "input_type_id", nullable = false)
-    public InputType getInputType() {
-        return inputType;
-    }
-
-    public void setInputType(InputType inputType) {
-        this.inputType = inputType;
+    public void setSurveySectionsId(List<SurveySection> surveySectionsId) {
+        this.surveySectionsId = surveySectionsId;
     }
 
     @Column(name = "name", nullable = false, length = 100)
@@ -74,12 +66,20 @@ public class Question {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "option_group")
-    @Column(name = "option_group")
     public OptionGroup getOptionGroup() {
         return optionGroup;
     }
 
     public void setOptionGroup(OptionGroup optionGroups) {
         this.optionGroup = optionGroups;
+    }
+
+    @Column(name = "input_type")
+    public String getInputType() {
+        return inputType;
+    }
+
+    public void setInputType(String inputType) {
+        this.inputType = inputType;
     }
 }

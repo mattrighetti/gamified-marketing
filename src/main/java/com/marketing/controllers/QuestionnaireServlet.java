@@ -36,18 +36,19 @@ public class QuestionnaireServlet extends RendererServlet {
     private void handlePostRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         switch (Objects.requireNonNull(getPostAction(request))) {
             case SUBMIT:
-                // TODO save answers to database
+                questionnaireBean.submitQuestionnaire(request.getParameterMap());
+                new RedirectAfterCompletion(Servlets.HOME, null).run(request, response);
                 break;
             case CANCEL:
-                RedirectAfterCompletion redirect = new RedirectAfterCompletion(Servlets.HOME, null);
-                redirect.run(request, response);
+                questionnaireBean.cancelQuestionnaire();
+                new RedirectAfterCompletion(Servlets.HOME, null).run(request, response);
                 break;
             case NEXT:
-                questionnaireBean.nextQuestion();
+                questionnaireBean.nextQuestion(request.getParameterMap());
                 renderAndServeWithVariables(request, response, questionnaireBean.getVarsForCurrentSection());
                 break;
             case PREVIOUS:
-                questionnaireBean.previousQuestion();
+                questionnaireBean.previousQuestion(request.getParameterMap());
                 renderAndServeWithVariables(request, response, questionnaireBean.getVarsForCurrentSection());
                 break;
             default:
@@ -62,8 +63,8 @@ public class QuestionnaireServlet extends RendererServlet {
     private void setInitialData(HttpServletRequest request) {
         if (!questionnaireBean.isDataSet()) {
             int productId = Integer.parseInt(request.getParameter("product"));
-            int surveyId = Integer.parseInt(request.getParameter("survey"));
-            questionnaireBean.setInitialData(productId, surveyId);
+            String username = request.getParameter("username");
+            questionnaireBean.setInitialData(productId, username);
         }
     }
 
