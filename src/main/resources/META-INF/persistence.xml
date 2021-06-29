@@ -18,6 +18,7 @@
         <class>com.marketing.entity.Forbidden</class>
         <class>com.marketing.entity.Review</class>
         <class>com.marketing.entity.SurveyHeaderUser</class>
+        <class>com.marketing.entity.Leaderboard</class>
         <properties>
             <property name="openjpa.Log" value="SQL=TRACE" />
             <property name="openjpa.ConnectionFactoryProperties" value="printParameters=true"/>

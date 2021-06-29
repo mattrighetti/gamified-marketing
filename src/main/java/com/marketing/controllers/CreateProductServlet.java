@@ -1,5 +1,6 @@
 package com.marketing.controllers;
 
+import com.marketing.bean.AdminBean;
 import com.marketing.bean.ProductBean;
 import com.marketing.bean.QuestionnaireBean;
 import com.marketing.entity.Product;
@@ -22,7 +23,7 @@ public class CreateProductServlet extends RendererServlet{
     @EJB
     private ProductBean productBean;
     @EJB
-    private QuestionnaireBean questionnaireBean;
+    private AdminBean adminBean;
 
     public CreateProductServlet() {
         super("/WEB-INF/createProduct.html");
@@ -64,7 +65,7 @@ public class CreateProductServlet extends RendererServlet{
         //check if the selected date is not already occupied with another product
         if (productBean.getProductByDate((long) date.getTime()/1000) == null) {
             Product product = productBean.addProduct(name, (long) date.getTime()/1000, description);
-            questionnaireBean.createQuestionnaire(product, questions);
+            adminBean.createQuestionnaire(product, questions);
             sendForm(request, response, true,"confirmation", "Product " + name + " has been correctly added!");
         } else {
             sendForm(request, response, true, "alertText","You cannot create a product of the day for the selected day,  a product is already set on that day! please select an other free date.");

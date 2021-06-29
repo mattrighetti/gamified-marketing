@@ -86,7 +86,7 @@ public class SurveyHeader {
     }
 
 
-    @OneToMany(mappedBy = "surveyHeaderId")
+    @OneToMany(mappedBy = "surveyHeaderId", cascade = CascadeType.REMOVE)
     public List<Answer> getAnswers() {
         return answers;
     }
@@ -99,7 +99,7 @@ public class SurveyHeader {
         this.answers.add(answer);
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinTable(
             name = "survey_header_user",
             joinColumns = @JoinColumn(name = "survey_header_id"),

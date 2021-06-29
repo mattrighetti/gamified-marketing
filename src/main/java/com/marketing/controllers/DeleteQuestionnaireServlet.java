@@ -1,5 +1,6 @@
 package com.marketing.controllers;
 
+import com.marketing.bean.AdminBean;
 import com.marketing.bean.QuestionnaireBean;
 import com.marketing.entity.SurveyHeader;
 import com.marketing.utils.Servlets;
@@ -18,7 +19,7 @@ import java.util.List;
 public class DeleteQuestionnaireServlet extends RendererServlet{
 
     @EJB
-    private QuestionnaireBean questionnaireBean;
+    private AdminBean adminBean;
 
     public DeleteQuestionnaireServlet() {
         super("/WEB-INF/inspectQuest.html");
@@ -26,7 +27,7 @@ public class DeleteQuestionnaireServlet extends RendererServlet{
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String surveyId = request.getParameter("surveyId");
-        questionnaireBean.deleteQuestionnaire(Integer.valueOf(surveyId));
+        adminBean.deleteQuestionnaire(Integer.valueOf(surveyId));
         response.sendRedirect(UrlBuilder.getUrl(request, Servlets.INSPECTION));
     }
 

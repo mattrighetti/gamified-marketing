@@ -1,7 +1,6 @@
 package com.marketing.controllers;
 
 import com.marketing.bean.AdminBean;
-import com.marketing.bean.QuestionnaireBean;
 import com.marketing.entity.SurveyHeader;
 import com.marketing.entity.User;
 
@@ -34,7 +33,7 @@ public class InspectQuestionnaireServlet extends RendererServlet{
         Map<Long,Map<String,List<User>>> usersMap = new HashMap<>();
         List<SurveyHeader> questionnaires =  adminBean.getAllQuestionnaires();
         for (SurveyHeader q : questionnaires ) {
-            usersMap.put(q.getId(),adminBean.getSumbittedCanceledUsers(q));
+            usersMap.put(q.getId(),adminBean.getSubmittedCanceledUsers(q));
         }
         HashMap<String, Object> vars = new HashMap<>();
         vars.put("username", session.getAttribute("username"));
