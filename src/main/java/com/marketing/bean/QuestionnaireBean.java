@@ -127,51 +127,6 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         return this.survey.getSurveySections().get(currentSection);
     }
 
-    public void createQuestionnaire(Product product, Map<String, String> questions) {
-        SurveyHeader surveyHeader = new SurveyHeader();
-        surveyHeader.setProductId(product);
-        surveyHeader.setSurveySections(new HashMap<>());
-        surveyHeader.setAnswers(new LinkedList<>());
-
-        List<Question> list = new ArrayList<>();
-        for (String key : questions.keySet()) {
-
-            //check if the question already exists
-            //TODO change in lower case without spaces
-            Question question = questionBean.getQuestionByName(questions.get(key));
-            //if the question doesn't exist, create a new one
-            if (question == null) {
-                question = new Question();
-                question.setName(questions.get(key));
-                question.setOptionGroup(null);
-                question.setRequired(true);
-                question.setInputType("text");
-                getEntityManager().persist(question);
-            }
-            list.add(question);
-        }
-        SurveySection surveySection = new SurveySection();
-        surveySection.setTitle("Marketing section");
-        surveySection.setName("Quality");
-        surveySection.setQuestions(list);
-        getEntityManager().persist(surveySection);
-
-        //Add the marketing section (marked with 1)
-        surveyHeader.addSurveySection(1, surveySection);
-        //Add the statistical Section: the section with id 2 is assumed to be the default "statistical section"
-        SurveySection statSection = getEntityManager().find(SurveySection.class, 2);
-        if (statSection != null) {
-            //TODO add the statistical part
-            //surveyHeader.addSurveySection(2, statSection);
-        }
-        create(surveyHeader);
-        getEntityManager().flush();
-    }
-
-    public void deleteQuestionnaire(int id) {
-        remove(find(id));
-    }
-
     public String getUsername() {
         return username;
     }
