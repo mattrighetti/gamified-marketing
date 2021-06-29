@@ -20,6 +20,7 @@
                 <h5>Users who submitted the questionnaire:</h5>
                 <ul th:each="user: ${usersMap.get(questionnaire.getId()).get('submitted')}">
                     <li th:text="${user.getUsername()}"></li>
+                    <a href="/AnswerServlet" th:href="@{/AnswerServlet(user=${user.getUsername()}, survey=${questionnaire.getId()})}" class="btn btn-primary">Read More</a>
                 </ul>
             </div>
             <div class="canceled_users col">

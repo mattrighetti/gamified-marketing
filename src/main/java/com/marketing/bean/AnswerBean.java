@@ -4,6 +4,7 @@ import com.marketing.entity.*;
 
 import javax.ejb.Stateless;
 import javax.persistence.NamedQuery;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -30,5 +31,20 @@ public class AnswerBean extends AbstractFacade{
             }
         }
         create(newAnswer);
+    }
+
+    public List<Answer> getAnswersByQuestionnaire( String username, int surveyHeaderId){
+        User user = (User) getEntityManager()
+                .createNamedQuery("User.selectUserWithUsername")
+                .setParameter("username", username)
+                .getResultList()
+                .get(0);
+        SurveyHeader surveyHeader = getEntityManager().find(SurveyHeader.class,surveyHeaderId);
+
+        List<Answer> answers = getEntityManager().createNamedQuery("Answer.getAnswerBySurveyHeader")
+                .setParameter("user", user).setParameter("surveyHeader", surveyHeader)
+                .getResultList();
+        if (answers != null) return answers;
+        else return new ArrayList<>();
     }
 }
