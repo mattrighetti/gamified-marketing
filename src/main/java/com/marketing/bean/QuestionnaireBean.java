@@ -149,6 +149,7 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
                 question.setName(questions.get(key));
                 question.setOptionGroup(null);
                 question.setRequired(true);
+                question.setInputType("text");
                 getEntityManager().persist(question);
             }
             list.add(question);
