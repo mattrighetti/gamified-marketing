@@ -19,6 +19,7 @@
             let input = document.createElement("input");
             input.type = "text";
             input.name=number;
+            input.required=true;
             document.getElementById("questions_form").appendChild(input);
         }
     </script>
@@ -47,8 +48,10 @@
         </div>
         <h3>Questionnaire</h3>
         <p>Create the questionnaire for the new product!</p>
-        <p>You have added <span id="counter">0</span> marketing questions:</p>
+        <p>You have added <span id="counter">1</span> marketing questions:</p>
         <div id="questions_form" class="row" >
+            <label>Question <span> 1 </span></label>
+            <input type="text" name="1" required="">
         </div>
         <a href=# onclick="addQuestion()" class="btn btn-primary">Add a question</a>
 

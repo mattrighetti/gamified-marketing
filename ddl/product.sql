@@ -4,7 +4,6 @@ CREATE TABLE `product` (
    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
    `name` VARCHAR(50) NOT NULL,
    `image` VARCHAR(500) NOT NULL,
-   `thumbnail` VARCHAR(50) NOT NULL,
    `date` INT UNSIGNED NOT NULL,
    `description` VARCHAR(100) NOT NULL,
    PRIMARY KEY (`id`)
