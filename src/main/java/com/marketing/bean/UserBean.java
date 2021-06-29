@@ -20,7 +20,7 @@ public class UserBean extends AbstractFacade<User> {
         this.edit(user);
     }
 
-    public User getUser(String username){
+    public User getUser(String username) {
         return (User) getEntityManager().createNamedQuery("User.selectUserWithUsername")
                 .setParameter("username", username)
                 .getResultList()

@@ -58,7 +58,7 @@ public class Answer {
     }
 
     @ManyToOne
-    @JoinColumn(name="option_choice_id")
+    @JoinColumn(name = "option_choice_id")
     public OptionChoice getOptionChoice() {
         return optionChoice;
     }

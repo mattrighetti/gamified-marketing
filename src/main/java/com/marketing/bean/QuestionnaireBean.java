@@ -14,7 +14,7 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
     private String username;
     private boolean isDataSet = false;
     private int currentSection = 1;
-    private final Map<String,Map<String,String>> temporaryAnswers;
+    private final Map<String, Map<String, String>> temporaryAnswers;
 
     @EJB
     private UserBean userBean;
@@ -45,7 +45,7 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         edit(survey);
     }
 
-    public User getCurrentUser(){
+    public User getCurrentUser() {
         return userBean.getUser(this.username);
     }
 
@@ -70,7 +70,7 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         vars.put("header", getCurrentSurveySection().getName());
         vars.put("subheader", getCurrentSurveySection().getSubheading());
         vars.put("questions", getCurrentSurveySection().getQuestions());
-        if (temporaryAnswers.containsKey(Integer.toString(currentSection))){
+        if (temporaryAnswers.containsKey(Integer.toString(currentSection))) {
             vars.put("temporaryAnswers", temporaryAnswers.get(Integer.toString(currentSection)));
         }
         vars.put("sectionState", new Tuple<>(this.survey.getSurveySections().size(), currentSection));
@@ -88,24 +88,25 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
     }
 
     @Remove
-    public void cancelQuestionnaire(){
+    public void cancelQuestionnaire() {
         // The persistence context is terminated when the client calls this method
         survey.addCompiledQuestUsers(this.getCurrentUser());
         getEntityManager().merge(survey);
         getEntityManager().flush();
     }
+
     @Remove
-    public void submitQuestionnaire(Map<String, String[]> answers){
+    public void submitQuestionnaire(Map<String, String[]> answers) {
         this.storeAnswers(answers);
         //add user in the list of who has compiled the questionnaire
         survey.addCompiledQuestUsers(this.getCurrentUser());
         getEntityManager().merge(survey);
         getEntityManager().flush();
 
-        Map<Integer,SurveySection> sections = survey.getSurveySections();
+        Map<Integer, SurveySection> sections = survey.getSurveySections();
         for (Integer sectionKey : sections.keySet()) {
             for (Question question : sections.get(sectionKey).getQuestions()) {
-                if (temporaryAnswers.get(sectionKey.toString()) != null && temporaryAnswers.get(sectionKey.toString()).get(Long.toString(question.getId())) != null ){
+                if (temporaryAnswers.get(sectionKey.toString()) != null && temporaryAnswers.get(sectionKey.toString()).get(Long.toString(question.getId())) != null) {
                     answerBean.createAnswer(survey, question, temporaryAnswers.get(sectionKey.toString()).get(Long.toString(question.getId())), getCurrentUser());
                 }
             }
@@ -126,20 +127,20 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         return this.survey.getSurveySections().get(currentSection);
     }
 
-    public void createQuestionnaire(Product product, Map<String,String> questions){
+    public void createQuestionnaire(Product product, Map<String, String> questions) {
         SurveyHeader surveyHeader = new SurveyHeader();
         surveyHeader.setProductId(product);
         surveyHeader.setSurveySections(new HashMap<>());
         surveyHeader.setAnswers(new LinkedList<>());
 
         List<Question> list = new ArrayList<>();
-        for (String key: questions.keySet() ) {
+        for (String key : questions.keySet()) {
 
             //check if the question already exists
             //TODO change in lower case without spaces
             Question question = questionBean.getQuestionByName(questions.get(key));
             //if the question doesn't exist, create a new one
-            if(question == null){
+            if (question == null) {
                 question = new Question();
                 question.setName(questions.get(key));
                 question.setOptionGroup(null);
@@ -156,10 +157,10 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         getEntityManager().persist(surveySection);
 
         //Add the marketing section (marked with 1)
-        surveyHeader.addSurveySection(1,surveySection);
+        surveyHeader.addSurveySection(1, surveySection);
         //Add the statistical Section: the section with id 2 is assumed to be the default "statistical section"
-        SurveySection statSection = getEntityManager().find(SurveySection.class,2);
-        if(statSection != null) {
+        SurveySection statSection = getEntityManager().find(SurveySection.class, 2);
+        if (statSection != null) {
             //TODO add the statistical part
             //surveyHeader.addSurveySection(2, statSection);
         }
@@ -167,7 +168,7 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         getEntityManager().flush();
     }
 
-    public void deleteQuestionnaire(int id){
+    public void deleteQuestionnaire(int id) {
         remove(find(id));
     }
 
@@ -179,10 +180,10 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         this.username = username;
     }
 
-    void storeAnswers(Map<String, String[]> answers){
-        Map<String,String> newParams = new HashMap<>();
-        for (String key: answers.keySet() ) {
-            newParams.put(key,new String(answers.get(key)[0]));
+    void storeAnswers(Map<String, String[]> answers) {
+        Map<String, String> newParams = new HashMap<>();
+        for (String key : answers.keySet()) {
+            newParams.put(key, new String(answers.get(key)[0]));
         }
         this.temporaryAnswers.put(Integer.toString(currentSection), newParams);
     }

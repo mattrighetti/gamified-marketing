@@ -22,7 +22,7 @@ public class Review {
 
     @ManyToOne()
     @JoinColumn(name = "product_id")
-    @Column(name = "product_id", nullable = false )
+    @Column(name = "product_id", nullable = false)
     public Product getProductId() {
         return productId;
     }
@@ -33,7 +33,7 @@ public class Review {
 
     @ManyToOne
     @Column(name = "user_id", nullable = false)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     public User getUserId() {
         return userId;
     }

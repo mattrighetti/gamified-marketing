@@ -22,10 +22,10 @@ public class ProductBean extends AbstractFacade<Product> {
         return find(id);
     }
 
-    public Product getProductByDate(long date){
+    public Product getProductByDate(long date) {
         List<Product> products = getEntityManager()
                 .createNamedQuery("Product.selectProductByDate", Product.class)
-                .setParameter("date",date)
+                .setParameter("date", date)
                 .getResultList();
 
         if (!products.isEmpty())
@@ -34,7 +34,7 @@ public class ProductBean extends AbstractFacade<Product> {
             return null;
     }
 
-    public Product addProduct(String name, long date, String description){
+    public Product addProduct(String name, long date, String description) {
         Product newProduct = new Product();
         newProduct.setName(name);
         newProduct.setDate(date);

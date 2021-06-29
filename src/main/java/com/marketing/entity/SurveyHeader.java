@@ -81,7 +81,8 @@ public class SurveyHeader {
     public void setSurveySections(Map<Integer, SurveySection> surveySections) {
         this.surveySections = surveySections;
     }
-    public void addSurveySection(int id, SurveySection surveySection){
+
+    public void addSurveySection(int id, SurveySection surveySection) {
         surveySections.put(id, surveySection);
     }
 
@@ -95,7 +96,7 @@ public class SurveyHeader {
         this.answers = answers;
     }
 
-    public void addAnswers(Answer answer){
+    public void addAnswers(Answer answer) {
         this.answers.add(answer);
     }
 
@@ -113,7 +114,7 @@ public class SurveyHeader {
         this.compiledQuestUsers = compiledQuestUsers;
     }
 
-    public void addCompiledQuestUsers(User user){
+    public void addCompiledQuestUsers(User user) {
         compiledQuestUsers.add(user);
     }
 

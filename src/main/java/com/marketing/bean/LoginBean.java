@@ -3,9 +3,6 @@ package com.marketing.bean;
 import com.marketing.entity.User;
 
 import javax.ejb.Stateless;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Stateless
 public class LoginBean extends AbstractFacade<User> {

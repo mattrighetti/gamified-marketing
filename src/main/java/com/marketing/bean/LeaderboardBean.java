@@ -5,21 +5,22 @@ import com.marketing.entity.Leaderboard;
 import javax.ejb.Stateless;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 @Stateless
-public class LeaderboardBean extends AbstractFacade{
+public class LeaderboardBean extends AbstractFacade<Leaderboard> {
 
     public LeaderboardBean() {
         super(Leaderboard.class);
     }
 
-    public List<Leaderboard> getLeaderboard(){
+    public List<Leaderboard> getLeaderboard() {
         List<Leaderboard> leaderboard = getEntityManager()
-                                .createNamedQuery("Leaderboard.getOrderedLeaderboard")
-                                .getResultList();
-        if(leaderboard != null) return leaderboard;
-        else return new LinkedList<>();
+                .createNamedQuery("Leaderboard.getOrderedLeaderboard", Leaderboard.class)
+                .getResultList();
+        if (leaderboard != null)
+            return leaderboard;
+        else
+            return new LinkedList<>();
     }
 
 }

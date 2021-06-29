@@ -16,7 +16,8 @@ public abstract class ProtectionFilter implements Filter {
     private Logger logger;
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {}
+    public void init(FilterConfig filterConfig) throws ServletException {
+    }
 
     @Override
     public void destroy() {

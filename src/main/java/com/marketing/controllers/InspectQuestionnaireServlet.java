@@ -14,8 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet(name="InspectQuestionnaireServlet", value="/InspectQuestionnaireServlet")
-public class InspectQuestionnaireServlet extends RendererServlet{
+@WebServlet(name = "InspectQuestionnaireServlet", value = "/InspectQuestionnaireServlet")
+public class InspectQuestionnaireServlet extends RendererServlet {
 
     @EJB
     private AdminBean adminBean;
@@ -25,15 +25,15 @@ public class InspectQuestionnaireServlet extends RendererServlet{
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        doGet(request,response);
+        doGet(request, response);
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
-        Map<Long,Map<String,List<User>>> usersMap = new HashMap<>();
-        List<SurveyHeader> questionnaires =  adminBean.getAllQuestionnaires();
-        for (SurveyHeader q : questionnaires ) {
-            usersMap.put(q.getId(),adminBean.getSubmittedCanceledUsers(q));
+        Map<Long, Map<String, List<User>>> usersMap = new HashMap<>();
+        List<SurveyHeader> questionnaires = adminBean.getAllQuestionnaires();
+        for (SurveyHeader q : questionnaires) {
+            usersMap.put(q.getId(), adminBean.getSubmittedCanceledUsers(q));
         }
         HashMap<String, Object> vars = new HashMap<>();
         vars.put("username", session.getAttribute("username"));

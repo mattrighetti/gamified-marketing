@@ -74,7 +74,7 @@ public class Product {
         this.description = description;
     }
 
-    @OneToMany(mappedBy="productId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "productId", fetch = FetchType.EAGER)
     public List<Review> getReviews() {
         return reviews;
     }

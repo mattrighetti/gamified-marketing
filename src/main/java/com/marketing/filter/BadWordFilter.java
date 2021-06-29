@@ -2,7 +2,6 @@ package com.marketing.filter;
 
 import com.marketing.bean.ForbiddenWordBean;
 import com.marketing.bean.UserBean;
-import com.marketing.commons.ForwardAfterCompletion;
 import com.marketing.commons.RedirectAfterCompletion;
 import com.marketing.utils.Servlets;
 
@@ -17,7 +16,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@WebFilter(servletNames = { Servlets.QUESTIONNAIRE })
+@WebFilter(servletNames = {Servlets.QUESTIONNAIRE})
 public class BadWordFilter implements Filter {
     private FilterConfig filterConfig;
 
