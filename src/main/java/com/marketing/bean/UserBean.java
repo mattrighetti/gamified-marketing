@@ -19,4 +19,11 @@ public class UserBean extends AbstractFacade<User> {
         user.setBanned(true);
         this.edit(user);
     }
+
+    public User getUser(String username){
+        return (User) getEntityManager().createNamedQuery("User.selectUserWithUsername")
+                .setParameter("username", username)
+                .getResultList()
+                .get(0);
+    }
 }
