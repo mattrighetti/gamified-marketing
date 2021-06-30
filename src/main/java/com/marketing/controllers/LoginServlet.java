@@ -2,12 +2,14 @@ package com.marketing.controllers;
 
 import com.marketing.bean.AccessLogBean;
 import com.marketing.bean.LoginBean;
+import com.marketing.bean.QuestionnaireBean;
 import com.marketing.entity.User;
 import com.marketing.utils.Servlets;
 import com.marketing.utils.SessionAttribute;
 import com.marketing.utils.UrlBuilder;
 
 import javax.ejb.EJB;
+import javax.naming.InitialContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -49,6 +51,22 @@ public class LoginServlet extends RendererServlet {
             session.setAttribute(SessionAttribute.IS_LOGGED, true);
             session.setAttribute(SessionAttribute.IS_ADMIN, user.getAdmin());
             session.setAttribute(SessionAttribute.USERNAME, user.getUsername());
+            try {
+                /*
+                 * We need one distinct EJB for each user. Get the Initial Context for the JNDI
+                 * lookup for a local EJB. Note that the path may be different in different EJB
+                 * environments. In IntelliJ use: ic.lookup(
+                 * "java:/openejb/local/ArtifactFileNameWeb/ArtifactNameWeb/QueryServiceLocalBean"
+                 * );
+                 */
+                InitialContext ic = new InitialContext();
+                // Retrieve the EJB using JNDI lookup
+                QuestionnaireBean questionnaireBean;
+                questionnaireBean = (QuestionnaireBean) ic.lookup("java:/openejb/local/QuestionnaireBeanLocalBean");
+                session.setAttribute(SessionAttribute.QUESTIONNAIRE, questionnaireBean);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             response.sendRedirect(UrlBuilder.getUrl(request, Servlets.HOME));
             accessLogBean.logUserAccess(user);
         } else {

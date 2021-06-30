@@ -15,7 +15,6 @@ import java.util.Objects;
 @WebServlet(name = "QuestionnaireServlet", value = "/QuestionnaireServlet")
 public class QuestionnaireServlet extends RendererServlet {
 
-    @EJB
     private QuestionnaireBean questionnaireBean;
 
     public QuestionnaireServlet() {
@@ -61,6 +60,7 @@ public class QuestionnaireServlet extends RendererServlet {
     }
 
     private void setInitialData(HttpServletRequest request) {
+        questionnaireBean = (QuestionnaireBean) request.getSession().getAttribute("questionnaireBean");
         if (!questionnaireBean.isDataSet()) {
             String username = (String) request.getSession().getAttribute("username");
             int productId = Integer.parseInt(request.getParameter("product"));
