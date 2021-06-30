@@ -67,7 +67,7 @@ public class SurveyHeader {
         this.instructions = instructions;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
     @JoinTable(
             name = "survey_header_survey_section",
             joinColumns = @JoinColumn(name = "survey_header_id"),
@@ -81,11 +81,6 @@ public class SurveyHeader {
     public void setSurveySections(Map<Integer, SurveySection> surveySections) {
         this.surveySections = surveySections;
     }
-
-    public void addSurveySection(int id, SurveySection surveySection) {
-        surveySections.put(id, surveySection);
-    }
-
 
     @OneToMany(mappedBy = "surveyHeaderId", cascade = CascadeType.REMOVE)
     public List<Answer> getAnswers() {

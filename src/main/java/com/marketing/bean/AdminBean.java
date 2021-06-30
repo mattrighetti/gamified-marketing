@@ -12,49 +12,32 @@ public class AdminBean extends AbstractFacade<SurveyHeader> {
     @EJB
     private QuestionBean questionBean;
 
+    @EJB
+    private SurveySectionBean surveySectionBean;
+
     public AdminBean() {
         super(SurveyHeader.class);
     }
 
-    public void createQuestionnaire(Product product, Map<String, String> questions) {
-        SurveyHeader surveyHeader = new SurveyHeader();
-        surveyHeader.setProductId(product);
-        surveyHeader.setName("Quality Control");
-        surveyHeader.setInstructions("Answer to all the required fields to gain points");
-        surveyHeader.setSurveySections(new HashMap<>());
+    public void createQuestionnaire(Product product, Map<String, String> questions, boolean withStats) {
+        SurveyHeader surveyHeader = createSurveyHeader(product, "Quality Control", "Answer to all the required fields to gain points");
+        List<Question> questionList = createQuestionsList(questions);
+        SurveySection surveySection = createSection("Marketing section", "Quality", questionList);
+
+        Map<Integer, SurveySection> surveySectionMap = new HashMap<>();
+        surveySectionMap.put(1, surveySection);
+
+        surveyHeader.setSurveySections(surveySectionMap);
         surveyHeader.setAnswers(new LinkedList<>());
 
-        List<Question> list = new ArrayList<>();
-        for (String key : questions.keySet()) {
-
-            //check if the question already exists
-            //TODO change in lower case without spaces
-            Question question = questionBean.getQuestionByName(questions.get(key));
-            //if the question doesn't exist, create a new one
-            if (question == null) {
-                question = new Question();
-                question.setName(questions.get(key));
-                question.setOptionGroup(null);
-                question.setRequired(true);
-                question.setInputType("text");
-            }
-            list.add(question);
-        }
-        SurveySection surveySection = new SurveySection();
-        surveySection.setTitle("Marketing section");
-        surveySection.setName("Quality");
-        surveySection.setQuestions(list);
-
-        //Add the marketing section (marked with 1)
-        surveyHeader.addSurveySection(1, surveySection);
-        //Add the statistical Section: the section with id 2 is assumed to be the default "statistical section"
-        SurveySection statSection = getEntityManager().find(SurveySection.class, 2);
-        if (statSection != null) {
-            //TODO add the statistical part
-            //surveyHeader.addSurveySection(2, statSection);
-        }
         create(surveyHeader);
         getEntityManager().flush();
+        if (withStats) {
+            surveySectionMap.put(2, surveySectionBean.getSurveyById(2));
+            surveyHeader.setSurveySections(surveySectionMap);
+            edit(surveyHeader);
+            getEntityManager().flush();
+        }
     }
 
     public void deleteQuestionnaire(int id) {
@@ -95,4 +78,38 @@ public class AdminBean extends AbstractFacade<SurveyHeader> {
         return compiledUsers;
     }
 
+    private List<Question> createQuestionsList(Map<String, String> questions) {
+        List<Question> list = new ArrayList<>();
+        for (String key : questions.keySet()) {
+            //check if the question already exists
+            //TODO change in lower case without spaces
+            Question question = questionBean.getQuestionByName(questions.get(key));
+            //if the question doesn't exist, create a new one
+            if (question == null) {
+                question = new Question();
+                question.setName(questions.get(key));
+                question.setOptionGroup(null);
+                question.setRequired(true);
+                question.setInputType("text");
+            }
+            list.add(question);
+        }
+        return list;
+    }
+
+    private SurveySection createSection(String title, String name, List<Question> questions) {
+        SurveySection surveySection = new SurveySection();
+        surveySection.setTitle(title);
+        surveySection.setName(name);
+        surveySection.setQuestions(questions);
+        return surveySection;
+    }
+
+    private SurveyHeader createSurveyHeader(Product product, String name, String instructions) {
+        SurveyHeader surveyHeader = new SurveyHeader();
+        surveyHeader.setProductId(product);
+        surveyHeader.setName(name);
+        surveyHeader.setInstructions(instructions);
+        return surveyHeader;
+    }
 }
