@@ -10,7 +10,10 @@ import javax.servlet.http.HttpServletRequest;
         Servlets.HOME,
         Servlets.QUESTIONNAIRE,
         Servlets.LOGOUT,
-        Servlets.BANNED
+        Servlets.BANNED,
+        Servlets.DELETE_QUESTIONNAIRE,
+        Servlets.INSPECT_QUESTIONNAIRE,
+        Servlets.CREATE_PRODUCT
 })
 public class ProtectedPagesFilter extends ProtectionFilter {
     @Override
