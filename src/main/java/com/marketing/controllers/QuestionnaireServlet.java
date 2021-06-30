@@ -62,8 +62,8 @@ public class QuestionnaireServlet extends RendererServlet {
 
     private void setInitialData(HttpServletRequest request) {
         if (!questionnaireBean.isDataSet()) {
+            String username = (String) request.getSession().getAttribute("username");
             int productId = Integer.parseInt(request.getParameter("product"));
-            String username = request.getParameter("username");
             questionnaireBean.setInitialData(productId, username);
         }
     }
