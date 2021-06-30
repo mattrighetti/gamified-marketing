@@ -1,7 +1,7 @@
 package com.marketing.controllers;
 
-import com.marketing.bean.LeaderboardBean;
-import com.marketing.entity.Leaderboard;
+import com.marketing.bean.UserBean;
+import com.marketing.entity.User;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -16,7 +16,7 @@ import java.util.List;
 public class LeaderBoardServlet extends RendererServlet {
 
     @EJB
-    private LeaderboardBean leaderboardBean;
+    private UserBean userBean;
 
     public LeaderBoardServlet() {
         super("/WEB-INF/leaderboard.html");
@@ -25,7 +25,7 @@ public class LeaderBoardServlet extends RendererServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HashMap<String, Object> vars = new HashMap<>();
-        List<Leaderboard> leaderboard = leaderboardBean.getLeaderboard();
+        List<User> leaderboard = userBean.getUsersByScore();
         vars.put("leaderboard", leaderboard);
         renderAndServeWithVariables(request, response, vars);
     }

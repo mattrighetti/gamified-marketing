@@ -5,6 +5,7 @@ import com.marketing.entity.User;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.util.List;
 
 @Stateless
 public class UserBean extends AbstractFacade<User> {
@@ -40,5 +41,11 @@ public class UserBean extends AbstractFacade<User> {
                 .getResultList()
                 .get(0);
         return surveyHeader.getCompiledQuestUsers().contains(getUser(username));
+    }
+
+    public List<User> getUsersByScore() {
+        return getEntityManager()
+                .createNamedQuery("User.selectUsersByScore", User.class)
+                .getResultList();
     }
 }

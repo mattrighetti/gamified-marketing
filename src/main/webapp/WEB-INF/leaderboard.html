@@ -12,8 +12,8 @@
     <a th:href="'HomeServlet'" class="btn btn-secondary btn-lg">Back</a>
 
     <div th:if="${leaderboard.size() > 0}" class="padding">
-        <ul th:each="l, iter: ${leaderboard}">
-            <li><span th:text="${(iter.index + 1) + ' - ' + l.userId.username + ' : ' + l.getPoints()}"> </span></li>
+        <ul th:each="user, iter: ${leaderboard}">
+            <li><span th:text="${(iter.index + 1) + ' - ' + user.username + ' : ' + user.score}"> </span></li>
         </ul>
     </div>
     <div th:unless="${leaderboard.size() > 0}" class="padding">

@@ -12,6 +12,10 @@ import javax.persistence.*;
         @NamedQuery(
                 name = "User.selectUserWithUsernameOrEmail",
                 query = "SELECT u FROM User u WHERE u.username = :username OR u.email = :email"
+        ),
+        @NamedQuery(
+                name = "User.selectUsersByScore",
+                query = "SELECT u FROM User u ORDER BY u.score DESC"
         )
 })
 public class User {
@@ -21,7 +25,7 @@ public class User {
     private String email;
     private boolean admin;
     private boolean banned;
-    private Object score;
+    private long score;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -84,12 +88,13 @@ public class User {
         this.banned = banned;
     }
 
+    @Basic
     @Column(name = "score", nullable = false)
-    public Object getScore() {
+    public long getScore() {
         return score;
     }
 
-    public void setScore(Object score) {
+    public void setScore(long score) {
         this.score = score;
     }
 }
