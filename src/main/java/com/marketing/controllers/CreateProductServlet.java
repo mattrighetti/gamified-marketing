@@ -64,8 +64,8 @@ public class CreateProductServlet extends RendererServlet {
         }
 
         //check if the selected date is not already occupied with another product
-        if (productBean.getProductByDate((long) date.getTime() / 1000) == null) {
-            Product product = productBean.addProduct(name, (long) date.getTime() / 1000, description);
+        if (productBean.getProductByDate(date.getTime() / 1000L) == null) {
+            Product product = productBean.addProduct(name, date.getTime() / 1000L, description, image);
             adminBean.createQuestionnaire(product, questions);
             sendForm(request, response, true, "confirmation", "Product " + name + " has been correctly added!");
         } else {
