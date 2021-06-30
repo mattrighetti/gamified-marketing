@@ -67,7 +67,7 @@ public class SurveyHeader {
         this.instructions = instructions;
     }
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "survey_header_survey_section",
             joinColumns = @JoinColumn(name = "survey_header_id"),

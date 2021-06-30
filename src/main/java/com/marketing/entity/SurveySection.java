@@ -50,7 +50,7 @@ public class SurveySection {
         this.subheading = subheading;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "survey_section_question",
             joinColumns = @JoinColumn(name = "survey_section_id"),

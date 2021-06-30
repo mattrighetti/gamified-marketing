@@ -37,7 +37,6 @@ public class AdminBean extends AbstractFacade<SurveyHeader> {
                 question.setOptionGroup(null);
                 question.setRequired(true);
                 question.setInputType("text");
-                getEntityManager().persist(question);
             }
             list.add(question);
         }
@@ -45,7 +44,6 @@ public class AdminBean extends AbstractFacade<SurveyHeader> {
         surveySection.setTitle("Marketing section");
         surveySection.setName("Quality");
         surveySection.setQuestions(list);
-        getEntityManager().persist(surveySection);
 
         //Add the marketing section (marked with 1)
         surveyHeader.addSurveySection(1, surveySection);
