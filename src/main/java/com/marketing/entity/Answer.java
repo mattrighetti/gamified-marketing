@@ -25,7 +25,7 @@ public class Answer {
         this.id = id;
     }
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "user_id")
     @Column(name = "user_id", nullable = false)
     public User getUserId() {

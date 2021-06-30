@@ -57,7 +57,6 @@ CREATE TABLE `survey_header` (
     `instructions` VARCHAR(255),
     PRIMARY KEY (`id`),
     FOREIGN KEY (`product_id`) REFERENCES `product`(`id`)
-        ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `survey_header_user`;
@@ -90,10 +89,8 @@ CREATE TABLE `survey_header_survey_section`(
     `survey_section_id` INT UNSIGNED NOT NULL,
     `section_order` INT UNSIGNED NOT NULL,
     PRIMARY KEY(`id`),
-    FOREIGN KEY (`survey_section_id`) REFERENCES `survey_section`(`id`)
-        ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (`survey_section_id`) REFERENCES `survey_section`(`id`),
     FOREIGN KEY (`survey_header_id`) REFERENCES `survey_header`(`id`)
-        ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `option_group`;
@@ -115,7 +112,6 @@ CREATE TABLE `question` (
     `required` BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY(`id`),
     FOREIGN KEY (`option_group`) REFERENCES `option_group`(`id`)
-        ON UPDATE CASCADE ON DELETE NO ACTION
 )  ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `survey_section_question`;
@@ -124,10 +120,8 @@ CREATE TABLE `survey_section_question`(
     `survey_section_id` INT UNSIGNED NOT NULL,
     `question_id` INT UNSIGNED NOT NULL,
     PRIMARY KEY (`survey_section_id`,question_id),
-    FOREIGN KEY (`survey_section_id`) REFERENCES survey_section(`id`)
-      ON UPDATE CASCADE  ON DELETE CASCADE,
+    FOREIGN KEY (`survey_section_id`) REFERENCES survey_section(`id`),
     FOREIGN KEY (`question_id`) REFERENCES `question`(`id`)
-      ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `option_choice`;
@@ -138,7 +132,6 @@ CREATE TABLE `option_choice`(
     `option_choice_name` VARCHAR(50) NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`option_group_id`) REFERENCES `option_group`(`id`)
-        ON UPDATE CASCADE ON DELETE NO ACTION
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `quesiton_option`;
@@ -153,14 +146,10 @@ CREATE TABLE `answer` (
     `option_choice_id` INT UNSIGNED,
     `answer_text` VARCHAR(255),
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (`survey_header_id`) REFERENCES `survey_header`(`id`)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-    FOREIGN KEY (`question_id`) REFERENCES `question`(`id`)
-        ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `user`(`id`),
+    FOREIGN KEY (`survey_header_id`) REFERENCES `survey_header`(`id`),
+    FOREIGN KEY (`question_id`) REFERENCES `question`(`id`),
     FOREIGN KEY (`option_choice_id`) REFERENCES `option_choice`(`id`)
-        ON UPDATE CASCADE ON DELETE NO ACTION
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `review`;
@@ -270,10 +259,13 @@ CREATE TRIGGER `subtractUsersScore`
 AFTER DELETE ON `answer`
 FOR EACH ROW
 UPDATE `user`
-SET user.`score` = user.`score` - (SELECT SUM(shss.`section_order`)
-                                   FROM `survey_section_question` AS sq
-                                            INNER JOIN `survey_section` AS ss ON sq.`survey_section_id` = ss.`id`
-                                            INNER JOIN `survey_header_survey_section` AS shss ON ss.id = shss.`survey_section_id`
-                                   WHERE OLD.`question_id` = sq.`question_id`
-)
+SET user.`score` = (SELECT COUNT(*)
+                       FROM `answer` AS a
+                                INNER JOIN `question` AS q ON a.`question_id` = q.`id`
+                       WHERE OLD.`user_id` = a.`user_id` AND q.required = true )
+                    +
+                   2 * (SELECT COUNT(*)
+                        FROM `answer` AS a
+                                 INNER JOIN `question` AS q ON a.`question_id` = q.`id`
+                        WHERE OLD.`user_id` = a.`user_id` AND q.required = false )
 WHERE `id` = OLD.`user_id`;//

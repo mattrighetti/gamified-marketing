@@ -67,7 +67,7 @@ public class SurveyHeader {
         this.instructions = instructions;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST })
     @JoinTable(
             name = "survey_header_survey_section",
             joinColumns = @JoinColumn(name = "survey_header_id"),
@@ -95,7 +95,7 @@ public class SurveyHeader {
         this.answers.add(answer);
     }
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "survey_header_user",
             joinColumns = @JoinColumn(name = "survey_header_id"),
