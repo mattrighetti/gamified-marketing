@@ -8,7 +8,7 @@ import javax.ejb.Remove;
 import javax.ejb.Stateful;
 import java.util.*;
 
-@Stateful
+@Stateful(mappedName = "QuestionnaireBean")
 public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
     private int productId;
     private String username;
@@ -93,6 +93,7 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         survey.addCompiledQuestUsers(this.getCurrentUser());
         getEntityManager().merge(survey);
         getEntityManager().flush();
+        isDataSet = false;
     }
 
     @Remove
@@ -113,6 +114,7 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         }
         this.edit(survey);
         getEntityManager().flush();
+        isDataSet=false;
     }
 
     public boolean hasPreviousSection() {
