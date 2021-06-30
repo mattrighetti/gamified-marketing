@@ -35,12 +35,14 @@ public class UserBean extends AbstractFacade<User> {
     }
 
     public boolean hasUserCompiledQuestionnaire(String username, long productId) {
-        SurveyHeader surveyHeader = getEntityManager()
+        List<SurveyHeader> surveyHeaders = getEntityManager()
                 .createNamedQuery("SurveyHeader.selectSurveyHeaderWhereProduct", SurveyHeader.class)
                 .setParameter("productId", productBean.getProduct(productId))
-                .getResultList()
-                .get(0);
-        return surveyHeader.getCompiledQuestUsers().contains(getUser(username));
+                .getResultList();
+        if (!surveyHeaders.isEmpty())
+            return surveyHeaders.get(0).getCompiledQuestUsers().contains(getUser(username));
+        else
+            return true;
     }
 
     public List<User> getUsersByScore() {
