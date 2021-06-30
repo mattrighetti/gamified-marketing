@@ -39,7 +39,7 @@
 
                             PARAM_NAME=OptionGroupId,VALUE=OptionChoiceId
                             */-->
-                            <input class="form-check-input" type="radio" th:name="${question.id}" th:id="${radiobutton.id}" th:value="${radiobutton.id}" th:required="question.required">
+                            <input class="form-check-input" type="radio" th:name="${question.id}" th:id="${radiobutton.id}" th:value="${radiobutton.id}" th:required="${question.required}">
                             <label class="form-check-label" th:for="${radiobutton.id}" th:text="${radiobutton.optionChoiceName}"></label>
                         </div>
                         <small th:if="${question.subtext != ''}" th:id="${question.id}" class="form-text text-muted" th:text="${question.subtext}"></small>
