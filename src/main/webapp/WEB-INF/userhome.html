@@ -24,13 +24,14 @@
                 <a th:if="${isAdmin}" href="/InspectQuestionnaireServlet" th:href="@{/InspectQuestionnaireServlet}" class="btn btn-primary">Inspect Questionnaires</a>
             </div>
         </div>
-        <div class="row">
+        <div th:if="${available}" class="row">
             <div class="card col-sm" style="width: 18rem;">
                 <img class="card-img-top" th:src="${imageUrl}" alt="Product cap">
                 <div class="card-body">
                     <h5 class="card-title" th:text="${productName}"></h5>
                     <p class="card-text" th:text="${productDescription}"></p>
-                    <a href="/QuestionnaireServlet" th:href="@{/QuestionnaireServlet(product=${productId})}" class="btn btn-primary">Take the questionnaire</a>
+                    <a th:if="${!completed}" href="/QuestionnaireServlet" th:href="@{/QuestionnaireServlet(product=${productId})}" role="button" class="btn btn-primary" aria-disabled="false">Take the questionnaire</a>
+                    <a th:if="${completed}" href="/QuestionnaireServlet" th:href="@{/QuestionnaireServlet(product=${productId})}" role="button" class="btn btn-primary disabled" aria-disabled="true">Take the questionnaire</a>
                 </div>
             </div>
             <div class="reviews col-sm">
@@ -43,6 +44,9 @@
             <div class="row" style="padding: 20px">
                 <a th:href="'LeaderboardServlet'" class="btn btn-secondary btn-lg">Leaderboard</a>
             </div>
+        </div>
+        <div th:if="${!available}">
+            <h1>There is no product listed for the current day, come back tomorrow!</h1>
         </div>
     </div>
     <br>

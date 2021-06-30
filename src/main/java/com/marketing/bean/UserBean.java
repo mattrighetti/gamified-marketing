@@ -1,18 +1,24 @@
 package com.marketing.bean;
 
+import com.marketing.entity.SurveyHeader;
 import com.marketing.entity.User;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 @Stateless
 public class UserBean extends AbstractFacade<User> {
+
+    @EJB
+    private ProductBean productBean;
+
     public UserBean() {
         super(User.class);
     }
 
     public void banUser(String username) {
-        User user = (User) getEntityManager()
-                .createNamedQuery("User.selectUserWithUsername")
+        User user = getEntityManager()
+                .createNamedQuery("User.selectUserWithUsername", User.class)
                 .setParameter("username", username)
                 .getResultList()
                 .get(0);
@@ -21,9 +27,18 @@ public class UserBean extends AbstractFacade<User> {
     }
 
     public User getUser(String username) {
-        return (User) getEntityManager().createNamedQuery("User.selectUserWithUsername")
+        return getEntityManager().createNamedQuery("User.selectUserWithUsername", User.class)
                 .setParameter("username", username)
                 .getResultList()
                 .get(0);
+    }
+
+    public boolean hasUserCompiledQuestionnaire(String username, long productId) {
+        SurveyHeader surveyHeader = getEntityManager()
+                .createNamedQuery("SurveyHeader.selectSurveyHeaderWhereProduct", SurveyHeader.class)
+                .setParameter("productId", productBean.getProduct(productId))
+                .getResultList()
+                .get(0);
+        return surveyHeader.getCompiledQuestUsers().contains(getUser(username));
     }
 }

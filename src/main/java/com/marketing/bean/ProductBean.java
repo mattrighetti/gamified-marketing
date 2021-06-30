@@ -18,7 +18,7 @@ public class ProductBean extends AbstractFacade<Product> {
         return getProductByDate(startOfToday);
     }
 
-    public Product getProduct(int id) {
+    public Product getProduct(long id) {
         return find(id);
     }
 
