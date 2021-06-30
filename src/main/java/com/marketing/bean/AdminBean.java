@@ -19,6 +19,8 @@ public class AdminBean extends AbstractFacade<SurveyHeader> {
     public void createQuestionnaire(Product product, Map<String, String> questions) {
         SurveyHeader surveyHeader = new SurveyHeader();
         surveyHeader.setProductId(product);
+        surveyHeader.setName("Quality Control");
+        surveyHeader.setInstructions("Answer to all the required fields to gain points");
         surveyHeader.setSurveySections(new HashMap<>());
         surveyHeader.setAnswers(new LinkedList<>());
 
