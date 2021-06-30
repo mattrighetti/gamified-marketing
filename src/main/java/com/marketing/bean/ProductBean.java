@@ -41,7 +41,6 @@ public class ProductBean extends AbstractFacade<Product> {
         newProduct.setDescription(description);
         //TODO placeholder image url should not be hardcoded
         newProduct.setImage("https://images-eu.ssl-images-amazon.com/images/G/29/X-Site/2021/PD21/shop-all-deals-cat-card-low-res._SY304_CB666436135_.jpg");
-        newProduct.setThumbnail("url");
         create(newProduct);
         getEntityManager().flush();
         return newProduct;

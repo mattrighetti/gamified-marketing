@@ -13,7 +13,6 @@ public class Product {
     private long id;
     private String name;
     private String image;
-    private String thumbnail;
     private long date;
     private String description;
     private List<Review> reviews;
@@ -45,15 +44,6 @@ public class Product {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    @Column(name = "thumbnail", nullable = false, length = 50)
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
     }
 
     @Column(name = "date", nullable = false)
