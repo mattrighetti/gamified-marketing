@@ -242,19 +242,19 @@ INSERT INTO `survey_header_user`(`survey_header_id`,`user_id`)
 VALUES (2,2);
 
 INSERT INTO `answer`(`user_id`,`question_id`,`survey_header_id`,`option_choice_id`,`answer_text`)
-VALUES (2,1,2,null,"a"),
+VALUES  (2,1,2,null,"a"),
         (2,2,2,null,"b"),
         (2,3,2,null,"c"),
-       (2,4,2,1,null),
-       (2,5,2,3,null);
+        (2,4,2,1,null),
+        (2,5,2,3,null);
 
 
 
 DELIMITER //
 
 CREATE TRIGGER `addUsersScore`
-    AFTER INSERT ON `answer`
-    FOR EACH ROW
+AFTER INSERT ON `answer`
+FOR EACH ROW
 BEGIN
     UPDATE `user`
     SET user.`score` = (SELECT SUM(shss.`section_order`)
@@ -263,7 +263,7 @@ BEGIN
                                  INNER JOIN `survey_header_survey_section` AS shss ON ss.id = shss.`survey_section_id`
                         WHERE NEW.`question_id` = sq.`question_id`
                        ) + user.`score`
-    WHERE `user_id` = NEW.`user_id`;
+    WHERE `id` = NEW.`user_id`;
 END;//
 
 CREATE TRIGGER `subtractUsersScore`
@@ -276,4 +276,4 @@ SET user.`score` = user.`score` - (SELECT SUM(shss.`section_order`)
                                             INNER JOIN `survey_header_survey_section` AS shss ON ss.id = shss.`survey_section_id`
                                    WHERE OLD.`question_id` = sq.`question_id`
 )
-WHERE `user_id` = OLD.`user_id`;//
+WHERE `id` = OLD.`user_id`;//

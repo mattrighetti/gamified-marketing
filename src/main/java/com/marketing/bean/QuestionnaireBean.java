@@ -140,7 +140,7 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
     void storeAnswers(Map<String, String[]> answers) {
         Map<String, String> newParams = new HashMap<>();
         for (String key : answers.keySet()) {
-            newParams.put(key, new String(answers.get(key)[0]));
+            newParams.put(key, answers.get(key)[0]);
         }
         this.temporaryAnswers.put(Integer.toString(currentSection), newParams);
     }
