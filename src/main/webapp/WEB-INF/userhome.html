@@ -41,12 +41,13 @@
                     <p th:text="${review.getReviewText()}"></p>
                 </div>
             </div>
-            <div class="row" style="padding: 20px">
-                <a th:href="'LeaderboardServlet'" class="btn btn-secondary btn-lg">Leaderboard</a>
-            </div>
+
         </div>
         <div th:if="${!available}">
             <h1>There is no product listed for the current day, come back tomorrow!</h1>
+        </div>
+        <div class="row" style="padding: 20px">
+            <a th:href="'LeaderboardServlet'" class="btn btn-secondary btn-lg">Leaderboard</a>
         </div>
     </div>
     <br>
