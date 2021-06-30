@@ -28,6 +28,7 @@ public class AnswerBean extends AbstractFacade<Answer> {
             if (optionChoice != null) {
                 newAnswer.setOptionChoice(optionChoice);
             } else {
+                // TODO handle this scenario
                 System.out.println("Error: the multiple choice does not match any option choice");
             }
         }
@@ -35,14 +36,15 @@ public class AnswerBean extends AbstractFacade<Answer> {
     }
 
     public List<Answer> getAnswersByQuestionnaire(String username, int surveyHeaderId) {
-        User user = (User) getEntityManager()
-                .createNamedQuery("User.selectUserWithUsername")
+        User user = getEntityManager()
+                .createNamedQuery("User.selectUserWithUsername", User.class)
                 .setParameter("username", username)
                 .getResultList()
                 .get(0);
         SurveyHeader surveyHeader = getEntityManager().find(SurveyHeader.class, surveyHeaderId);
 
-        List<Answer> answers = getEntityManager().createNamedQuery("Answer.getAnswerBySurveyHeader", Answer.class)
+        List<Answer> answers = getEntityManager()
+                .createNamedQuery("Answer.getAnswerBySurveyHeader", Answer.class)
                 .setParameter("user", user).setParameter("surveyHeader", surveyHeader)
                 .getResultList();
         if (answers != null)

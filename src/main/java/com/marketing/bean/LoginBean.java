@@ -24,7 +24,8 @@ public class LoginBean extends AbstractFacade<User> {
     private User findUserByUsername(String username) {
         // TODO try to find a cleaner way to handle empty returned list
         try {
-            return (User) getEntityManager().createNamedQuery("User.selectUserWithUsername")
+            return getEntityManager()
+                    .createNamedQuery("User.selectUserWithUsername", User.class)
                     .setParameter("username", username)
                     .getResultList()
                     .get(0);
