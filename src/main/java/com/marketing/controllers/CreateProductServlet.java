@@ -3,6 +3,7 @@ package com.marketing.controllers;
 import com.marketing.bean.AdminBean;
 import com.marketing.bean.ProductBean;
 import com.marketing.entity.Product;
+import com.marketing.utils.DateUtils;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -11,10 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,16 +41,7 @@ public class CreateProductServlet extends RendererServlet {
         String name = request.getParameter("name");
         String description = request.getParameter("description");
         String image = request.getParameter("image");
-        String dateString = request.getParameter("date");
-
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
-        try {
-            date = formatter.parse(dateString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Date currDate = new Date();
+        long unixDate = DateUtils.atStartOfDayUnix(request.getParameter("date"));
 
         //Save the questions for the questionnaire
         int id = 1;
@@ -64,12 +52,12 @@ public class CreateProductServlet extends RendererServlet {
         }
 
         //check if the selected date is not already occupied with another product
-        if (productBean.getProductByDate(date.getTime() / 1000L) == null) {
-            Product product = productBean.addProduct(name, date.getTime() / 1000L, description, image);
-            adminBean.createQuestionnaire(product, questions);
-            sendForm(request, response, true, "confirmation", "Product " + name + " has been correctly added!");
+        if (productBean.getProductByDate(unixDate) == null) {
+            Product product = productBean.addProduct(name, unixDate, description, image);
+            adminBean.createQuestionnaire(product, questions, true);
+            sendForm(request, response, false, "confirmation", "Product " + name + " has been correctly added!");
         } else {
-            sendForm(request, response, true, "alertText", "You cannot create a product of the day for the selected day,  a product is already set on that day! please select an other free date.");
+            sendForm(request, response, true, "alertText", "You cannot create a product of the day for the selected day, a product is already set on that day! please select an other free date.");
         }
     }
 
@@ -78,6 +66,4 @@ public class CreateProductServlet extends RendererServlet {
             put(messageName, message);
         }});
     }
-
-
 }
