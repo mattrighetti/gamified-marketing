@@ -36,7 +36,7 @@ public class QuestionnaireServlet extends RendererServlet {
         switch (Objects.requireNonNull(getPostAction(request))) {
             case SUBMIT:
                 questionnaireBean.submitQuestionnaire(request.getParameterMap());
-                new RedirectAfterCompletion(Servlets.HOME, null).run(request, response);
+                new RedirectAfterCompletion(Servlets.GREETING, null).run(request, response);
                 break;
             case CANCEL:
                 questionnaireBean.cancelQuestionnaire();

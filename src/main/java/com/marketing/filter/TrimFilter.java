@@ -7,9 +7,9 @@ import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 import java.util.Enumeration;
 
-@WebFilter(servletNames = {
-        Servlets.QUESTIONNAIRE
-})
+//@WebFilter(servletNames = {
+//        Servlets.QUESTIONNAIRE
+//})
 public class TrimFilter implements Filter {
     private FilterConfig filterConfig;
 

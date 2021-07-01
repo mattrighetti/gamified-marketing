@@ -12,4 +12,6 @@ public class Servlets {
     public static final String LEADERBOARD = "LeaderBoardServlet";
     public static final String DELETE_QUESTIONNAIRE = "DeleteQuestionnaireServlet";
     public static final String INSPECT_QUESTIONNAIRE = "InspectQuestionnaireServlet";
+    public static final String GREETING = "GreetingServlet";
+
 }
