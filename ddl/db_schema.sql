@@ -240,7 +240,6 @@ VALUES  (2,1,2,null,"a"),
 
 
 DELIMITER //
-
 CREATE TRIGGER `addUsersScore`
     AFTER INSERT ON `answer`
     FOR EACH ROW
@@ -267,3 +266,39 @@ SET user.`score` = (SELECT COUNT(*)
                 FROM `answer` AS a INNER JOIN `question` AS q ON a.`question_id` = q.`id`
                 WHERE OLD.`user_id` = a.`user_id` AND q.required = false )
 WHERE `id` = OLD.`user_id`;//
+
+
+//
+CREATE TRIGGER cleanSurveyHeaderSurveySection
+    AFTER DELETE ON `survey_header`
+    FOR EACH ROW
+    DELETE FROM `survey_header_survey_section`
+    WHERE `survey_header_id` = OLD.id; //
+
+//
+
+CREATE TRIGGER cleanSurveySection
+    AFTER DELETE ON `survey_header_survey_section`
+    FOR EACH ROW
+        DELETE FROM `survey_section`
+        WHERE survey_section.id NOT IN (
+                            SELECT DISTINCT survey_section_id
+                            FROM survey_header_survey_section );
+//
+
+//
+CREATE TRIGGER cleanSurveySectionQuestion
+    AFTER DELETE ON `survey_section`
+    FOR EACH ROW
+    DELETE FROM `survey_section_question`
+    WHERE `survey_section_id` = OLD.id; //
+
+//
+CREATE TRIGGER cleanQuestion
+    AFTER DELETE ON `survey_section_question`
+    FOR EACH ROW
+    DELETE FROM `question`
+    WHERE question.id NOT IN (
+        SELECT DISTINCT question_id
+        FROM survey_section_question );//
+
