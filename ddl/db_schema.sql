@@ -169,11 +169,11 @@ CREATE TABLE `review` (
 -- SQL DATA INSERTION
 
 INSERT INTO `user`(`username`, `password`, `email`, `admin`, `banned`, `score`)
-VALUES ("admin1", "secret", "admin1@gmail.com", 1, 0, 10),
-       ("admin2", "secret", "admin2@gmail.com", 1, 0, 1000),
-       ("admin3", "secret", "admin3@gmail.com", 1, 0, 854),
-       ("matt", "secret", "matt@gmail.com", 0, 0, 130921),
-       ("random", "secret", "random@gmail.com", 0, 0, 2139);
+VALUES ("admin1", "secret", "admin1@gmail.com", 1, 0, 0),
+       ("admin2", "secret", "admin2@gmail.com", 1, 0, 7),
+       ("admin3", "secret", "admin3@gmail.com", 1, 0, 0),
+       ("matt", "secret", "matt@gmail.com", 0, 0, 0),
+       ("random", "secret", "random@gmail.com", 0, 0, 0);
 
 INSERT INTO `product`(`name`, `image`, `date`, `description`)
 VALUE ("iPad 12.9\"", "https://johnlewis.scene7.com/is/image/JohnLewis/238667158?$rsp-pdp-port-1440$", 1622106066, "This is the new iPad 12.9 inches with the new M1 chip"),
@@ -242,30 +242,28 @@ VALUES  (2,1,2,null,"a"),
 DELIMITER //
 
 CREATE TRIGGER `addUsersScore`
-AFTER INSERT ON `answer`
-FOR EACH ROW
-BEGIN
-    UPDATE `user`
-    SET user.`score` = (SELECT SUM(shss.`section_order`)
-                        FROM `survey_section_question` AS sq
-                                 INNER JOIN `survey_section` AS ss ON sq.`survey_section_id` = ss.`id`
-                                 INNER JOIN `survey_header_survey_section` AS shss ON ss.id = shss.`survey_section_id`
-                        WHERE NEW.`question_id` = sq.`question_id`
-                       ) + user.`score`
-    WHERE `id` = NEW.`user_id`;
-END;//
+    AFTER INSERT ON `answer`
+    FOR EACH ROW
+    IF true = (SELECT required FROM question WHERE id = NEW.question_id) THEN
+        UPDATE `user`
+        SET user.`score` = 1 + user.`score`
+        WHERE `id` = NEW.`user_id`;
+    ELSE
+        UPDATE `user`
+        SET user.`score` = 2 + user.`score`
+        WHERE `id` = NEW.`user_id`;
+    END IF;
+//
 
+//
 CREATE TRIGGER `subtractUsersScore`
 AFTER DELETE ON `answer`
 FOR EACH ROW
 UPDATE `user`
 SET user.`score` = (SELECT COUNT(*)
-                       FROM `answer` AS a
-                                INNER JOIN `question` AS q ON a.`question_id` = q.`id`
-                       WHERE OLD.`user_id` = a.`user_id` AND q.required = true )
-                    +
-                   2 * (SELECT COUNT(*)
-                        FROM `answer` AS a
-                                 INNER JOIN `question` AS q ON a.`question_id` = q.`id`
-                        WHERE OLD.`user_id` = a.`user_id` AND q.required = false )
+        FROM `answer` AS a INNER JOIN `question` AS q ON a.`question_id` = q.`id`
+        WHERE OLD.`user_id` = a.`user_id` AND q.required = true ) + 2 *
+            (SELECT COUNT(*)
+                FROM `answer` AS a INNER JOIN `question` AS q ON a.`question_id` = q.`id`
+                WHERE OLD.`user_id` = a.`user_id` AND q.required = false )
 WHERE `id` = OLD.`user_id`;//
