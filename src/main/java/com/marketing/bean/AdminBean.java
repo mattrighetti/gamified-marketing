@@ -15,6 +15,9 @@ public class AdminBean extends AbstractFacade<SurveyHeader> {
     @EJB
     private SurveySectionBean surveySectionBean;
 
+    @EJB
+    private UnownedEntitiesBean unownedEntitiesBean;
+
     public AdminBean() {
         super(SurveyHeader.class);
     }
@@ -43,6 +46,8 @@ public class AdminBean extends AbstractFacade<SurveyHeader> {
     public void deleteQuestionnaire(int id) {
         SurveyHeader surveyHeader = (SurveyHeader) find(id);
         remove(surveyHeader);
+        getEntityManager().flush();
+        unownedEntitiesBean.removeUnownedEntries();
     }
 
     public List<SurveyHeader> getAllQuestionnaires() {

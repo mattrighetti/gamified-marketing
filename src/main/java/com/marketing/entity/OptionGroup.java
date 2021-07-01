@@ -31,7 +31,7 @@ public class OptionGroup {
         this.optionGroupName = optionGroupName;
     }
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "option_group_id")
     public List<OptionChoice> getOptionChoices() {
         return optionChoices;
