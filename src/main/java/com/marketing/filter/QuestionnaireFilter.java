@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter(servletNames = { Servlets.QUESTIONNAIRE })
+// @WebFilter(servletNames = { Servlets.QUESTIONNAIRE })
 public class QuestionnaireFilter implements Filter {
     private FilterConfig filterConfig;
     
@@ -49,14 +49,20 @@ public class QuestionnaireFilter implements Filter {
     public boolean hasUrlBeenTampered(ServletRequest servletRequest) {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String productId = request.getParameter("product");
-        long productIdExpected = productBean.getProductOfTheDay().getId();
-        return productIdExpected != Long.parseLong(productId);
+        if (productId != null) {
+            long productIdExpected = productBean.getProductOfTheDay().getId();
+            return productIdExpected != Long.parseLong(productId);
+        }
+        return false;
     }
 
     private boolean userHasNotCompletedQuestionnaire(ServletRequest servletRequest) {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String productId = request.getParameter("product");
-        String username = request.getParameter(SessionAttribute.USERNAME);
-        return userBean.hasUserCompiledQuestionnaire(username, Long.parseLong(productId));
+        String username = (String) request.getSession(false).getAttribute(SessionAttribute.USERNAME);
+        if (productId != null) {
+            return userBean.hasUserCompiledQuestionnaire(username, Long.parseLong(productId));
+        }
+        return false;
     }
 }

@@ -1,9 +1,15 @@
 package com.marketing.filter;
 
+import com.marketing.utils.Servlets;
+
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 import java.util.Enumeration;
 
+@WebFilter(servletNames = {
+        Servlets.QUESTIONNAIRE
+})
 public class TrimFilter implements Filter {
     private FilterConfig filterConfig;
 
