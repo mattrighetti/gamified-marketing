@@ -65,10 +65,8 @@ CREATE TABLE `survey_header_user` (
     `survey_header_id` INT UNSIGNED NOT NULL ,
     `user_id` INT UNSIGNED NOT NULL,
     PRIMARY KEY (`survey_header_id`,`user_id`),
-    FOREIGN KEY (`survey_header_id`) REFERENCES `survey_header`(`id`)
-        ON UPDATE CASCADE ON DELETE CASCADE ,
+    FOREIGN KEY (`survey_header_id`) REFERENCES `survey_header`(`id`),
     FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
-        ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS `survey_section`;
@@ -160,10 +158,8 @@ CREATE TABLE `review` (
     `user_id` INT UNSIGNED NOT NULL,
     `review_text` VARCHAR(511),
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`product_id`) REFERENCES `product`(`id`)
-        ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (`product_id`) REFERENCES `product`(`id`),
     FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
-        ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- SQL DATA INSERTION
@@ -176,8 +172,9 @@ VALUES ("admin1", "secret", "admin1@gmail.com", 1, 0, 0),
        ("random", "secret", "random@gmail.com", 0, 0, 0);
 
 INSERT INTO `product`(`name`, `image`, `date`, `description`)
-VALUE ("iPad 12.9\"", "https://johnlewis.scene7.com/is/image/JohnLewis/238667158?$rsp-pdp-port-1440$", 1622106066, "This is the new iPad 12.9 inches with the new M1 chip"),
-      ("iPhone 12\"", "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.apple.com%2Fit%2Fshop%2Fbuy-iphone%2Fiphone-12-pro&psig=AOvVaw0F9zeDBzOck__7nGRYLMU3&ust=1624488071565000&source=images&cd=vfe&ved=0CAoQjRxqFwoTCMDao9HCrPECFQAAAAAdAAAAABAD", 1620106066, "This is the new iPhone 12 ");
+VALUES ("iPhone 12\"", "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.apple.com%2Fit%2Fshop%2Fbuy-iphone%2Fiphone-12-pro&psig=AOvVaw0F9zeDBzOck__7nGRYLMU3&ust=1624488071565000&source=images&cd=vfe&ved=0CAoQjRxqFwoTCMDao9HCrPECFQAAAAAdAAAAABAD", 1620106066, "This is the new iPhone 12 "),
+        ("iPad 12.9\"", "https://johnlewis.scene7.com/is/image/JohnLewis/238667158?$rsp-pdp-port-1440$", 1625180400, "This is the new iPad 12.9 inches with the new M1 chip");
+
 
 
 INSERT INTO `survey_header`(`name`, `product_id`, `instructions`)

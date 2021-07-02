@@ -7,7 +7,7 @@ import java.util.List;
 @Table(name = "product", schema = "gamified_marketing")
 @NamedQueries({
         @NamedQuery(name = "Product.selectProductByDate",
-                query = "select p from Product p where p.date =: date")
+                query = "select p from Product p where p.date >= :today and p.date <= :tomorrow")
 })
 public class Product {
     private long id;
@@ -64,7 +64,8 @@ public class Product {
         this.description = description;
     }
 
-    @OneToMany(mappedBy = "productId", fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JoinColumn(name = "product_id")
     public List<Review> getReviews() {
         return reviews;
     }

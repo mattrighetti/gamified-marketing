@@ -1,6 +1,7 @@
 package com.marketing.entity;
 
 import javax.persistence.*;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -95,7 +96,7 @@ public class SurveyHeader {
         this.answers.add(answer);
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "survey_header_user",
             joinColumns = @JoinColumn(name = "survey_header_id"),
@@ -110,7 +111,12 @@ public class SurveyHeader {
     }
 
     public void addCompiledQuestUsers(User user) {
-        compiledQuestUsers.add(user);
+        List<User> users = new LinkedList<>();
+        for (User u : this.getCompiledQuestUsers() ) {
+            users.add(u);
+        }
+        users.add(user);
+        setCompiledQuestUsers(users);
     }
 
 }

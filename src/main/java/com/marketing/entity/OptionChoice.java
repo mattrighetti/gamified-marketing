@@ -31,6 +31,7 @@ public class OptionChoice {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "option_group_id")
     @Column(name = "option_group_id", nullable = false)
     public OptionGroup getOptionGroupId() {
         return optionGroupId;
