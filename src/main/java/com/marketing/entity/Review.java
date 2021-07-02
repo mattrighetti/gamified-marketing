@@ -6,7 +6,6 @@ import javax.persistence.*;
 @Table(name = "review", schema = "gamified_marketing")
 public class Review {
     private long id;
-    private Product productId;
     private User userId;
     private String reviewText;
 
@@ -18,17 +17,6 @@ public class Review {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    @ManyToOne()
-    @JoinColumn(name = "product_id")
-    @Column(name = "product_id", nullable = false)
-    public Product getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Product productId) {
-        this.productId = productId;
     }
 
     @ManyToOne

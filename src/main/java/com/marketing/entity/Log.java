@@ -21,7 +21,7 @@ public class Log {
         this.id = id;
     }
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @Column(name = "user_id", nullable = false)
     public User getUserId() {
         return userId;

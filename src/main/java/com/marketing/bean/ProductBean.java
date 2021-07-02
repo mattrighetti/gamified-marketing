@@ -25,7 +25,8 @@ public class ProductBean extends AbstractFacade<Product> {
     public Product getProductByDate(long date) {
         List<Product> products = getEntityManager()
                 .createNamedQuery("Product.selectProductByDate", Product.class)
-                .setParameter("date", date)
+                .setParameter("today", date)
+                .setParameter("tomorrow",date + 86400)
                 .getResultList();
 
         if (!products.isEmpty())
