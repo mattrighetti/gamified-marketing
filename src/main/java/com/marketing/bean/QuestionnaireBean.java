@@ -42,7 +42,7 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
                 .setParameter("productId", productBean.getProduct(this.productId))
                 .getResultList()
                 .get(0);
-        edit(survey);
+
     }
 
     public User getCurrentUser() {
@@ -54,7 +54,6 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         this.setUsername(username);
         this.isDataSet = true;
         getProductQuestionnaire();
-        survey.setCompiledQuestUsers(new LinkedList<>());
     }
 
     public boolean isDataSet() {
@@ -101,7 +100,7 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
         this.storeAnswers(answers);
         //add user in the list of who has compiled the questionnaire
         survey.addCompiledQuestUsers(this.getCurrentUser());
-        getEntityManager().merge(survey);
+        edit(survey);
         getEntityManager().flush();
 
         Map<Integer, SurveySection> sections = survey.getSurveySections();
@@ -112,7 +111,7 @@ public class QuestionnaireBean extends AbstractFacade<SurveyHeader> {
                 }
             }
         }
-        this.edit(survey);
+        edit(survey);
         getEntityManager().flush();
         isDataSet=false;
     }

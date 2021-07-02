@@ -115,6 +115,7 @@ public class AdminBean extends AbstractFacade<SurveyHeader> {
         surveyHeader.setProductId(product);
         surveyHeader.setName(name);
         surveyHeader.setInstructions(instructions);
+        surveyHeader.setCompiledQuestUsers(new LinkedList<>());
         return surveyHeader;
     }
 }
