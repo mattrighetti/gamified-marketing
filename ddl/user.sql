@@ -1,10 +1,14 @@
 DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (
-                        `username` VARCHAR(50) NOT NULL,
-                        `password` VARCHAR(50) NOT NULL,
-                        `admin` BOOL NOT NULL DEFAULT FALSE,
-                        `banned` BOOL NOT NULL DEFAULT FALSE,
-                        `score` INT NOT NULL DEFAULT 0,
-                        PRIMARY KEY(`username`)
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `username` VARCHAR(50) NOT NULL,
+    `password` VARCHAR(50) NOT NULL,
+    `email` VARCHAR(50) NOT NULL,
+    `admin` BOOLEAN NOT NULL DEFAULT FALSE,
+    `banned` BOOLEAN NOT NULL DEFAULT FALSE,
+    `score` INT UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY(`id`),
+    UNIQUE (`username`),
+    UNIQUE (`email`)
 ) ENGINE=InnoDB;

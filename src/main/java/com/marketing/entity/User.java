@@ -1,27 +1,45 @@
 package com.marketing.entity;
 
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Entity;
-
-import java.io.Serializable;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "user", schema="gamified_marketing")
-public class User implements Serializable {
-
-    @Id
+@Table(name = "user")
+@NamedQueries({
+        @NamedQuery(
+                name = "User.selectUserWithUsername",
+                query = "SELECT u FROM User u WHERE u.username = :username"
+        ),
+        @NamedQuery(
+                name = "User.selectUserWithUsernameOrEmail",
+                query = "SELECT u FROM User u WHERE u.username = :username OR u.email = :email"
+        ),
+        @NamedQuery(
+                name = "User.selectUsersByScore",
+                query = "SELECT u FROM User u ORDER BY u.score DESC"
+        )
+})
+public class User {
+    private long id;
     private String username;
     private String password;
-    private Boolean admin;
-    private Boolean banned;
-    private Integer score;
+    private String email;
+    private boolean admin;
+    private boolean banned;
+    private long score;
 
-    public User(){
-
+    @Id
+    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public long getId() {
+        return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
 
+    @Basic
+    @Column(name = "username", nullable = false, length = 50)
     public String getUsername() {
         return username;
     }
@@ -30,6 +48,8 @@ public class User implements Serializable {
         this.username = username;
     }
 
+    @Basic
+    @Column(name = "password", nullable = false, length = 50)
     public String getPassword() {
         return password;
     }
@@ -38,27 +58,43 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public Boolean getAdmin() {
+    @Basic
+    @Column(name = "email", nullable = false, length = 50)
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Basic
+    @Column(name = "admin", nullable = false, columnDefinition = "TINYINT(1)")
+    public boolean getAdmin() {
         return admin;
     }
 
-    public void setAdmin(Boolean admin) {
+    public void setAdmin(boolean admin) {
         this.admin = admin;
     }
 
-    public Boolean getBanned() {
+    @Basic
+    @Column(name = "banned", nullable = false, columnDefinition = "TINYINT(1)")
+    public boolean getBanned() {
         return banned;
     }
 
-    public void setBanned(Boolean banned) {
+    public void setBanned(boolean banned) {
         this.banned = banned;
     }
 
-    public Integer getScore() {
+    @Basic
+    @Column(name = "score", nullable = false)
+    public long getScore() {
         return score;
     }
 
-    public void setScore(Integer score) {
+    public void setScore(long score) {
         this.score = score;
     }
 }

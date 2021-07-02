@@ -1,13 +1,18 @@
 DROP TABLE IF EXISTS `question`;
 
 CREATE TABLE `question` (
-                            `id` INT NOT NULL AUTO_INCREMENT,
-                            `user` VARCHAR(50) NOT NULL,
-                            `product` INT UNSIGNED NOT NULL,
-                            `question_text` VARCHAR(100) NOT NULL,
-                            `mandatory` BOOL NOT NULL DEFAULT FALSE,
-                            `answer` VARCHAR(100),
-                            PRIMARY KEY(`id`,`user`,`product`),
-                            FOREIGN KEY(`user`) REFERENCES user(`username`) ON UPDATE CASCADE ON DELETE CASCADE,
-                            FOREIGN KEY(`product`) REFERENCES product(`id`)  ON UPDATE CASCADE ON DELETE CASCADE
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `input_type_id` INT UNSIGNED NOT NULL,
+    `option_group` INT UNSIGNED,
+    `name` VARCHAR(100) NOT NULL,
+    `subtext` VARCHAR(255),
+    `input_type` VARCHAR(30) NOT NULL,
+    `required` BOOLEAN NOT NULL DEFAULT FALSE,
+    PRIMARY KEY(`id`),
+    FOREIGN KEY (`option_group`) REFERENCES `option_group`(`id`)
+        ON UPDATE CASCADE ON DELETE NO ACTION,
+    FOREIGN KEY (`survey_section_id`) REFERENCES `survey_section`(`id`)
+        ON UPDATE CASCADE ON DELETE NO ACTION,
+    FOREIGN KEY (`input_type_id`) REFERENCES `input_type`(`id`)
+        ON UPDATE CASCADE ON DELETE NO ACTION
 )  ENGINE=InnoDB;

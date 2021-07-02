@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Leaderboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+<div class="container mt-3">
+    <h1>Leaderboard</h1>
+    <a th:href="'HomeServlet'" class="btn btn-secondary btn-lg">Back</a>
+
+    <div th:if="${leaderboard.size() > 0}" class="padding">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Position</th>
+                <th scope="col">Username</th>
+                <th scope="col">Score</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="user, iter: ${leaderboard}">
+                <tr>
+                    <th scope="row" th:text="${iter.index + 1}"></th>
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.score}"></td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+    <div th:unless="${leaderboard.size() > 0}" class="padding">
+        <h4>The leaderboard has not participant yet!</h4>
+    </div>
+</div>
+</body>
+</html>

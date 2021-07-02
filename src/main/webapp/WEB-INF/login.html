@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login page</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+<div class="container mt-3">
+  <p class="display-2">Welcome to Gamified Marketing</p>
+  <br>
+  <div th:if="${failedAttempt}" th:text="${alertText}" class="alert alert-danger" role="alert">
+  </div>
+  <form action="LoginServlet" th:attr="action=@{${formAction}}" method="post">
+    <div class="mb-3">
+      <label for="inputUsername" class="form-label">Username</label>
+      <input type="text" class="form-control" id="inputUsername" aria-describedby="emailHelp" name="username">
+    </div>
+    <div th:if="${formAction} == 'RegistrationServlet'" class="mb-3">
+      <label for="inputEmail" class="form-label">Email address</label>
+      <input type="text" class="form-control" id="inputEmail" aria-describedby="emailHelp" name="email">
+      <div id="emailHelp" class="form-text">We'll never share your username with anyone else.</div>
+    </div>
+    <div class="mb-3">
+      <label for="inputPassword" class="form-label">Password</label>
+      <input type="password" class="form-control" id="inputPassword" name="password">
+    </div>
+    <button type="submit" class="btn btn-primary" th:text="${formAction} == 'RegistrationServlet' ? 'Register' : 'Login'"></button>
+    <button type="button" class="btn btn-alert">
+      <a th:href="${formAction} == 'RegistrationServlet' ? 'LoginServlet' : 'RegistrationServlet'">
+        <p th:text="${formAction} == 'RegistrationServlet' ? 'Already have an accout? Sign in' : 'Don\'t have an accout? Register'"></p>
+      </a>
+    </button>
+
+  </form>
+</div>
+</body>
+</html>

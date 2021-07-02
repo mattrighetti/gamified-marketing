@@ -3,7 +3,25 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
              version="2.2">
-    <persistence-unit name="default">
-
+    <persistence-unit name="MarketingEJB">
+        <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+        <jta-data-source>MyDataBase</jta-data-source>
+        <class>com.marketing.entity.Answer</class>
+        <class>com.marketing.entity.Log</class>
+        <class>com.marketing.entity.OptionChoice</class>
+        <class>com.marketing.entity.OptionGroup</class>
+        <class>com.marketing.entity.Product</class>
+        <class>com.marketing.entity.Question</class>
+        <class>com.marketing.entity.SurveyHeader</class>
+        <class>com.marketing.entity.SurveySection</class>
+        <class>com.marketing.entity.User</class>
+        <class>com.marketing.entity.Forbidden</class>
+        <class>com.marketing.entity.Review</class>
+        <properties>
+            <property name="openjpa.Log" value="SQL=TRACE" />
+            <property name="openjpa.ConnectionFactoryProperties" value="printParameters=true"/>
+            <property name="openjpa.ConnectionURL" value="jdbc:mysql://localhost:3306"/>
+            <property name="openjpa.ConnectionDriverName" value="com.mysql.cj.jdbc.Driver"/>
+        </properties>
     </persistence-unit>
 </persistence>

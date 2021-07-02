@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inspect Questionnaires</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+<div class="container">
+    <p class="display-1">Inspect Questionnaires</p>
+    <a th:href="'HomeServlet'" class="btn btn-secondary btn-lg">Back</a>
+        <div th:each="questionnaire: ${questionnaires}" class="row">
+            <div class="col">
+                <h4>Questionnaire related to product: </h4>
+                <h5 class="card-title" th:text="${questionnaire.getProductId().getName()}"></h5>
+                <a href="/DeleteQuestionnaireServlet" th:href="@{/DeleteQuestionnaireServlet(surveyId = ${questionnaire.getId()})}" class="btn btn-primary">Delete</a>
+            </div>
+            <div class="submitted_users col">
+                <h5>Users who submitted the questionnaire:</h5>
+                <ul th:each="user: ${usersMap.get(questionnaire.getId()).get('submitted')}">
+                    <li th:text="${user.getUsername()}"></li>
+                    <a href="/AnswerServlet" th:href="@{/AnswerServlet(user=${user.getUsername()}, survey=${questionnaire.getId()})}" class="btn btn-primary">Read More</a>
+                </ul>
+            </div>
+            <div class="canceled_users col">
+                <h5>Users who canceled the questionnaire:</h5>
+                <ul th:each="user: ${usersMap.get(questionnaire.getId()).get('canceled')}">
+                    <li th:text="${user.getUsername()}"></li>
+                </ul>
+            </div>
+        </div>
+</div>
+<br>
+</body>
+</html>
